@@ -33,4 +33,10 @@ export class Zona extends Model<ZonaAttributes, ZonaCreationAttributes> implemen
       timestamps: true
     });
   }
+
+  static associate(models: any) {
+    this.hasMany(models.Tarifa, {
+      foreignKey: 'id_zona'
+    });
+  }
 }

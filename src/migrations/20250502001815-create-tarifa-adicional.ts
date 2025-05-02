@@ -3,31 +3,35 @@ import { QueryInterface, DataTypes } from 'sequelize';
 
 export = {
   up: async (queryInterface: QueryInterface): Promise<void> => {
-    await queryInterface.createTable('carga', {
-      id_carga: {
+    await queryInterface.createTable('tarifaAdicional', {
+      id_tarifaAdicional: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER
       },
-      peso: {
-        type: DataTypes.DECIMAL
+      costo_personalizado: {
+        type: DataTypes.DECIMAL(8, 2)
       },
-      volumen: {
-        type: DataTypes.DECIMAL
-      },
-      requisitos_especiales: {
-        type: DataTypes.STRING
-      },
-      id_tipo_carga: {
+      id_tarifa: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-        model: 'tipo_carga', 
-        key: 'id_tipo_carga'
+          model: 'tarifa',
+          key: 'id_tarifa'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
+        onDelete: 'RESTRICT'
+      },
+      id_adicional: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'adicional',
+          key: 'id_adicional'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT'
       },
       createdAt: {
         allowNull: false,
@@ -40,6 +44,6 @@ export = {
     });
   },
   down: async (queryInterface: QueryInterface): Promise<void> => {
-    await queryInterface.dropTable('carga');
+    await queryInterface.dropTable('tarifaAdicional');
   }
 };

@@ -7,6 +7,9 @@ import routesCargas from './routes/routesCarga';
 import routesTipoCargas from './routes/routesTipoCarga';
 import routesTransportista from './routes/routesTransportista';
 import routesTipoVehiculo from './routes/routesTipoVehiculo';
+import routesAdicional from './routes/routesAdicional';
+import routesTarifa from './routes/routesTarifa';
+import routesTarifaAdicional from './routes/routesTarifaAdicional';
 
 dotenv.config();
 
@@ -18,9 +21,8 @@ const initDatabase = async () => {
   try {
     await db.sequelize.authenticate();
     console.log('Conexión a la base de datos establecida con éxito.');
-    
-    
-    await db.sequelize.sync({ force: process.env.NODE_ENV === 'development' });
+       
+    await db.sequelize.sync({ force: process.env.NODE_ENV === 'development'  }); //force: true
     console.log('Modelos sincronizados con la base de datos.');
   } catch (error) {
     console.error('No se pudo conectar a la base de datos:', error);
@@ -37,11 +39,13 @@ app.get('/', (_, res) => {
 });
 
 app.use('/zonas', routerZonas); 
-app.use('/cargas', routesCargas);
-app.use('/tipocargas', routesTipoCargas);
+app.use('/cargas', routesCargas); 
+app.use('/tipocargas', routesTipoCargas); 
 app.use('/transportistas', routesTransportista);
 app.use('/tipovehiculos', routesTipoVehiculo);
-
+app.use('/adicionales', routesAdicional);
+app.use('/tarifas', routesTarifa);
+app.use('/tarifaAdicional', routesTarifaAdicional);
 
 
 app.listen(PORT, () => {

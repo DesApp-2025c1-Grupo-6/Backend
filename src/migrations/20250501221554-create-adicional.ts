@@ -1,17 +1,22 @@
 'use strict';
+
 import { QueryInterface, DataTypes } from 'sequelize';
 
 export = {
   up: async (queryInterface: QueryInterface): Promise<void> => {
-    await queryInterface.createTable('tipo_carga', {
-      id_tipo_carga: {
+    await queryInterface.createTable('adicional', {
+      id_adicional: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER
       },
-      descripcion: {
-        type: DataTypes.STRING,
+      tipo: {
+        type: DataTypes.STRING(50),
+        allowNull: false
+      },
+      costo_default: {
+        type: DataTypes.INTEGER,
         allowNull: false
       },
       createdAt: {
@@ -25,6 +30,6 @@ export = {
     });
   },
   down: async (queryInterface: QueryInterface): Promise<void> => {
-    await queryInterface.dropTable('tipo_carga');
+    await queryInterface.dropTable('adicional');
   }
 };

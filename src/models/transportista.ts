@@ -33,4 +33,10 @@ export class Transportista extends Model<TransportistaAttributes, TransportistaC
       timestamps: true
     });
   }
+
+  static associate(models: any) {
+    this.hasMany(models.Tarifa, {
+      foreignKey: 'id_transportista'
+    });
+  }
 }

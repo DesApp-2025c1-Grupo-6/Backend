@@ -5,7 +5,7 @@ import { QueryInterface, DataTypes } from 'sequelize';
 export = {
   up: async (queryInterface: QueryInterface): Promise<void> => {
     await queryInterface.createTable('zona', {
-      id: {
+      id_zona: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,

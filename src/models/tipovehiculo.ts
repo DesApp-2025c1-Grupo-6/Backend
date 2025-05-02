@@ -8,9 +8,9 @@ interface TipoVehiculoAttributes {
   updatedAt?: Date;
 }
 
-type ZonaCreationAttributes = Optional<TipoVehiculoAttributes, 'id_tipoVehiculo' | 'tipo' | 'toneladas' | 'createdAt' | 'updatedAt'>;
+type TipoVehiculoCreationAttributes = Optional<TipoVehiculoAttributes, 'id_tipoVehiculo' | 'createdAt' | 'updatedAt'>;
 
-export class TipoVehiculo extends Model<TipoVehiculoAttributes, ZonaCreationAttributes> implements TipoVehiculoAttributes {
+export class TipoVehiculo extends Model<TipoVehiculoAttributes, TipoVehiculoCreationAttributes> implements TipoVehiculoAttributes {
   public id_tipoVehiculo!: number;
   public tipo!: string;
   public toneladas!: number;
@@ -37,6 +37,12 @@ export class TipoVehiculo extends Model<TipoVehiculoAttributes, ZonaCreationAttr
       tableName: 'tipoVehiculo',
       modelName: 'TipoVehiculo',
       timestamps: true
+    });
+  }
+
+  static associate(models: any) {
+    this.hasMany(models.Tarifa, {
+      foreignKey: 'id_tipoVehiculo'
     });
   }
 }

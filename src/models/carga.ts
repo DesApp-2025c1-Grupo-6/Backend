@@ -1,7 +1,7 @@
 import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
 
 interface CargaAttributes {
-  id: number;
+  id_carga: number;
   peso: number;
   volumen: number;
   requisitos_especiales: string;
@@ -10,10 +10,10 @@ interface CargaAttributes {
   updatedAt?: Date;
 }
 
-type CargaCreationAttributes = Optional<CargaAttributes, 'id' | 'createdAt' | 'updatedAt'>;
+type CargaCreationAttributes = Optional<CargaAttributes, 'id_carga' | 'createdAt' | 'updatedAt'>;
 
 export class Carga extends Model<CargaAttributes, CargaCreationAttributes> implements CargaAttributes {
-  public id!: number;
+  public id_carga!: number;
   public peso!: number;
   public volumen!: number;
   public requisitos_especiales!: string;
@@ -23,7 +23,7 @@ export class Carga extends Model<CargaAttributes, CargaCreationAttributes> imple
 
   static initModel(sequelize: Sequelize): typeof Carga {
     return Carga.init({
-      id: {
+      id_carga: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -45,7 +45,7 @@ export class Carga extends Model<CargaAttributes, CargaCreationAttributes> imple
         allowNull: false,
         references: {
           model: 'tipo_carga',
-          key: 'id'
+          key: 'id_tipo_carga'
         },
         onUpdate: 'CASCADE',
         onDelete: 'RESTRICT'
@@ -62,6 +62,9 @@ export class Carga extends Model<CargaAttributes, CargaCreationAttributes> imple
     this.belongsTo(models.TipoCarga, {
       foreignKey: 'id_tipo_carga',
       as: 'tipoCarga'
+    });
+    this.hasMany(models.Tarifa, {
+      foreignKey: 'id_carga'
     });
   }
 }
