@@ -1,4 +1,5 @@
-import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
+import { DataTypes, Sequelize, Optional } from 'sequelize';
+import { BaseModel } from './BaseModel';
 
 interface TipoCargaAttributes {
   id_tipo_carga: number;
@@ -9,11 +10,21 @@ interface TipoCargaAttributes {
 
 type TipoCargaCreationAttributes = Optional<TipoCargaAttributes, 'id_tipo_carga' | 'createdAt' | 'updatedAt'>;
 
-export class TipoCarga extends Model<TipoCargaAttributes, TipoCargaCreationAttributes> implements TipoCargaAttributes {
+export class TipoCarga extends BaseModel<TipoCargaAttributes, TipoCargaCreationAttributes> implements TipoCargaAttributes {
   public id_tipo_carga!: number;
   public descripcion!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+
+  // Esto es para el Front
+  get idField(): string {
+    return 'id_tipo_carga';
+  }
+  protected getFieldOrder(): string[] {
+    return ['descripcion'];
+  }
+
 
   static initModel(sequelize: Sequelize): typeof TipoCarga {
     return TipoCarga.init({

@@ -1,4 +1,5 @@
-import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
+import { DataTypes, Sequelize, Optional } from 'sequelize';
+import { BaseModel } from './BaseModel';
 
 interface TarifaAdicionalAttributes {
   id_tarifaAdicional: number;
@@ -11,13 +12,23 @@ interface TarifaAdicionalAttributes {
 
 type TarifaAdicionalCreationAttributes = Optional<TarifaAdicionalAttributes, 'id_tarifaAdicional' | 'createdAt' | 'updatedAt'>;
 
-export class TarifaAdicional extends Model<TarifaAdicionalAttributes, TarifaAdicionalCreationAttributes> implements TarifaAdicionalAttributes {
+export class TarifaAdicional extends BaseModel<TarifaAdicionalAttributes, TarifaAdicionalCreationAttributes> implements TarifaAdicionalAttributes {
   public id_tarifaAdicional!: number;
   public costo_personalizado!: number;
   public id_tarifa!: number;
   public id_adicional!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+
+  // Esto es para el Front
+  get idField(): string {
+    return 'id_tarifaAdicional';
+  }
+  protected getFieldOrder(): string[] {
+    return ['costo_personalizado', 'id_tarifa', 'id_adicional']; 
+  }
+
 
   static initModel(sequelize: Sequelize): typeof TarifaAdicional {
     return TarifaAdicional.init({

@@ -1,4 +1,5 @@
-import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
+import { DataTypes, Sequelize, Optional } from 'sequelize';
+import { BaseModel } from './BaseModel';
 
 interface TipoVehiculoAttributes {
   id_tipoVehiculo: number;
@@ -10,12 +11,22 @@ interface TipoVehiculoAttributes {
 
 type TipoVehiculoCreationAttributes = Optional<TipoVehiculoAttributes, 'id_tipoVehiculo' | 'createdAt' | 'updatedAt'>;
 
-export class TipoVehiculo extends Model<TipoVehiculoAttributes, TipoVehiculoCreationAttributes> implements TipoVehiculoAttributes {
+export class TipoVehiculo extends BaseModel<TipoVehiculoAttributes, TipoVehiculoCreationAttributes> implements TipoVehiculoAttributes {
   public id_tipoVehiculo!: number;
   public tipo!: string;
   public toneladas!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+
+  // Esto es para el Front
+  get idField(): string {
+    return 'id_tipoVehiculo';
+  }
+  protected getFieldOrder(): string[] {
+    return ['tipo', 'toneladas'];
+  }
+
 
   static initModel(sequelize: Sequelize): typeof TipoVehiculo {
     return TipoVehiculo.init({

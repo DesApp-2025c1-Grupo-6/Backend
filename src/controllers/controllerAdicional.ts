@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import db from '../models';
 
-export const getAdicional = async (req: Request, res: Response) => {
+export const getAllAdicionales = async (req: Request, res: Response) => {
   try {
     const adicional = await db.Adicional.findAll();
     res.json(adicional);

@@ -1,8 +1,8 @@
 import express from 'express';
-import { getAdicional } from '../controllers/controllerAdicional';
+import { getAllAdicionales } from '../controllers/controllerAdicional';
 
 const router = express.Router();
 
-router.get('/', getAdicional);
+router.get('/', getAllAdicionales);
 
 export default router;

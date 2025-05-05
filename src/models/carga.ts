@@ -1,4 +1,5 @@
-import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
+import { DataTypes, Sequelize, Optional } from 'sequelize';
+import { BaseModel } from './BaseModel';
 
 interface CargaAttributes {
   id_carga: number;
@@ -12,7 +13,7 @@ interface CargaAttributes {
 
 type CargaCreationAttributes = Optional<CargaAttributes, 'id_carga' | 'createdAt' | 'updatedAt'>;
 
-export class Carga extends Model<CargaAttributes, CargaCreationAttributes> implements CargaAttributes {
+export class Carga extends BaseModel<CargaAttributes, CargaCreationAttributes> implements CargaAttributes {
   public id_carga!: number;
   public peso!: number;
   public volumen!: number;
@@ -20,6 +21,16 @@ export class Carga extends Model<CargaAttributes, CargaCreationAttributes> imple
   public id_tipo_carga!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+
+  // Esto es para el Front
+  get idField(): string {
+    return 'id_carga';
+  }
+  protected getFieldOrder(): string[] {
+    return ['peso', 'volumen', 'requisitos_especiales', 'id_tipo_carga']; 
+  }
+
 
   static initModel(sequelize: Sequelize): typeof Carga {
     return Carga.init({
