@@ -24,7 +24,7 @@ export class Adicional extends BaseModel<AdicionalAttributes, AdicionalCreationA
     return 'id_adicional';
   }
   protected getFieldOrder(): string[] {
-    return ['tipo', 'costo_default']; //Preguntar a Branko que orden quiere
+    return ['tipo', 'costo_default'];
   }
 
 
@@ -55,13 +55,5 @@ export class Adicional extends BaseModel<AdicionalAttributes, AdicionalCreationA
     this.hasMany(models.TarifaAdicional, {
       foreignKey: 'id_adicional'
     });
-  }
-
-  toJSON() {
-    const values = { ...this.get() };
-
-    delete values.createdAt;
-    delete values.updatedAt;
-    return values;
   }
 }

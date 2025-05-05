@@ -32,8 +32,9 @@ export class Tarifa extends BaseModel<TarifaAttributes, TarifaCreationAttributes
     return 'id_tarifa';
   }
   protected getFieldOrder(): string[] {
-    return ['valor_base', 'fecha', 'id_tipoVehiculo', 'id_carga', 'id_zona', 'id_transportista']; //Preguntar a Branko que orden quiere
+    return ['valor_base', 'fecha', 'id_tipoVehiculo', 'id_carga', 'id_zona', 'id_transportista']; 
   }
+
 
   static initModel(sequelize: Sequelize): typeof Tarifa {
     return Tarifa.init({
@@ -118,13 +119,5 @@ export class Tarifa extends BaseModel<TarifaAttributes, TarifaCreationAttributes
     this.hasMany(models.TarifaAdicional, {
       foreignKey: 'id_tarifa'
     });
-  }
-
-  toJSON() {
-    const values = { ...this.get() };
-
-    delete values.createdAt;
-    delete values.updatedAt;
-    return values;
   }
 }

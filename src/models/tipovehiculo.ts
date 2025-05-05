@@ -24,7 +24,7 @@ export class TipoVehiculo extends BaseModel<TipoVehiculoAttributes, TipoVehiculo
     return 'id_tipoVehiculo';
   }
   protected getFieldOrder(): string[] {
-    return ['tipo', 'toneladas']; //Preguntar a Branko que orden quiere
+    return ['tipo', 'toneladas'];
   }
 
 

@@ -28,7 +28,7 @@ export class Carga extends BaseModel<CargaAttributes, CargaCreationAttributes> i
     return 'id_carga';
   }
   protected getFieldOrder(): string[] {
-    return ['peso', 'volumen', 'requisitos_especiales', 'id_tipo_carga']; //Preguntar a Branko que orden quiere
+    return ['peso', 'volumen', 'requisitos_especiales', 'id_tipo_carga']; 
   }
 
 
@@ -77,13 +77,5 @@ export class Carga extends BaseModel<CargaAttributes, CargaCreationAttributes> i
     this.hasMany(models.Tarifa, {
       foreignKey: 'id_carga'
     });
-  }
-
-  toJSON() {
-    const values = { ...this.get() };
-
-    delete values.createdAt;
-    delete values.updatedAt;
-    return values;
   }
 }

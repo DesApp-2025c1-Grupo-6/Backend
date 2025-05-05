@@ -26,7 +26,7 @@ export class TarifaAdicional extends BaseModel<TarifaAdicionalAttributes, Tarifa
     return 'id_tarifaAdicional';
   }
   protected getFieldOrder(): string[] {
-    return ['costo_personalizado', 'id_tarifa', 'id_adicional']; //Preguntar a Branko que orden quiere
+    return ['costo_personalizado', 'id_tarifa', 'id_adicional']; 
   }
 
 
@@ -78,13 +78,5 @@ export class TarifaAdicional extends BaseModel<TarifaAdicionalAttributes, Tarifa
         foreignKey: 'id_adicional',
         as: 'adicional'
     })
-  }
-
-  toJSON() {
-    const values = { ...this.get() };
-
-    delete values.createdAt;
-    delete values.updatedAt;
-    return values;
   }
 }
