@@ -45,4 +45,12 @@ export class TipoVehiculo extends Model<TipoVehiculoAttributes, TipoVehiculoCrea
       foreignKey: 'id_tipoVehiculo'
     });
   }
+  
+  toJSON() {
+    const values = { ...this.get() };
+
+    delete values.createdAt;
+    delete values.updatedAt;
+    return values;
+  }
 }

@@ -67,4 +67,12 @@ export class Carga extends Model<CargaAttributes, CargaCreationAttributes> imple
       foreignKey: 'id_carga'
     });
   }
+
+  toJSON() {
+    const values = { ...this.get() };
+
+    delete values.createdAt;
+    delete values.updatedAt;
+    return values;
+  }
 }

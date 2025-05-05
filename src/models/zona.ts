@@ -20,7 +20,7 @@ export class Zona extends Model<ZonaAttributes, ZonaCreationAttributes> implemen
       id_zona: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
       },
       nombre: {
         type: DataTypes.STRING(50),
@@ -33,10 +33,18 @@ export class Zona extends Model<ZonaAttributes, ZonaCreationAttributes> implemen
       timestamps: true
     });
   }
-
+  
   static associate(models: any) {
     this.hasMany(models.Tarifa, {
       foreignKey: 'id_zona'
     });
+  }
+
+  toJSON() {
+    const values = { ...this.get() };
+
+    delete values.createdAt;
+    delete values.updatedAt;
+    return values;
   }
 }

@@ -39,4 +39,11 @@ export class Transportista extends Model<TransportistaAttributes, TransportistaC
       foreignKey: 'id_transportista'
     });
   }
+
+  toJSON() {
+    const values = { ...this.get() };
+    delete values.createdAt;
+    delete values.updatedAt;
+    return values;
+  }
 }

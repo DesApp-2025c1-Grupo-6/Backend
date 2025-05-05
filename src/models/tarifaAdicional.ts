@@ -68,4 +68,12 @@ export class TarifaAdicional extends Model<TarifaAdicionalAttributes, TarifaAdic
         as: 'adicional'
     })
   }
+
+  toJSON() {
+    const values = { ...this.get() };
+
+    delete values.createdAt;
+    delete values.updatedAt;
+    return values;
+  }
 }

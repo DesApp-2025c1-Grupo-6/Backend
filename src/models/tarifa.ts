@@ -109,4 +109,12 @@ export class Tarifa extends Model<TarifaAttributes, TarifaCreationAttributes> im
       foreignKey: 'id_tarifa'
     });
   }
+
+  toJSON() {
+    const values = { ...this.get() };
+
+    delete values.createdAt;
+    delete values.updatedAt;
+    return values;
+  }
 }

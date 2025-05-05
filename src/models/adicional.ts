@@ -45,4 +45,12 @@ export class Adicional extends Model<AdicionalAttributes, AdicionalCreationAttri
       foreignKey: 'id_adicional'
     });
   }
+
+  toJSON() {
+    const values = { ...this.get() };
+
+    delete values.createdAt;
+    delete values.updatedAt;
+    return values;
+  }
 }

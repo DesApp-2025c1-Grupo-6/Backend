@@ -40,4 +40,12 @@ export class TipoCarga extends Model<TipoCargaAttributes, TipoCargaCreationAttri
       as: 'cargas'
     });
   }
+
+  toJSON() {
+    const values = { ...this.get() };
+
+    delete values.createdAt;
+    delete values.updatedAt;
+    return values;
+  }
 }
