@@ -1,4 +1,5 @@
-import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
+import { DataTypes, Sequelize, Optional } from 'sequelize';
+import { BaseModel } from './BaseModel';
 
 interface TransportistaAttributes {
   id_transportista: number;
@@ -9,11 +10,21 @@ interface TransportistaAttributes {
 
 type TransportistaCreationAttributes = Optional<TransportistaAttributes, 'id_transportista' | 'createdAt' | 'updatedAt'>;
 
-export class Transportista extends Model<TransportistaAttributes, TransportistaCreationAttributes> implements TransportistaAttributes {
+export class Transportista extends BaseModel<TransportistaAttributes, TransportistaCreationAttributes> implements TransportistaAttributes {
   public id_transportista!: number;
   public nombre!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+
+  // Esto es para el Front
+  get idField(): string {
+    return 'id_transportista';
+  }
+  protected getFieldOrder(): string[] {
+    return ['nombre'];
+  }
+
 
   static initModel(sequelize: Sequelize): typeof Transportista {
     return Transportista.init({
@@ -38,12 +49,5 @@ export class Transportista extends Model<TransportistaAttributes, TransportistaC
     this.hasMany(models.Tarifa, {
       foreignKey: 'id_transportista'
     });
-  }
-
-  toJSON() {
-    const values = { ...this.get() };
-    delete values.createdAt;
-    delete values.updatedAt;
-    return values;
   }
 }

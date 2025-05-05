@@ -45,7 +45,7 @@ app.use('/transportistas', routesTransportista);
 app.use('/tipovehiculos', routesTipoVehiculo);
 app.use('/adicionales', routesAdicional);
 app.use('/tarifas', routesTarifa);
-app.use('/tarifaAdicional', routesTarifaAdicional);
+app.use('/tarifasAdicionales', routesTarifaAdicional);
 
 
 app.listen(PORT, () => {

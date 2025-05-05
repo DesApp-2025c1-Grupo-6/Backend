@@ -1,4 +1,5 @@
-import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
+import { DataTypes, Sequelize, Optional } from 'sequelize';
+import { BaseModel } from './BaseModel';
 
 interface AdicionalAttributes {
   id_adicional: number;
@@ -10,12 +11,22 @@ interface AdicionalAttributes {
 
 type AdicionalCreationAttributes = Optional<AdicionalAttributes, 'id_adicional' | 'createdAt' | 'updatedAt'>;
 
-export class Adicional extends Model<AdicionalAttributes, AdicionalCreationAttributes> implements AdicionalAttributes {
+export class Adicional extends BaseModel<AdicionalAttributes, AdicionalCreationAttributes> implements AdicionalAttributes {
   public id_adicional!: number;
   public tipo!: string;
   public costo_default!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+
+  // Esto es para el Front
+  get idField(): string {
+    return 'id_adicional';
+  }
+  protected getFieldOrder(): string[] {
+    return ['tipo', 'costo_default']; //Preguntar a Branko que orden quiere
+  }
+
 
   static initModel(sequelize: Sequelize): typeof Adicional {
     return Adicional.init({

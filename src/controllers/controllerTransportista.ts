@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import db from '../models';
 
-export const getTransportistas = async (req: Request, res: Response) => {
+export const getAllTransportistas = async (req: Request, res: Response) => {
   try {
     const transportistas = await db.Transportista.findAll();
     res.json(transportistas);

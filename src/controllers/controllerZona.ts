@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import db from '../models';
 
-export const getZonas = async (req: Request, res: Response) => {
+export const getAllZonas = async (req: Request, res: Response) => {
   try {
     const zonas = await db.Zona.findAll();
     res.json(zonas);

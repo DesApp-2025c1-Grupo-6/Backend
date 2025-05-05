@@ -1,8 +1,8 @@
 import express from 'express';
-import { getTransportistas } from '../controllers/controllerTransportista';
+import { getAllTransportistas } from '../controllers/controllerTransportista';
 
 const router = express.Router();
 
-router.get('/', getTransportistas);
+router.get('/', getAllTransportistas);
 
 export default router;
