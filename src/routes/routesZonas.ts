@@ -12,7 +12,7 @@ const router = express.Router();
 router.get("/", getAllZonas);
 /**
  * @swagger
- * /zona:
+ * /zonas:
  *   get:
  *     summary: Obtener todas las zonas
  *     tags: [Zonas]
