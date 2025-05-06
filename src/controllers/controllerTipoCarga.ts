@@ -3,7 +3,7 @@ import db from '../models';
 
 export const getAllTiposCarga = async (_: Request, res: Response) => {
   try {
-    const tiposCarga = await db.TipoCarga.findAll({ include: ['cargas'] });
+    const tiposCarga = await db.TipoCarga.findAll();
     res.json(tiposCarga);
   } catch (error) {
     console.error('Error al obtener tipos de carga:', error);
@@ -13,7 +13,7 @@ export const getAllTiposCarga = async (_: Request, res: Response) => {
 
 export const getTipoCargaById = async (req: Request, res: Response) => {
   try {
-    const tipoCarga = await db.TipoCarga.findByPk(req.params.id, { include: ['cargas'] });
+    const tipoCarga = await db.TipoCarga.findByPk(req.params.id);
     if (tipoCarga) 
       res.status(200).json(tipoCarga);
     else 
