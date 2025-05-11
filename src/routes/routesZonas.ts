@@ -15,7 +15,7 @@ router.get("/", getAllZonas);
  * /zonas:
  *   get:
  *     summary: Obtener todas las zonas
- *     tags: [zona]
+ *     tags: [Zonas]
  *     responses:
  *       200:
  *         description: Lista de zonas
@@ -31,7 +31,7 @@ router.get("/:id", getZonaById);
  * /zonas/{id}:
  *   get:
  *     summary: Obtener una zona por ID
- *     tags: [zona]
+ *     tags: [Zonas]
  *     parameters:
  *       - in: path
  *         name: id
@@ -52,7 +52,7 @@ router.post("/", createZona);
  * /zonas:
  *   post:
  *     summary: Crear una nueva zona
- *     tags: [zona]
+ *     tags: [Zonas]
  *     requestBody:
  *       required: true
  *       content:
@@ -71,7 +71,7 @@ router.put("/:id", updateZona);
  * /zonas/{id}:
  *   put:
  *     summary: Actualizar una zona existente
- *     tags: [zona]
+ *     tags: [Zonas]
  *     parameters:
  *       - in: path
  *         name: id
@@ -98,7 +98,7 @@ router.delete("/:id", deleteZona);
  * /zonas/{id}:
  *   delete:
  *     summary: Eliminar una zona
- *     tags: [zona]
+ *     tags: [Zonas]
  *     parameters:
  *       - in: path
  *         name: id
