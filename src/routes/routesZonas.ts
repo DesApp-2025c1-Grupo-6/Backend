@@ -15,7 +15,7 @@ router.get("/", getAllZonas);
  * /zonas:
  *   get:
  *     summary: Obtener todas las zonas
- *     tags: [Zonas]
+ *     tags: [zona]
  *     responses:
  *       200:
  *         description: Lista de zonas
@@ -28,10 +28,10 @@ router.get("/", getAllZonas);
 router.get("/:id", getZonaById);
 /**
  * @swagger
- * /zona/{id}:
+ * /zonas/{id}:
  *   get:
  *     summary: Obtener una zona por ID
- *     tags: [Zonas]
+ *     tags: [zona]
  *     parameters:
  *       - in: path
  *         name: id
@@ -49,14 +49,16 @@ router.get("/:id", getZonaById);
 router.post("/", createZona);
 /**
  * @swagger
- * /zona:
+ * /zonas:
  *   post:
  *     summary: Crear una nueva zona
- *     tags: [Zonas]
+ *     tags: [zona]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
+ *            schema:
+ *             type: object
  *
  *     responses:
  *       201:
@@ -66,10 +68,10 @@ router.put("/:id", updateZona);
 
 /**
  * @swagger
- * /zona/{id}:
+ * /zonas/{id}:
  *   put:
  *     summary: Actualizar una zona existente
- *     tags: [Zonas]
+ *     tags: [zona]
  *     parameters:
  *       - in: path
  *         name: id
@@ -81,6 +83,8 @@ router.put("/:id", updateZona);
  *       required: true
  *       content:
  *         application/json:
+ *             schema:
+ *              type: object
  *
  *     responses:
  *       200:
@@ -91,10 +95,10 @@ router.put("/:id", updateZona);
 router.delete("/:id", deleteZona);
 /**
  * @swagger
- * /zona/{id}:
+ * /zonas/{id}:
  *   delete:
  *     summary: Eliminar una zona
- *     tags: [Zonas]
+ *     tags: [zona]
  *     parameters:
  *       - in: path
  *         name: id
@@ -108,4 +112,5 @@ router.delete("/:id", deleteZona);
  *       404:
  *         description: Zona no encontrada
  */
+
 export default router;
