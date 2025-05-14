@@ -70,11 +70,52 @@ router.post("/", createCarga);
  *         application/json:
  *           schema:
  *             type: object
- *
+ *             properties:
+ *               peso:
+ *                 type: number
+ *                 example: 1200.5
+ *               volumen:
+ *                 type: number
+ *                 example: 8.3
+ *               requisitos_especiales:
+ *                 type: string
+ *                 example: "Requiere refrigeración"
+ *               id_tipo_carga:
+ *                 type: integer
+ *                 example: 2
  *     responses:
  *       201:
  *         description: Carga creada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id_carga:
+ *                   type: integer
+ *                   example: 15
+ *                 peso:
+ *                   type: number
+ *                   example: 1200.5
+ *                 volumen:
+ *                   type: number
+ *                   example: 8.3
+ *                 requisitos_especiales:
+ *                   type: string
+ *                   example: "Requiere refrigeración"
+ *                 id_tipo_carga:
+ *                   type: integer
+ *                   example: 2
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                   example: "2025-05-14T13:30:00.000Z"
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
+ *                   example: "2025-05-14T13:30:00.000Z"
  */
+
 router.put("/:id", updateCarga);
 /**
  * @swagger
@@ -115,8 +156,8 @@ router.delete("/:id", deleteCarga);
  *         schema:
  *           type: integer
  *     responses:
- *       204:
- *         description: Eliminado exitosamente
+ *       200:
+ *         description: Carga eliminada exitosamente
  *       404:
  *         description: Carga no encontrada
  */

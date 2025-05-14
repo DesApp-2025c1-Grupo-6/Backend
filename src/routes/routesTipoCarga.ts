@@ -112,8 +112,8 @@ router.delete("/:id", deleteTipoCarga);
  *         schema:
  *           type: integer
  *     responses:
- *       204:
- *         description: Eliminado exitosamente
+ *       200:
+ *         description: Carga eliminada exitosamente
  *       404:
  *         description: Tipo de carga no encontrado
  *       500:

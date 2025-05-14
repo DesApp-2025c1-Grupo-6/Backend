@@ -57,13 +57,36 @@ router.post("/", createZona);
  *       required: true
  *       content:
  *         application/json:
- *            schema:
+ *           schema:
  *             type: object
- *
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 example: "Zona Norte"
  *     responses:
  *       201:
  *         description: Zona creada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id_zona:
+ *                   type: integer
+ *                   example: 1
+ *                 nombre:
+ *                   type: string
+ *                   example: "Zona Norte"
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                   example: "2025-05-14T12:34:56.789Z"
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
+ *                   example: "2025-05-14T12:34:56.789Z"
  */
+
 router.put("/:id", updateZona);
 
 /**
