@@ -3,8 +3,10 @@ import initDatabase from "./config/db";
 import router from "./routes";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./swagger";
+import cors from "cors";
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (_, res) => {
