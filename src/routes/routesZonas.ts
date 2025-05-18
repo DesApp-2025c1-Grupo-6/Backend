@@ -85,10 +85,11 @@ router.post("/", createZona);
  *                   type: string
  *                   format: date-time
  *                   example: "2025-05-14T12:34:56.789Z"
+ *       400:
+ *         description: Datos inválidos o faltantes
  */
 
 router.put("/:id", updateZona);
-
 /**
  * @swagger
  * /zonas/{id}:
@@ -106,15 +107,40 @@ router.put("/:id", updateZona);
  *       required: true
  *       content:
  *         application/json:
- *             schema:
- *              type: object
- *
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *           example:
+ *             nombre: Zona Central
  *     responses:
  *       200:
  *         description: Zona actualizada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id_zona:
+ *                   type: integer
+ *                 nombre:
+ *                   type: string
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
+ *             example:
+ *               id_zona: 4
+ *               nombre: Zona Central
+ *               createdAt: "2025-05-10T12:00:00.000Z"
+ *               updatedAt: "2025-05-18T15:42:00.000Z"
  *       404:
  *         description: Zona no encontrada
  */
+
 router.delete("/:id", deleteZona);
 /**
  * @swagger
