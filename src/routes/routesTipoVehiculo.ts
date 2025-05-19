@@ -9,19 +9,14 @@ import {
 
 const router = express.Router();
 
-// Todos
 router.get('/', getAllTiposVehiculo);
 
-// Uno por ID
 router.get('/:id', getTipoVehiculoById);
 
-// Crear
 router.post('/', createTipoVehiculo);
 
-// Actualizar
 router.put('/:id', updateTipoVehiculo);
 
-// Eliminar
 router.delete('/:id', deleteTipoVehiculo);
 
 export default router;
