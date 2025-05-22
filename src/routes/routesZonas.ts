@@ -19,10 +19,7 @@ router.get("/", getAllZonas);
  *     responses:
  *       200:
  *         description: Lista de zonas
- *         content:
- *           application/json:
- *             schema:
- *               type: array
+ *
  *
  */
 router.get("/:id", getZonaById);
@@ -66,25 +63,7 @@ router.post("/", createZona);
  *     responses:
  *       201:
  *         description: Zona creada
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id_zona:
- *                   type: integer
- *                   example: 1
- *                 nombre:
- *                   type: string
- *                   example: "Zona Norte"
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                   example: "2025-05-14T12:34:56.789Z"
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
- *                   example: "2025-05-14T12:34:56.789Z"
+ *
  *       400:
  *         description: Datos inválidos o faltantes
  */
@@ -117,26 +96,7 @@ router.put("/:id", updateZona);
  *     responses:
  *       200:
  *         description: Zona actualizada
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id_zona:
- *                   type: integer
- *                 nombre:
- *                   type: string
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
- *             example:
- *               id_zona: 4
- *               nombre: Zona Central
- *               createdAt: "2025-05-10T12:00:00.000Z"
- *               updatedAt: "2025-05-18T15:42:00.000Z"
+ *
  *       404:
  *         description: Zona no encontrada
  */
