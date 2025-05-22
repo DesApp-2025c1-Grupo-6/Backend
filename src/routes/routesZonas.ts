@@ -6,12 +6,6 @@ import {
   updateZona,
   deleteZona,
 } from "../controllers/controllerZona";
-import { validate, validateParams } from "../middlewares/validate.middleware";
-import {
-  createZonaSchema,
-  idParamSchema,
-  updateZonaSchema,
-} from "../validations/zona.validation";
 
 const router = express.Router();
 
@@ -31,7 +25,7 @@ router.get("/", getAllZonas);
  *               type: array
  *
  */
-router.get("/:id", validateParams(idParamSchema), getZonaById);
+router.get("/:id", getZonaById);
 /**
  * @swagger
  * /zonas/{id}:
@@ -52,7 +46,7 @@ router.get("/:id", validateParams(idParamSchema), getZonaById);
  *       404:
  *         description: Zona no encontrada
  */
-router.post("/", validate(createZonaSchema), createZona);
+router.post("/", createZona);
 /**
  * @swagger
  * /zonas:
@@ -72,17 +66,30 @@ router.post("/", validate(createZonaSchema), createZona);
  *     responses:
  *       201:
  *         description: Zona creada
- *
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id_zona:
+ *                   type: integer
+ *                   example: 1
+ *                 nombre:
+ *                   type: string
+ *                   example: "Zona Norte"
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                   example: "2025-05-14T12:34:56.789Z"
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
+ *                   example: "2025-05-14T12:34:56.789Z"
  *       400:
  *         description: Datos inválidos o faltantes
  */
 
-router.put(
-  "/:id",
-  validateParams(idParamSchema),
-  validate(updateZonaSchema),
-  updateZona
-);
+router.put("/:id", updateZona);
 /**
  * @swagger
  * /zonas/{id}:
@@ -110,13 +117,31 @@ router.put(
  *     responses:
  *       200:
  *         description: Zona actualizada
- *
- *
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id_zona:
+ *                   type: integer
+ *                 nombre:
+ *                   type: string
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *                 updatedAt:
+ *                   type: string
+ *                   format: date-time
+ *             example:
+ *               id_zona: 4
+ *               nombre: Zona Central
+ *               createdAt: "2025-05-10T12:00:00.000Z"
+ *               updatedAt: "2025-05-18T15:42:00.000Z"
  *       404:
  *         description: Zona no encontrada
  */
 
-router.delete("/:id", validateParams(idParamSchema), deleteZona);
+router.delete("/:id", deleteZona);
 /**
  * @swagger
  * /zonas/{id}:
