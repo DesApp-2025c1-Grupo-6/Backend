@@ -116,8 +116,7 @@ router.delete("/:id", deleteTipoCarga);
  *         description: Carga eliminada exitosamente
  *       404:
  *         description: Tipo de carga no encontrado
- *       500:
- *         description: Error interno del servidor
+ *
  */
 
 export default router;

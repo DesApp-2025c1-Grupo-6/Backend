@@ -56,6 +56,9 @@ router.get("/:id/tipo-carga", getTipoCargaByCargaId as express.RequestHandler);
  *     responses:
  *       200:
  *         description: Tipo de carga encontrado
+ *       404:
+ *         description: No se encontró un tipo de carga
+ *
  */
 router.post("/", createCarga);
 /**
@@ -86,34 +89,9 @@ router.post("/", createCarga);
  *     responses:
  *       201:
  *         description: Carga creada
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id_carga:
- *                   type: integer
- *                   example: 15
- *                 peso:
- *                   type: number
- *                   example: 1200.5
- *                 volumen:
- *                   type: number
- *                   example: 8.3
- *                 requisitos_especiales:
- *                   type: string
- *                   example: "Requiere refrigeración"
- *                 id_tipo_carga:
- *                   type: integer
- *                   example: 2
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                   example: "2025-05-14T13:30:00.000Z"
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
- *                   example: "2025-05-14T13:30:00.000Z"
+ *
+ *       400:
+ *         description: Datos inválidos o faltantes
  */
 
 router.put("/:id", updateCarga);
@@ -135,13 +113,27 @@ router.put("/:id", updateCarga);
  *         application/json:
  *           schema:
  *             type: object
- *
+ *             properties:
+ *               peso:
+ *                 type: number
+ *               volumen:
+ *                 type: number
+ *               requisitos_especiales:
+ *                 type: string
+ *               id_tipo_carga:
+ *                 type: integer
+ *           example:
+ *             peso: 1200.5
+ *             volumen: 3.4
+ *             requisitos_especiales: Manejo con cuidado extremo
+ *             id_tipo_carga: 2
  *     responses:
  *       200:
  *         description: Carga actualizada
  *       404:
  *         description: Carga no encontrada
  */
+
 router.delete("/:id", deleteCarga);
 /**
  * @swagger
