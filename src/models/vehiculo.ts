@@ -1,18 +1,18 @@
 import { DataTypes, Sequelize, Optional } from 'sequelize';
 import { BaseModel } from './BaseModel';
 
-interface TipoVehiculoAttributes {
-  id_tipoVehiculo: number;
+interface VehiculoAttributes {
+  id_vehiculo: number;
   tipo: string;
   toneladas: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-type TipoVehiculoCreationAttributes = Optional<TipoVehiculoAttributes, 'id_tipoVehiculo' | 'createdAt' | 'updatedAt'>;
+type VehiculoCreationAttributes = Optional<VehiculoAttributes, 'id_vehiculo' | 'createdAt' | 'updatedAt'>;
 
-export class TipoVehiculo extends BaseModel<TipoVehiculoAttributes, TipoVehiculoCreationAttributes> implements TipoVehiculoAttributes {
-  public id_tipoVehiculo!: number;
+export class Vehiculo extends BaseModel<VehiculoAttributes, VehiculoCreationAttributes> implements VehiculoAttributes {
+  public id_vehiculo!: number;
   public tipo!: string;
   public toneladas!: number;
   public readonly createdAt!: Date;
@@ -21,16 +21,16 @@ export class TipoVehiculo extends BaseModel<TipoVehiculoAttributes, TipoVehiculo
 
   // Esto es para el Front
   get idField(): string {
-    return 'id_tipoVehiculo';
+    return 'id_vehiculo';
   }
   protected getFieldOrder(): string[] {
     return ['tipo', 'toneladas'];
   }
 
 
-  static initModel(sequelize: Sequelize): typeof TipoVehiculo {
-    return TipoVehiculo.init({
-      id_tipoVehiculo: {
+  static initModel(sequelize: Sequelize): typeof Vehiculo {
+    return Vehiculo.init({
+      id_vehiculo: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -45,15 +45,15 @@ export class TipoVehiculo extends BaseModel<TipoVehiculoAttributes, TipoVehiculo
       }
     }, {
       sequelize,
-      tableName: 'tipoVehiculo',
-      modelName: 'TipoVehiculo',
+      tableName: 'vehiculo',
+      modelName: 'Vehiculo',
       timestamps: true
     });
   }
 
   static associate(models: any) {
     this.hasMany(models.Tarifa, {
-      foreignKey: 'id_tipoVehiculo'
+      foreignKey: 'id_vehiculo'
     });
   }
 }
