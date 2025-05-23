@@ -5,7 +5,7 @@ interface TarifaAttributes {
   id_tarifa: number;
   valor_base: number;
   fecha: Date;
-  id_tipoVehiculo: number;
+  id_vehiculo: number;
   id_carga: number;
   id_zona: number;
   id_transportista: number;
@@ -19,7 +19,7 @@ export class Tarifa extends BaseModel<TarifaAttributes, TarifaCreationAttributes
   public id_tarifa!: number;
   public valor_base!: number;
   public fecha!: Date;
-  public id_tipoVehiculo!: number;
+  public id_vehiculo!: number;
   public id_carga!: number;
   public id_zona!: number;
   public id_transportista!: number;
@@ -32,7 +32,7 @@ export class Tarifa extends BaseModel<TarifaAttributes, TarifaCreationAttributes
     return 'id_tarifa';
   }
   protected getFieldOrder(): string[] {
-    return ['valor_base', 'fecha', 'id_tipoVehiculo', 'id_carga', 'id_zona', 'id_transportista']; 
+    return ['valor_base', 'fecha', 'id_vehiculo', 'id_carga', 'id_zona', 'id_transportista']; 
   }
 
 
@@ -51,12 +51,12 @@ export class Tarifa extends BaseModel<TarifaAttributes, TarifaCreationAttributes
         type: DataTypes.DATE,
         allowNull: false
       },
-      id_tipoVehiculo: {
+      id_vehiculo: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'tipoVehiculo',
-          key: 'id_tipoVehiculo'
+          model: 'vehiculo',
+          key: 'id_vehiculo'
         },
         onUpdate: 'CASCADE',
         onDelete: 'RESTRICT'
@@ -100,9 +100,9 @@ export class Tarifa extends BaseModel<TarifaAttributes, TarifaCreationAttributes
   }
 
   static associate(models: any) {
-    this.belongsTo(models.TipoVehiculo, {
-      foreignKey: 'id_tipoVehiculo',
-      as: 'tipoVehiculo'
+    this.belongsTo(models.Vehiculo, {
+      foreignKey: 'id_vehiculo',
+      as: 'vehiculo'
     });
     this.belongsTo(models.Carga, {
         foreignKey: 'id_carga',

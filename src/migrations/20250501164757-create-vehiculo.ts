@@ -4,8 +4,8 @@ import { QueryInterface, DataTypes } from 'sequelize';
 
 export = {
   up: async (queryInterface: QueryInterface): Promise<void> => {
-    await queryInterface.createTable('tipoVehiculo', {
-      id_tipoVehiculo: {
+    await queryInterface.createTable('vehiculo', {
+      id_vehiculo: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -30,6 +30,6 @@ export = {
     });
   },
   down: async (queryInterface: QueryInterface): Promise<void> => {
-    await queryInterface.dropTable('tipoVehiculo');
+    await queryInterface.dropTable('vehiculo');
   }
 };
