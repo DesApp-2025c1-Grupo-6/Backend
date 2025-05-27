@@ -42,7 +42,13 @@ export = {
         type: DataTypes.DATE
       }
     });
+
+    await queryInterface.addIndex('tarifaAdicional', ['id_tarifa', 'id_adicional'], {
+      unique: true,
+      name: 'unique_tarifa_adicional'
+    });
   },
+  
   down: async (queryInterface: QueryInterface): Promise<void> => {
     await queryInterface.dropTable('tarifaAdicional');
   }
