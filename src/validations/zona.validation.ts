@@ -11,7 +11,12 @@ export const createZonaSchema = Joi.object({
 });
 
 export const updateZonaSchema = Joi.object({
-  nombre: Joi.string().min(3).max(100).optional(),
+  nombre: Joi.string().min(3).max(100).optional().messages({
+    "string.base": "El nombre debe ser un texto",
+    "string.empty": "El nombre no puede estar vacío si se proporciona",
+    "string.min": "El nombre debe tener al menos 3 caracteres",
+    "string.max": "El nombre no puede tener más de 100 caracteres",
+  }),
 });
 
 export const idParamSchema = Joi.object({

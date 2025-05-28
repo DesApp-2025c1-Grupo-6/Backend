@@ -4,26 +4,35 @@ export const createCargaSchema = Joi.object({
   nombre: Joi.string().min(3).max(100).required().messages({
     "string.base": "El nombre debe ser una cadena de texto",
     "string.empty": "El nombre no puede estar vacío",
-    "string.min": "El nombre debe tener al menos {#limit} caracteres",
-    "string.max": "El nombre debe tener como máximo {#limit} caracteres",
+    "string.min": "El nombre debe tener al menos 2 caracteres",
+    "string.max": "El nombre debe tener como máximo 2 caracteres",
     "any.required": "El nombre es obligatorio",
   }),
-  peso: Joi.number().positive().precision(2).required(),
-  fecha: Joi.date().iso().required(),
-  id_tipo_carga: Joi.number().integer().positive().required(),
-});
-
-export const updateCargaSchema = Joi.object({
-  nombre: Joi.string().min(3).max(100),
-  peso: Joi.number().positive().precision(2).messages({
+  peso: Joi.number().positive().precision(2).required().messages({
     "number.base": "El peso debe ser un número",
     "number.positive": "El peso debe ser un número positivo",
     "any.required": "El peso es obligatorio",
   }),
-  fecha: Joi.date().iso().messages({
-    "date.base": "La fecha debe ser una fecha válida",
-    "date.format": "La fecha debe tener formato ISO",
-    "any.required": "La fecha es obligatoria",
+  id_tipo_carga: Joi.number().integer().positive().required().messages({
+    "number.base": "El id_tipo_carga debe ser un número",
+    "number.integer": "El id_tipo_carga debe ser un número entero",
+    "number.positive": "El id_tipo_carga debe ser un número positivo",
+    "any.required": "El id_tipo_carga es obligatorio",
+  }),
+});
+
+export const updateCargaSchema = Joi.object({
+  nombre: Joi.string().min(3).max(100).messages({
+    "string.base": "El nombre debe ser una cadena de texto",
+    "string.empty": "El nombre no puede estar vacío",
+    "string.min": "El nombre debe tener al menos 2 caracteres",
+    "string.max": "El nombre debe tener como máximo 2 caracteres",
+    "any.required": "El nombre es obligatorio",
+  }),
+  peso: Joi.number().positive().precision(2).messages({
+    "number.base": "El peso debe ser un número",
+    "number.positive": "El peso debe ser un número positivo",
+    "any.required": "El peso es obligatorio",
   }),
   id_tipo_carga: Joi.number().integer().positive().messages({
     "number.base": "El id_tipo_carga debe ser un número",
