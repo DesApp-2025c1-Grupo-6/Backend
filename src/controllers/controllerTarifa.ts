@@ -3,7 +3,7 @@ import db from '../models';
 
 export const getAllTarifas  = async (_: Request, res: Response) => {
   try {
-    const tarifas = await db.Tarifa.findAll({ include: ['tipoVehiculo', 'carga', 'zona', 'transportista'] });
+    const tarifas = await db.Tarifa.findAll({ include: ['vehiculo', 'carga', 'zona', 'transportista'] });
     res.json(tarifas);
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener las tarifas' });

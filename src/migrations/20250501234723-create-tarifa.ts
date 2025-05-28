@@ -17,12 +17,12 @@ export = {
       fecha: {
         type: DataTypes.DATE
       },
-      id_tipoVehiculo: {
+      id_vehiculo: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'tipoVehiculo',
-          key: 'id_tipoVehiculo'
+          model: 'vehiculo',
+          key: 'id_vehiculo'
         },
         onUpdate: 'CASCADE',
         onDelete: 'RESTRICT'
