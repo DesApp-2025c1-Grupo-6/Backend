@@ -1,17 +1,21 @@
 import Joi from "joi";
 
 export const createCargaSchema = Joi.object({
-  nombre: Joi.string().min(3).max(100).required().messages({
-    "string.base": "El nombre debe ser una cadena de texto",
-    "string.empty": "El nombre no puede estar vacío",
-    "string.min": "El nombre debe tener al menos 2 caracteres",
-    "string.max": "El nombre debe tener como máximo 2 caracteres",
-    "any.required": "El nombre es obligatorio",
-  }),
   peso: Joi.number().positive().precision(2).required().messages({
     "number.base": "El peso debe ser un número",
     "number.positive": "El peso debe ser un número positivo",
     "any.required": "El peso es obligatorio",
+  }),
+  volumen: Joi.number().positive().precision(2).required().messages({
+    "number.base": "El volumen debe ser un número",
+    "number.positive": "El volumen debe ser un número positivo",
+    "any.required": "El volumen es obligatorio",
+  }),
+
+  requisitos_especiales: Joi.string().max(255).optional().messages({
+    "string.base": "Los requisitos especiales deben ser texto",
+    "string.max":
+      "Los requisitos especiales no pueden superar los 255 caracteres",
   }),
   id_tipo_carga: Joi.number().integer().positive().required().messages({
     "number.base": "El id_tipo_carga debe ser un número",
@@ -19,16 +23,9 @@ export const createCargaSchema = Joi.object({
     "number.positive": "El id_tipo_carga debe ser un número positivo",
     "any.required": "El id_tipo_carga es obligatorio",
   }),
-});
+}).unknown(true);
 
 export const updateCargaSchema = Joi.object({
-  nombre: Joi.string().min(3).max(100).messages({
-    "string.base": "El nombre debe ser una cadena de texto",
-    "string.empty": "El nombre no puede estar vacío",
-    "string.min": "El nombre debe tener al menos 2 caracteres",
-    "string.max": "El nombre debe tener como máximo 2 caracteres",
-    "any.required": "El nombre es obligatorio",
-  }),
   peso: Joi.number().positive().precision(2).messages({
     "number.base": "El peso debe ser un número",
     "number.positive": "El peso debe ser un número positivo",
