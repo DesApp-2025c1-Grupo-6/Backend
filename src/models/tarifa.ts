@@ -116,8 +116,10 @@ export class Tarifa extends BaseModel<TarifaAttributes, TarifaCreationAttributes
         foreignKey: 'id_transportista',
         as: 'transportista'
     });
+
     this.hasMany(models.TarifaAdicional, {
-      foreignKey: 'id_tarifa'
+      foreignKey: 'id_tarifa',
+      as: 'adicionales'
     });
   }
 }

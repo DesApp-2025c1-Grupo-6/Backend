@@ -7,7 +7,6 @@ import routesTransportista from './routesTransportista';
 import routesVehiculos from './routesVehiculo';
 import routesAdicional from './routesAdicional';
 import routesTarifa from './routesTarifa';
-import routesTarifaAdicional from './routesTarifaAdicional';
 
 const router = Router();
 
@@ -18,6 +17,5 @@ router.use('/transportistas', routesTransportista);
 router.use('/vehiculos', routesVehiculos);
 router.use('/adicionales', routesAdicional);
 router.use('/tarifas', routesTarifa);
-router.use('/tarifaAdicional', routesTarifaAdicional);
 
 export default router;
