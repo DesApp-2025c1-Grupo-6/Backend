@@ -37,7 +37,9 @@ export const updateCargaSchema = Joi.object({
     "number.positive": "El id_tipo_carga debe ser un número positivo",
     "any.required": "El id_tipo_carga es obligatorio",
   }),
-}).min(1);
+})
+  .min(1)
+  .unknown(true);
 
 export const idParamSchema = Joi.object({
   id: Joi.number().integer().positive().required().messages({
