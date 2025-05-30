@@ -8,11 +8,8 @@ import {
   getTipoCargaByCargaId,
 } from "../controllers/controllerCarga";
 import { validate, validateParams } from "../middlewares/validate.middlewares";
-import {
-  createCargaSchema,
-  updateCargaSchema,
-  idParamSchema,
-} from "../validations/carga.validation";
+import { cargaSchema } from "../validations/carga.validation";
+import { idParamSchema } from "../validations/comun.validation";
 
 const router = express.Router();
 
@@ -70,7 +67,7 @@ router.get(
  *         description: No se encontró un tipo de carga
  *
  */
-router.post("/", validate(createCargaSchema), createCarga);
+router.post("/", validate(cargaSchema), createCarga);
 /**
  * @swagger
  * /cargas:
@@ -107,7 +104,7 @@ router.post("/", validate(createCargaSchema), createCarga);
 router.put(
   "/:id",
   validateParams(idParamSchema),
-  validate(updateCargaSchema),
+  validate(cargaSchema),
   updateCarga
 );
 /**
