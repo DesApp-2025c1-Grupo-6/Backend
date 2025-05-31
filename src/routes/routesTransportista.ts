@@ -1,19 +1,19 @@
-import express from "express";
+import express from 'express';
 import {
   getAllTransportistas,
   getTransportistaById,
   createTransportista,
   updateTransportista,
   deleteTransportista,
-} from "../controllers/controllerTransportista";
-import { validate, validateParams } from "../middlewares/validate.middlewares";
-import { transportistaSchema } from "../validations/transportista.validation";
-import { idParamSchema } from "../validations/comun.validation";
+} from '../controllers/controllerTransportista';
+import { validate, validateParams } from '../middlewares/validate.middlewares';
+import { transportistaSchema } from '../validations/transportista.validation';
+import { idParamSchema } from '../validations/comun.validation';
 
 const router = express.Router();
 
 // Todos
-router.get("/", getAllTransportistas);
+router.get('/', getAllTransportistas);
 /**
  * @swagger
  * /transportistas:
@@ -30,7 +30,7 @@ router.get("/", getAllTransportistas);
  *
  */
 
-router.get("/:id", validateParams(idParamSchema), getTransportistaById);
+router.get('/:id', validateParams(idParamSchema), getTransportistaById);
 /**
  * @swagger
  * /transportistas/{id}:
@@ -51,7 +51,7 @@ router.get("/:id", validateParams(idParamSchema), getTransportistaById);
  *         description: Transportista no encontrado
  */
 
-router.post("/", validate(transportistaSchema), createTransportista);
+router.post('/', validate(transportistaSchema), createTransportista);
 /**
  * @swagger
  * /transportistas:
@@ -78,7 +78,7 @@ router.post("/", validate(transportistaSchema), createTransportista);
  */
 
 router.put(
-  "/:id",
+  '/:id',
   validateParams(idParamSchema),
   validate(transportistaSchema),
   updateTransportista
@@ -114,7 +114,7 @@ router.put(
  *         description: Transportista no encontrado
  */
 
-router.delete("/:id", validateParams(idParamSchema), deleteTransportista);
+router.delete('/:id', validateParams(idParamSchema), deleteTransportista);
 /**
  * @swagger
  * /transportistas/{id}:

@@ -1,18 +1,18 @@
-import express from "express";
+import express from 'express';
 import {
   getAllAdicionales,
   getAdicionalById,
   createAdicional,
   updateAdicional,
   deleteAdicional,
-} from "../controllers/controllerAdicional";
-import { validate, validateParams } from "../middlewares/validate.middlewares";
-import { adicionalSchema } from "../validations/adicional.validation";
-import { idParamSchema } from "../validations/comun.validation";
+} from '../controllers/controllerAdicional';
+import { validate, validateParams } from '../middlewares/validate.middlewares';
+import { adicionalSchema } from '../validations/adicional.validation';
+import { idParamSchema } from '../validations/comun.validation';
 
 const router = express.Router();
 
-router.get("/", getAllAdicionales);
+router.get('/', getAllAdicionales);
 /**
  * @swagger
  * /adicionales:
@@ -29,7 +29,7 @@ router.get("/", getAllAdicionales);
  *
  */
 
-router.get("/:id", validateParams(idParamSchema), getAdicionalById);
+router.get('/:id', validateParams(idParamSchema), getAdicionalById);
 /**
  * @swagger
  * /adicionales/{id}:
@@ -50,7 +50,7 @@ router.get("/:id", validateParams(idParamSchema), getAdicionalById);
  *         description: Adicional no encontrado
  */
 
-router.post("/", validate(adicionalSchema), createAdicional);
+router.post('/', validate(adicionalSchema), createAdicional);
 /**
  * @swagger
  * /adicionales:
@@ -81,7 +81,7 @@ router.post("/", validate(adicionalSchema), createAdicional);
  */
 
 router.put(
-  "/:id",
+  '/:id',
   validateParams(idParamSchema),
   validate(adicionalSchema),
   updateAdicional
@@ -121,7 +121,7 @@ router.put(
  *         description: Adicional no encontrado
  */
 
-router.delete("/:id", validateParams(idParamSchema), deleteAdicional);
+router.delete('/:id', validateParams(idParamSchema), deleteAdicional);
 /**
  * @swagger
  * /adicionales/{id}:

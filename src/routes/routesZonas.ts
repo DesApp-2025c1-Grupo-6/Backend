@@ -1,18 +1,18 @@
-import express from "express";
+import express from 'express';
 import {
   getAllZonas,
   getZonaById,
   createZona,
   updateZona,
   deleteZona,
-} from "../controllers/controllerZona";
-import { validate, validateParams } from "../middlewares/validate.middlewares";
-import { zonaSchema } from "../validations/zona.validation";
-import { idParamSchema } from "../validations/comun.validation";
+} from '../controllers/controllerZona';
+import { validate, validateParams } from '../middlewares/validate.middlewares';
+import { zonaSchema } from '../validations/zona.validation';
+import { idParamSchema } from '../validations/comun.validation';
 
 const router = express.Router();
 
-router.get("/", getAllZonas);
+router.get('/', getAllZonas);
 /**
  * @swagger
  * /zonas:
@@ -25,7 +25,7 @@ router.get("/", getAllZonas);
  *
  *
  */
-router.get("/:id", validateParams(idParamSchema), getZonaById);
+router.get('/:id', validateParams(idParamSchema), getZonaById);
 /**
  * @swagger
  * /zonas/{id}:
@@ -46,7 +46,7 @@ router.get("/:id", validateParams(idParamSchema), getZonaById);
  *       404:
  *         description: Zona no encontrada
  */
-router.post("/", validate(zonaSchema), createZona);
+router.post('/', validate(zonaSchema), createZona);
 /**
  * @swagger
  * /zonas:
@@ -72,7 +72,7 @@ router.post("/", validate(zonaSchema), createZona);
  */
 
 router.put(
-  "/:id",
+  '/:id',
   validateParams(idParamSchema),
   validate(zonaSchema),
   updateZona
@@ -109,7 +109,7 @@ router.put(
  *         description: Zona no encontrada
  */
 
-router.delete("/:id", validateParams(idParamSchema), deleteZona);
+router.delete('/:id', validateParams(idParamSchema), deleteZona);
 /**
  * @swagger
  * /zonas/{id}:

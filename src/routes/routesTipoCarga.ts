@@ -1,18 +1,18 @@
-import express from "express";
+import express from 'express';
 import {
   getAllTiposCarga,
   getTipoCargaById,
   createTipoCarga,
   updateTipoCarga,
   deleteTipoCarga,
-} from "../controllers/controllerTipoCarga";
-import { tipoCargaSchema } from "../validations/tipoCarga.validation";
-import { idParamSchema } from "../validations/comun.validation";
-import { validate, validateParams } from "../middlewares/validate.middlewares";
+} from '../controllers/controllerTipoCarga';
+import { tipoCargaSchema } from '../validations/tipoCarga.validation';
+import { idParamSchema } from '../validations/comun.validation';
+import { validate, validateParams } from '../middlewares/validate.middlewares';
 
 const router = express.Router();
 
-router.get("/", getAllTiposCarga);
+router.get('/', getAllTiposCarga);
 /**
  * @swagger
  * /tipocargas:
@@ -24,7 +24,7 @@ router.get("/", getAllTiposCarga);
  *         description: Lista de tipos de carga
  *
  */
-router.get("/:id", validateParams(idParamSchema), getTipoCargaById);
+router.get('/:id', validateParams(idParamSchema), getTipoCargaById);
 /**
  * @swagger
  * /tipocargas/{id}:
@@ -44,7 +44,7 @@ router.get("/:id", validateParams(idParamSchema), getTipoCargaById);
  *       404:
  *         description: Tipo de carga no encontrado
  */
-router.post("/", validate(tipoCargaSchema), createTipoCarga);
+router.post('/', validate(tipoCargaSchema), createTipoCarga);
 /**
  * @swagger
  * /tipocargas:
@@ -71,7 +71,7 @@ router.post("/", validate(tipoCargaSchema), createTipoCarga);
  *         description: Datos inválidos
  */
 router.put(
-  "/:id",
+  '/:id',
   validateParams(idParamSchema),
   validate(tipoCargaSchema),
   updateTipoCarga
@@ -106,7 +106,7 @@ router.put(
  *       404:
  *         description: Tipo de carga no encontrado
  */
-router.delete("/:id", validateParams(idParamSchema), deleteTipoCarga);
+router.delete('/:id', validateParams(idParamSchema), deleteTipoCarga);
 /**
  * @swagger
  * /tipocargas/{id}:
