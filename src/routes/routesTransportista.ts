@@ -1,16 +1,19 @@
-import express from 'express';
-import { 
-  getAllTransportistas, 
-  getTransportistaById, 
+import express from "express";
+import {
+  getAllTransportistas,
+  getTransportistaById,
   createTransportista,
   updateTransportista,
-  deleteTransportista 
-} from '../controllers/controllerTransportista';
+  deleteTransportista,
+} from "../controllers/controllerTransportista";
+import { validate, validateParams } from "../middlewares/validate.middlewares";
+import { transportistaSchema } from "../validations/transportista.validation";
+import { idParamSchema } from "../validations/comun.validation";
 
 const router = express.Router();
 
 // Todos
-router.get('/', getAllTransportistas);
+router.get("/", getAllTransportistas);
 /**
  * @swagger
  * /transportistas:
@@ -27,7 +30,7 @@ router.get('/', getAllTransportistas);
  *
  */
 
-router.get('/:id', getTransportistaById);
+router.get("/:id", validateParams(idParamSchema), getTransportistaById);
 /**
  * @swagger
  * /transportistas/{id}:
@@ -48,7 +51,7 @@ router.get('/:id', getTransportistaById);
  *         description: Transportista no encontrado
  */
 
-router.post('/', createTransportista);
+router.post("/", validate(transportistaSchema), createTransportista);
 /**
  * @swagger
  * /transportistas:
@@ -74,7 +77,12 @@ router.post('/', createTransportista);
  *         description: Error al crear el transportista
  */
 
-router.put('/:id', updateTransportista);
+router.put(
+  "/:id",
+  validateParams(idParamSchema),
+  validate(transportistaSchema),
+  updateTransportista
+);
 /**
  * @swagger
  * /transportistas/{id}:
@@ -106,7 +114,7 @@ router.put('/:id', updateTransportista);
  *         description: Transportista no encontrado
  */
 
-router.delete('/:id', deleteTransportista);
+router.delete("/:id", validateParams(idParamSchema), deleteTransportista);
 /**
  * @swagger
  * /transportistas/{id}:
