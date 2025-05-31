@@ -6,6 +6,9 @@ import {
   updateZona,
   deleteZona,
 } from "../controllers/controllerZona";
+import { validate, validateParams } from "../middlewares/validate.middlewares";
+import { zonaSchema } from "../validations/zona.validation";
+import { idParamSchema } from "../validations/comun.validation";
 
 const router = express.Router();
 
@@ -22,7 +25,7 @@ router.get("/", getAllZonas);
  *
  *
  */
-router.get("/:id", getZonaById);
+router.get("/:id", validateParams(idParamSchema), getZonaById);
 /**
  * @swagger
  * /zonas/{id}:
@@ -43,7 +46,7 @@ router.get("/:id", getZonaById);
  *       404:
  *         description: Zona no encontrada
  */
-router.post("/", createZona);
+router.post("/", validate(zonaSchema), createZona);
 /**
  * @swagger
  * /zonas:
@@ -68,7 +71,12 @@ router.post("/", createZona);
  *         description: Datos inválidos o faltantes
  */
 
-router.put("/:id", updateZona);
+router.put(
+  "/:id",
+  validateParams(idParamSchema),
+  validate(zonaSchema),
+  updateZona
+);
 /**
  * @swagger
  * /zonas/{id}:
@@ -101,7 +109,7 @@ router.put("/:id", updateZona);
  *         description: Zona no encontrada
  */
 
-router.delete("/:id", deleteZona);
+router.delete("/:id", validateParams(idParamSchema), deleteZona);
 /**
  * @swagger
  * /zonas/{id}:

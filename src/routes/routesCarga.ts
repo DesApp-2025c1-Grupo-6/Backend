@@ -7,6 +7,9 @@ import {
   deleteCarga,
   getTipoCargaByCargaId,
 } from "../controllers/controllerCarga";
+import { validate, validateParams } from "../middlewares/validate.middlewares";
+import { cargaSchema } from "../validations/carga.validation";
+import { idParamSchema } from "../validations/comun.validation";
 
 const router = express.Router();
 
@@ -21,7 +24,7 @@ router.get("/", getAllCargas);
  *       200:
  *         description: Lista de cargas
  */
-router.get("/:id", getCargaById);
+router.get("/:id", validateParams(idParamSchema), getCargaById);
 /**
  * @swagger
  * /cargas/{id}:
@@ -40,7 +43,11 @@ router.get("/:id", getCargaById);
  *       404:
  *         description: Carga no encontrada
  */
-router.get("/:id/tipo-carga", getTipoCargaByCargaId as express.RequestHandler);
+router.get(
+  "/:id/tipo-carga",
+  validateParams(idParamSchema),
+  getTipoCargaByCargaId as express.RequestHandler
+);
 /**
  * @swagger
  * /cargas/{id}/tipo-carga:
@@ -60,7 +67,7 @@ router.get("/:id/tipo-carga", getTipoCargaByCargaId as express.RequestHandler);
  *         description: No se encontró un tipo de carga
  *
  */
-router.post("/", createCarga);
+router.post("/", validate(cargaSchema), createCarga);
 /**
  * @swagger
  * /cargas:
@@ -94,7 +101,12 @@ router.post("/", createCarga);
  *         description: Datos inválidos o faltantes
  */
 
-router.put("/:id", updateCarga);
+router.put(
+  "/:id",
+  validateParams(idParamSchema),
+  validate(cargaSchema),
+  updateCarga
+);
 /**
  * @swagger
  * /cargas/{id}:
@@ -134,7 +146,7 @@ router.put("/:id", updateCarga);
  *         description: Carga no encontrada
  */
 
-router.delete("/:id", deleteCarga);
+router.delete("/:id", validateParams(idParamSchema), deleteCarga);
 /**
  * @swagger
  * /cargas/{id}:
