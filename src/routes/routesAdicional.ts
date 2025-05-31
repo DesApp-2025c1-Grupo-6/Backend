@@ -13,11 +13,6 @@ router.get('/', getAllAdicionales);
  *     responses:
  *       200:
  *         description: Lista de adicionales
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *
  */
 
 router.get("/:id", getAdicionalById);

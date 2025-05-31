@@ -11,7 +11,8 @@ export = {
         type: DataTypes.INTEGER
       },
       costo_personalizado: {
-        type: DataTypes.DECIMAL(8, 2)
+        type: DataTypes.DECIMAL(8, 2),
+        allowNull: true
       },
       id_tarifa: {
         type: DataTypes.INTEGER,
