@@ -205,7 +205,6 @@ export const deleteTarifa = async (req: Request, res: Response): Promise<void> =
       return;
     }
 
-    const tarifaEliminada = mapTarifa(tarifaAEliminar);
 
     await db.TarifaAdicional.destroy({
       where: { id_tarifa: id },
@@ -219,7 +218,7 @@ export const deleteTarifa = async (req: Request, res: Response): Promise<void> =
 
     await transaction.commit();
 
-    res.status(200).json({ tarifaEliminada });
+    res.status(200).json( mapTarifa(tarifaAEliminar) );
 
   } catch (error) {
     await transaction.rollback();
