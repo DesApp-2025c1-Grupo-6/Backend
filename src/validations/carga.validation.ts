@@ -16,6 +16,7 @@ export const cargaSchema = Joi.object({
     'string.base': 'Los requisitos especiales deben ser texto',
     'string.max':
       'Los requisitos especiales no pueden superar los 255 caracteres',
+    'any.required': 'Los requisitos especiales son obligatorios',
   }),
   id_tipo_carga: Joi.number().integer().positive().required().messages({
     'number.base': 'El id_tipo_carga debe ser un número',
