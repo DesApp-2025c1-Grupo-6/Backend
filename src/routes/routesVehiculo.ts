@@ -6,7 +6,8 @@ import {
   updateVehiculo,
   deleteVehiculo,
 } from '../controllers/controllerVehiculo';
-import { validateParams } from '../middlewares/validate.middlewares';
+import { validate, validateParams } from '../middlewares/validate.middlewares';
+import { vehiculoSchema } from '../validations/vehiculo.validation';
 import { idParamSchema } from '../validations/comun.validation';
 
 const router = express.Router();
@@ -25,7 +26,12 @@ router.get('/:id', validateParams(idParamSchema), getVehiculoById);
  *         description: Lista de vehículos
  */
 
-router.get('/:id', validateParams(idParamSchema), getVehiculoById);
+router.get(
+  '/:id',
+  validateParams(idParamSchema),
+  validate(vehiculoSchema),
+  getVehiculoById
+);
 /**
  * @swagger
  * /vehiculos/{id}:
@@ -56,7 +62,7 @@ router.put(
 );
 
 router.delete('/:id', validateParams(idParamSchema), deleteVehiculo);
-router.post('/', createVehiculo);
+router.post('/', validate(vehiculoSchema), createVehiculo);
 /**
  * @swagger
  * /vehiculos:
