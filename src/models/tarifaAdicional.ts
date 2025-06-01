@@ -65,7 +65,14 @@ export class TarifaAdicional extends BaseModel<TarifaAdicionalAttributes, Tarifa
       sequelize,
       tableName: 'tarifaAdicional',
       modelName: 'TarifaAdicional',
-      timestamps: true
+      timestamps: true,
+      indexes: [ 
+        {
+          unique: true,
+          fields: ['id_tarifa', 'id_adicional'],
+          name: 'unique_tarifa_adicional'
+        }
+      ]
     });
   }
 

@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-export const tipoVehiculoSchema = Joi.object({
+export const vehiculoSchema = Joi.object({
   tipo: Joi.string().min(3).max(100).required().messages({
     'string.base': 'El tipo debe ser una cadena de texto',
     'string.empty': 'El tipo no puede estar vacío',
