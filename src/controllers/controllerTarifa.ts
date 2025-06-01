@@ -64,10 +64,17 @@ export const createTarifa = async (req: Request, res: Response) => {
 
     if (Array.isArray(adicionales) && adicionales.length > 0) { 
       
-      const adicionalesData = adicionales.map((adicional: any) => ({
-        id_tarifa: nuevaTarifa.id_tarifa,
-        id_adicional: adicional.id_adicional,
-        costo_personalizado: adicional.costo_personalizado || null
+      const adicionalesData = await Promise.all(adicionales.map(async (adicional: any) => {
+        let costo_personalizado = adicional.costo_personalizado;
+        if (costo_personalizado == null) {
+          const adicionalDB = await db.Adicional.findByPk(adicional.id_adicional);
+          costo_personalizado = adicionalDB ? adicionalDB.costo_default : 0;
+        }
+        return {
+          id_tarifa: nuevaTarifa.id_tarifa,
+          id_adicional: adicional.id_adicional,
+          costo_personalizado
+        };
       }));
       
       await db.TarifaAdicional.bulkCreate(adicionalesData, { transaction:transaction });
@@ -126,10 +133,17 @@ export const updateTarifa = async (req: Request, res: Response): Promise<void> =
       });
 
       if (Array.isArray(adicionales) && adicionales.length > 0) {
-        const adicionalesData = adicionales.map((adicional: any) => ({
-          id_tarifa: parseInt(id),
-          id_adicional: adicional.id_adicional,
-          costo_personalizado: adicional.costo_personalizado || null
+        const adicionalesData = await Promise.all(adicionales.map(async (adicional: any) => {
+          let costo_personalizado = adicional.costo_personalizado;
+          if (costo_personalizado == null) {
+            const adicionalDB = await db.Adicional.findByPk(adicional.id_adicional);
+            costo_personalizado = adicionalDB ? adicionalDB.costo_default : 0;
+          }
+          return {
+            id_tarifa: parseInt(id),
+            id_adicional: adicional.id_adicional,
+            costo_personalizado
+          };
         }));
         
         await db.TarifaAdicional.bulkCreate(adicionalesData, { transaction });
@@ -191,7 +205,6 @@ export const deleteTarifa = async (req: Request, res: Response): Promise<void> =
       return;
     }
 
-    const tarifaEliminada = mapTarifa(tarifaAEliminar);
 
     await db.TarifaAdicional.destroy({
       where: { id_tarifa: id },
@@ -205,7 +218,7 @@ export const deleteTarifa = async (req: Request, res: Response): Promise<void> =
 
     await transaction.commit();
 
-    res.status(200).json({ tarifaEliminada });
+    res.status(200).json( mapTarifa(tarifaAEliminar) );
 
   } catch (error) {
     await transaction.rollback();
@@ -234,7 +247,7 @@ export const getVehiculoByTarifa = async (req: Request, res: Response) => {
 export const getCargaByTarifa = async (req: Request, res: Response) => {
   try {
     const tarifa = await db.Tarifa.findByPk(req.params.id, { 
-      include: [ {
+      include: [ 'carga', {
           association: 'carga',
           include: ['tipoCarga']
         } ] 
@@ -327,14 +340,13 @@ export const getAdicionalesByTarifa = async (req: Request, res: Response) => {
 };
 
 
-
 /* ************************************************************************************** */
 
 function mapTarifa(tarifa: any) {
   return {
     id: tarifa.id_tarifa,
     valor_base: tarifa.valor_base,
-    fecha: tarifa.fecha,
+    fecha: tarifa.fecha ? new Date(tarifa.fecha).toISOString().slice(0, 10) : null,
     id_vehiculo: tarifa.id_vehiculo,
     id_carga: tarifa.id_carga,
     id_zona: tarifa.id_zona,
@@ -342,7 +354,7 @@ function mapTarifa(tarifa: any) {
     adicionales: (tarifa.adicionales ?? []).map((a: any) => ({
       id: a.adicional?.id_adicional,
       tipo: a.adicional?.tipo,
-      costo: a.costo_personalizado ?? a.adicional?.costo_default
+      costo: a.costo_personalizado
     })),
     vehiculo: tarifa.vehiculo?.tipo || null,
     zona: tarifa.zona?.nombre || null,
@@ -354,6 +366,3 @@ function mapTarifa(tarifa: any) {
 function mapTarifas(tarifas: any[]) {
   return tarifas.map(mapTarifa);
 }
-
-
-

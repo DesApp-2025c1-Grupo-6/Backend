@@ -3,7 +3,7 @@ import { BaseModel } from './BaseModel';
 
 interface TarifaAdicionalAttributes {
   id_tarifaAdicional: number;
-  costo_personalizado: number;
+  costo_personalizado: number | null;
   id_tarifa: number;
   id_adicional: number;
   createdAt?: Date;
@@ -39,7 +39,7 @@ export class TarifaAdicional extends BaseModel<TarifaAdicionalAttributes, Tarifa
       },
       costo_personalizado: {
         type: DataTypes.DECIMAL(8, 2),
-        allowNull: false
+        allowNull: true
       },
       id_tarifa: {
         type: DataTypes.INTEGER,
