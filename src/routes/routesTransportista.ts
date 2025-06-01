@@ -9,7 +9,6 @@ import {
 
 const router = express.Router();
 
-// Todos
 router.get('/', getAllTransportistas);
 /**
  * @swagger
@@ -20,11 +19,6 @@ router.get('/', getAllTransportistas);
  *     responses:
  *       200:
  *         description: Lista de transportistas
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *
  */
 
 router.get('/:id', getTransportistaById);
