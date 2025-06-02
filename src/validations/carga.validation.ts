@@ -12,7 +12,7 @@ export const cargaSchema = Joi.object({
     'any.required': 'El volumen es obligatorio',
   }),
 
-  requisitos_especiales: Joi.string().max(255).optional().messages({
+  requisitos_especiales: Joi.string().max(255).required().messages({
     'string.base': 'Los requisitos especiales deben ser texto',
     'string.max':
       'Los requisitos especiales no pueden superar los 255 caracteres',
