@@ -12,7 +12,7 @@ export const tarifaSchema = Joi.object({
     'any.required': 'La fecha es obligatoria',
   }),
 
-  id_tipoVehiculo: Joi.number().integer().positive().required().messages({
+  id_vehiculo: Joi.number().integer().positive().required().messages({
     'number.base': 'El id_tipoVehiculo debe ser un número',
     'number.integer': 'El id_tipoVehiculo debe ser un número entero',
     'number.positive': 'El id_tipoVehiculo debe ser un número positivo',
