@@ -1,18 +1,20 @@
 import { Router } from 'express';
-import { 
-    getAllTarifas, 
-    getTarifaById, 
-    createTarifa, 
-    updateTarifa, 
-    deleteTarifa,
-    getVehiculoByTarifa,
-    getCargaByTarifa,
-    getTipoCargaByTarifa,
-    getZonaByTarifa,
-    getTransportistaByTarifa,
-    getAdicionalesByTarifa 
+import {
+  getAllTarifas,
+  getTarifaById,
+  createTarifa,
+  updateTarifa,
+  deleteTarifa,
+  getVehiculoByTarifa,
+  getCargaByTarifa,
+  getTipoCargaByTarifa,
+  getZonaByTarifa,
+  getTransportistaByTarifa,
+  getAdicionalesByTarifa,
 } from '../controllers/controllerTarifa';
-
+import { validate, validateParams } from '../middlewares/validate.middlewares';
+import { tarifaSchema } from '../validations/tarifa.validation';
+import { idParamSchema } from '../validations/comun.validation';
 
 const router = Router();
 
@@ -28,7 +30,7 @@ router.get('/', getAllTarifas);
  *         description: Lista de tarifas
  */
 
-router.get("/:id", getTarifaById);
+router.get('/:id', validateParams(idParamSchema), getTarifaById);
 /**
  * @swagger
  * /tarifas/{id}:
@@ -48,7 +50,7 @@ router.get("/:id", getTarifaById);
  *         description: Tarifa no encontrada
  */
 
-router.post('/', createTarifa);
+router.post('/', validate(tarifaSchema), createTarifa);
 /**
  * @swagger
  * /tarifas:
@@ -90,7 +92,7 @@ router.post('/', createTarifa);
  *             id_carga: 1
  *             id_zona: 1
  *             id_transportista: 1
- *             adicionales: 
+ *             adicionales:
  *               - id_adicional: 1
  *                 costo_personalizado: 200
  *               - id_adicional: 2
@@ -101,7 +103,12 @@ router.post('/', createTarifa);
  *         description: Datos inválidos o faltantes
  */
 
-router.put("/:id", updateTarifa);
+router.put(
+  '/:id',
+  validateParams(idParamSchema),
+  validate(tarifaSchema),
+  updateTarifa
+);
 /**
  * @swagger
  * /tarifas/{id}:
@@ -150,10 +157,10 @@ router.put("/:id", updateTarifa);
  *             id_carga: 1
  *             id_zona: 1
  *             id_transportista: 1
- *             adicionales: 
+ *             adicionales:
  *               - id_adicional: 1
  *                 costo_personalizado: 200
- *               - id_adicional: 2 
+ *               - id_adicional: 2
  *     responses:
  *       200:
  *         description: Tarifa actualizada
@@ -161,7 +168,7 @@ router.put("/:id", updateTarifa);
  *         description: Tarifa no encontrada
  */
 
-router.delete("/:id", deleteTarifa);
+router.delete('/:id', validateParams(idParamSchema), deleteTarifa);
 /**
  * @swagger
  * /tarifas/{id}:
@@ -181,8 +188,7 @@ router.delete("/:id", deleteTarifa);
  *         description: Tarifa no encontrada
  */
 
-
-router.get("/:id/vehiculo", getVehiculoByTarifa);
+router.get('/:id/vehiculo', validateParams(idParamSchema), getVehiculoByTarifa);
 /**
  * @swagger
  * /tarifas/{id}/vehiculo:
@@ -202,7 +208,7 @@ router.get("/:id/vehiculo", getVehiculoByTarifa);
  *         description: Vehículo no encontrado en la tarifa
  */
 
-router.get("/:id/carga", getCargaByTarifa);
+router.get('/:id/carga', validateParams(idParamSchema), getCargaByTarifa);
 /**
  * @swagger
  * /tarifas/{id}/carga:
@@ -222,7 +228,11 @@ router.get("/:id/carga", getCargaByTarifa);
  *         description: Carga no encontrada en la tarifa
  */
 
-router.get("/:id/tipoCarga", getTipoCargaByTarifa);
+router.get(
+  '/:id/tipoCarga',
+  validateParams(idParamSchema),
+  getTipoCargaByTarifa
+);
 /**
  * @swagger
  * /tarifas/{id}/tipoCarga:
@@ -242,7 +252,7 @@ router.get("/:id/tipoCarga", getTipoCargaByTarifa);
  *         description: Tipo de carga no encontrado en la tarifa
  */
 
-router.get("/:id/zona", getZonaByTarifa);
+router.get('/:id/zona', validateParams(idParamSchema), getZonaByTarifa);
 /**
  * @swagger
  * /tarifas/{id}/zona:
@@ -262,7 +272,11 @@ router.get("/:id/zona", getZonaByTarifa);
  *         description: Zona no encontrada en la tarifa
  */
 
-router.get("/:id/transportista", getTransportistaByTarifa);
+router.get(
+  '/:id/transportista',
+  validateParams(idParamSchema),
+  getTransportistaByTarifa
+);
 /**
  * @swagger
  * /tarifas/{id}/transportista:
@@ -282,7 +296,11 @@ router.get("/:id/transportista", getTransportistaByTarifa);
  *         description: Transportista no encontrado en la tarifa
  */
 
-router.get("/:id/adicionales", getAdicionalesByTarifa);
+router.get(
+  '/:id/adicionales',
+  validateParams(idParamSchema),
+  getAdicionalesByTarifa
+);
 /**
  * @swagger
  * /tarifas/{id}/adicionales:
@@ -301,6 +319,5 @@ router.get("/:id/adicionales", getAdicionalesByTarifa);
  *       404:
  *         description: No se encontraron adicionales en la tarifa
  */
-
 
 export default router;

@@ -1,4 +1,4 @@
-import express from "express";
+import express from 'express';
 import {
   getAllCargas,
   getCargaById,
@@ -6,14 +6,14 @@ import {
   updateCarga,
   deleteCarga,
   getTipoCargaByCargaId,
-} from "../controllers/controllerCarga";
-import { validate, validateParams } from "../middlewares/validate.middlewares";
-import { cargaSchema } from "../validations/carga.validation";
-import { idParamSchema } from "../validations/comun.validation";
+} from '../controllers/controllerCarga';
+import { validate, validateParams } from '../middlewares/validate.middlewares';
+import { cargaSchema } from '../validations/carga.validation';
+import { idParamSchema } from '../validations/comun.validation';
 
 const router = express.Router();
 
-router.get("/", getAllCargas);
+router.get('/', getAllCargas);
 /**
  * @swagger
  * /cargas:
@@ -24,7 +24,7 @@ router.get("/", getAllCargas);
  *       200:
  *         description: Lista de cargas
  */
-router.get("/:id", validateParams(idParamSchema), getCargaById);
+router.get('/:id', validateParams(idParamSchema), getCargaById);
 /**
  * @swagger
  * /cargas/{id}:
@@ -44,7 +44,7 @@ router.get("/:id", validateParams(idParamSchema), getCargaById);
  *         description: Carga no encontrada
  */
 router.get(
-  "/:id/tipo-carga",
+  '/:id/tipo-carga',
   validateParams(idParamSchema),
   getTipoCargaByCargaId as express.RequestHandler
 );
@@ -67,7 +67,7 @@ router.get(
  *         description: No se encontró un tipo de carga
  *
  */
-router.post("/", validate(cargaSchema), createCarga);
+router.post('/', validate(cargaSchema), createCarga);
 /**
  * @swagger
  * /cargas:
@@ -102,7 +102,7 @@ router.post("/", validate(cargaSchema), createCarga);
  */
 
 router.put(
-  "/:id",
+  '/:id',
   validateParams(idParamSchema),
   validate(cargaSchema),
   updateCarga
@@ -146,7 +146,7 @@ router.put(
  *         description: Carga no encontrada
  */
 
-router.delete("/:id", validateParams(idParamSchema), deleteCarga);
+router.delete('/:id', validateParams(idParamSchema), deleteCarga);
 /**
  * @swagger
  * /cargas/{id}:
