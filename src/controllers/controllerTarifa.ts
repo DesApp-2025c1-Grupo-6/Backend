@@ -64,17 +64,10 @@ export const createTarifa = async (req: Request, res: Response) => {
 
     if (Array.isArray(adicionales) && adicionales.length > 0) { 
       
-      const adicionalesData = await Promise.all(adicionales.map(async (adicional: any) => {
-        let costo_personalizado = adicional.costo_personalizado;
-        if (costo_personalizado == null) {
-          const adicionalDB = await db.Adicional.findByPk(adicional.id_adicional);
-          costo_personalizado = adicionalDB ? adicionalDB.costo_default : 0;
-        }
-        return {
-          id_tarifa: nuevaTarifa.id_tarifa,
-          id_adicional: adicional.id_adicional,
-          costo_personalizado
-        };
+       const adicionalesData = adicionales.map((adicional: any) => ({
+        id_tarifa: nuevaTarifa.id_tarifa,
+        id_adicional: adicional.id_adicional,
+        costo_personalizado: adicional.costo_personalizado || null
       }));
       
       await db.TarifaAdicional.bulkCreate(adicionalesData, { transaction:transaction });
@@ -133,17 +126,10 @@ export const updateTarifa = async (req: Request, res: Response): Promise<void> =
       });
 
       if (Array.isArray(adicionales) && adicionales.length > 0) {
-        const adicionalesData = await Promise.all(adicionales.map(async (adicional: any) => {
-          let costo_personalizado = adicional.costo_personalizado;
-          if (costo_personalizado == null) {
-            const adicionalDB = await db.Adicional.findByPk(adicional.id_adicional);
-            costo_personalizado = adicionalDB ? adicionalDB.costo_default : 0;
-          }
-          return {
-            id_tarifa: parseInt(id),
-            id_adicional: adicional.id_adicional,
-            costo_personalizado
-          };
+        const adicionalesData = adicionales.map((adicional: any) => ({
+          id_tarifa: parseInt(id),
+          id_adicional: adicional.id_adicional,
+          costo_personalizado: adicional.costo_personalizado || null
         }));
         
         await db.TarifaAdicional.bulkCreate(adicionalesData, { transaction });
@@ -354,7 +340,7 @@ function mapTarifa(tarifa: any) {
     adicionales: (tarifa.adicionales ?? []).map((a: any) => ({
       id: a.adicional?.id_adicional,
       tipo: a.adicional?.tipo,
-      costo: a.costo_personalizado
+      costo: a.costo_personalizado ?? a.adicional?.costo_default
     })),
     vehiculo: tarifa.vehiculo?.tipo || null,
     zona: tarifa.zona?.nombre || null,

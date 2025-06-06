@@ -89,12 +89,12 @@ async function seed() {
 
   await db.TarifaAdicional.bulkCreate([
     { id_tarifa: 1, id_adicional: 1, costo_personalizado: 9500 },
-    { id_tarifa: 1, id_adicional: 5, costo_personalizado: getCostoDefault(5) },
-    { id_tarifa: 1, id_adicional: 6, costo_personalizado: getCostoDefault(6) },
-    { id_tarifa: 2, id_adicional: 1, costo_personalizado: getCostoDefault(1) },
-    { id_tarifa: 2, id_adicional: 2, costo_personalizado: getCostoDefault(2) },
-    { id_tarifa: 2, id_adicional: 3, costo_personalizado: getCostoDefault(3) },
-    { id_tarifa: 3, id_adicional: 4, costo_personalizado: getCostoDefault(4) },
+    { id_tarifa: 1, id_adicional: 5, costo_personalizado: null },
+    { id_tarifa: 1, id_adicional: 6, costo_personalizado: null },
+    { id_tarifa: 2, id_adicional: 1, costo_personalizado: null },
+    { id_tarifa: 2, id_adicional: 2, costo_personalizado: null },
+    { id_tarifa: 2, id_adicional: 3, costo_personalizado: null },
+    { id_tarifa: 3, id_adicional: 4, costo_personalizado: null },
     { id_tarifa: 3, id_adicional: 6, costo_personalizado: 16000 }
   ]);
 
