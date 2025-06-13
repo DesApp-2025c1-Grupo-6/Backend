@@ -6,9 +6,9 @@ import {
   updateTipoCarga,
   deleteTipoCarga,
 } from '../controllers/controllerTipoCarga';
+import { validate, validateParams } from '../middlewares/validate.middlewares';
 import { tipoCargaSchema } from '../validations/tipoCarga.validation';
 import { idParamSchema } from '../validations/comun.validation';
-import { validate, validateParams } from '../middlewares/validate.middlewares';
 
 const router = express.Router();
 
@@ -22,8 +22,10 @@ router.get('/', getAllTiposCarga);
  *     responses:
  *       200:
  *         description: Lista de tipos de carga
- *
+ *       500:
+ *         description: Error interno del servidor
  */
+
 router.get('/:id', validateParams(idParamSchema), getTipoCargaById);
 /**
  * @swagger
@@ -34,16 +36,21 @@ router.get('/:id', validateParams(idParamSchema), getTipoCargaById);
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: integer
+ *         required: true
+ *         description: ID del tipo de carga
  *     responses:
  *       200:
  *         description: Tipo de carga encontrado
- *
  *       404:
  *         description: Tipo de carga no encontrado
+ *       400:
+ *         description: ID inválido
+ *       500:
+ *         description: Error interno del servidor
  */
+
 router.post('/', validate(tipoCargaSchema), createTipoCarga);
 /**
  * @swagger
@@ -62,14 +69,16 @@ router.post('/', validate(tipoCargaSchema), createTipoCarga);
  *             properties:
  *               descripcion:
  *                 type: string
- *                 example: Carga refrigerada
+ *                 example: "Carga refrigerada"
  *     responses:
  *       201:
  *         description: Tipo de carga creado exitosamente
- *
  *       400:
- *         description: Datos inválidos
+ *         description: Datos inválidos o faltantes
+ *       500:
+ *         description: Error interno del servidor
  */
+
 router.put(
   '/:id',
   validateParams(idParamSchema),
@@ -80,7 +89,7 @@ router.put(
  * @swagger
  * /tipocargas/{id}:
  *   put:
- *     summary: Actualizar un tipo de carga
+ *     summary: Actualizar un tipo de carga existente
  *     tags: [TiposCarga]
  *     parameters:
  *       - in: path
@@ -88,6 +97,7 @@ router.put(
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID del tipo de carga
  *     requestBody:
  *       required: true
  *       content:
@@ -99,13 +109,18 @@ router.put(
  *             properties:
  *               descripcion:
  *                 type: string
- *                 example: Carga voluminosa
+ *                 example: "Carga refrigerada"
  *     responses:
  *       200:
  *         description: Tipo de carga actualizado
  *       404:
  *         description: Tipo de carga no encontrado
+ *       400:
+ *         description: Datos inválidos o faltantes
+ *       500:
+ *         description: Error interno del servidor
  */
+
 router.delete('/:id', validateParams(idParamSchema), deleteTipoCarga);
 /**
  * @swagger
@@ -119,12 +134,18 @@ router.delete('/:id', validateParams(idParamSchema), deleteTipoCarga);
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID del tipo de carga
  *     responses:
  *       200:
- *         description: Carga eliminada exitosamente
+ *         description: Tipo de carga eliminado exitosamente
  *       404:
  *         description: Tipo de carga no encontrado
- *
+ *       400:
+ *         description: ID inválido
+ *       409:
+ *         description: No se puede eliminar porque está asociado a una carga
+ *       500:
+ *         description: Error interno del servidor
  */
 
 export default router;

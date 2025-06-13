@@ -28,6 +28,8 @@ router.get('/', getAllTarifas);
  *     responses:
  *       200:
  *         description: Lista de tarifas
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.get('/:id', validateParams(idParamSchema), getTarifaById);
@@ -40,14 +42,19 @@ router.get('/:id', validateParams(idParamSchema), getTarifaById);
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: integer
+ *         required: true
+ *         description: ID de la tarifa
  *     responses:
  *       200:
  *         description: Tarifa encontrada
  *       404:
  *         description: Tarifa no encontrada
+ *       400:
+ *         description: ID inválido 
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.post('/', validate(tarifaSchema), createTarifa);
@@ -63,6 +70,13 @@ router.post('/', validate(tarifaSchema), createTarifa);
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - valor_base
+ *               - fecha
+ *               - id_vehiculo
+ *               - id_carga
+ *               - id_zona
+ *               - id_transportista
  *             properties:
  *               valor_base:
  *                 type: number
@@ -98,9 +112,11 @@ router.post('/', validate(tarifaSchema), createTarifa);
  *               - id_adicional: 2
  *     responses:
  *       201:
- *         description: Tarifa creada
+ *         description: Tarifa creada exitosamente
  *       400:
  *         description: Datos inválidos o faltantes
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.put(
@@ -121,12 +137,20 @@ router.put(
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID de la tarifa 
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - valor_base
+ *               - fecha
+ *               - id_vehiculo
+ *               - id_carga
+ *               - id_zona
+ *               - id_transportista
  *             properties:
  *               valor_base:
  *                 type: number
@@ -166,6 +190,10 @@ router.put(
  *         description: Tarifa actualizada
  *       404:
  *         description: Tarifa no encontrada
+ *       400:
+ *         description: Datos inválidos o faltantes
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.delete('/:id', validateParams(idParamSchema), deleteTarifa);
@@ -181,12 +209,18 @@ router.delete('/:id', validateParams(idParamSchema), deleteTarifa);
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID de la tarifa
  *     responses:
  *       200:
  *         description: Tarifa eliminada exitosamente
  *       404:
  *         description: Tarifa no encontrada
+ *       400:
+ *         description: ID inválido
+ *       500:
+ *         description: Error interno del servidor
  */
+
 
 router.get('/:id/vehiculo', validateParams(idParamSchema), getVehiculoByTarifa);
 /**
@@ -201,11 +235,16 @@ router.get('/:id/vehiculo', validateParams(idParamSchema), getVehiculoByTarifa);
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID de la tarifa
  *     responses:
  *       200:
- *         description: Detalle del vehículo asociado a la tarifa
+ *         description: Vehículo recuperado correctamente
  *       404:
- *         description: Vehículo no encontrado en la tarifa
+ *         description: Tarifa no encontrada
+ *       400:
+ *         description: ID inválido
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.get('/:id/carga', validateParams(idParamSchema), getCargaByTarifa);
@@ -221,18 +260,19 @@ router.get('/:id/carga', validateParams(idParamSchema), getCargaByTarifa);
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID de la tarifa
  *     responses:
  *       200:
- *         description: Detalle de la carga asociada a la tarifa
+ *         description: Carga recuperada correctamente
  *       404:
- *         description: Carga no encontrada en la tarifa
+ *         description: Tarifa no encontrada
+ *       400:
+ *         description: ID inválido
+ *       500:
+ *         description: Error interno del servidor
  */
 
-router.get(
-  '/:id/tipoCarga',
-  validateParams(idParamSchema),
-  getTipoCargaByTarifa
-);
+router.get('/:id/tipoCarga', validateParams(idParamSchema), getTipoCargaByTarifa);
 /**
  * @swagger
  * /tarifas/{id}/tipoCarga:
@@ -245,11 +285,16 @@ router.get(
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID de la tarifa
  *     responses:
  *       200:
- *         description: Detalle del tipo de carga asociado a la tarifa
+ *         description: Tipo de carga recuperado correctamente
  *       404:
- *         description: Tipo de carga no encontrado en la tarifa
+ *         description: Tarifa no encontrada
+ *       400:
+ *         description: ID inválido
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.get('/:id/zona', validateParams(idParamSchema), getZonaByTarifa);
@@ -265,18 +310,19 @@ router.get('/:id/zona', validateParams(idParamSchema), getZonaByTarifa);
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID de la tarifa
  *     responses:
  *       200:
- *         description: Detalle de la zona asociada a la tarifa
+ *         description: Zona recuperada correctamente
  *       404:
- *         description: Zona no encontrada en la tarifa
+ *         description: Tarifa no encontrada
+ *       400:
+ *         description: ID inválido
+ *       500:
+ *         description: Error interno del servidor
  */
 
-router.get(
-  '/:id/transportista',
-  validateParams(idParamSchema),
-  getTransportistaByTarifa
-);
+router.get('/:id/transportista', validateParams(idParamSchema), getTransportistaByTarifa);
 /**
  * @swagger
  * /tarifas/{id}/transportista:
@@ -289,18 +335,19 @@ router.get(
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID de la tarifa
  *     responses:
  *       200:
- *         description: Detalle del transportista asociado a la tarifa
+ *         description: Transportista recuperado correctamente
  *       404:
- *         description: Transportista no encontrado en la tarifa
+ *         description: Tarifa no encontrada
+ *       400:
+ *         description: ID inválido
+ *       500:
+ *         description: Error interno del servidor
  */
 
-router.get(
-  '/:id/adicionales',
-  validateParams(idParamSchema),
-  getAdicionalesByTarifa
-);
+router.get('/:id/adicionales', validateParams(idParamSchema), getAdicionalesByTarifa);
 /**
  * @swagger
  * /tarifas/{id}/adicionales:
@@ -313,11 +360,16 @@ router.get(
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID de la tarifa
  *     responses:
  *       200:
- *         description: Detalle de los adicionales asociados a la tarifa
+ *         description: Adicionales recuperados correctamente
  *       404:
- *         description: No se encontraron adicionales en la tarifa
+ *         description: Tarifa no encontrada
+ *       400:
+ *         description: ID inválido
+ *       500:
+ *         description: Error interno del servidor
  */
 
 export default router;
