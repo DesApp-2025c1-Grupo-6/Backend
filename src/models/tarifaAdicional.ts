@@ -14,7 +14,7 @@ type TarifaAdicionalCreationAttributes = Optional<TarifaAdicionalAttributes, 'id
 
 export class TarifaAdicional extends BaseModel<TarifaAdicionalAttributes, TarifaAdicionalCreationAttributes> implements TarifaAdicionalAttributes {
   public id_tarifaAdicional!: number;
-  public costo_personalizado!: number;
+  public costo_personalizado!: number | null;
   public id_tarifa!: number;
   public id_adicional!: number;
   public readonly createdAt!: Date;

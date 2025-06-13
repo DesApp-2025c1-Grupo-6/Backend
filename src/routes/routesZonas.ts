@@ -22,9 +22,10 @@ router.get('/', getAllZonas);
  *     responses:
  *       200:
  *         description: Lista de zonas
- *
- *
+ *       500:
+ *         description: Error interno del servidor
  */
+
 router.get('/:id', validateParams(idParamSchema), getZonaById);
 /**
  * @swagger
@@ -42,10 +43,14 @@ router.get('/:id', validateParams(idParamSchema), getZonaById);
  *     responses:
  *       200:
  *         description: Zona encontrada
- *
  *       404:
  *         description: Zona no encontrada
+ *       400:
+ *         description: ID inválido
+ *       500:
+ *         description: Error interno del servidor
  */
+
 router.post('/', validate(zonaSchema), createZona);
 /**
  * @swagger
@@ -59,16 +64,19 @@ router.post('/', validate(zonaSchema), createZona);
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - nombre
  *             properties:
  *               nombre:
  *                 type: string
- *                 example: "Zona Norte"
+ *                 example: "Zona Oeste"
  *     responses:
  *       201:
- *         description: Zona creada
- *
+ *         description: Zona creada exitosamente
  *       400:
  *         description: Datos inválidos o faltantes
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.put(
@@ -96,17 +104,21 @@ router.put(
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - nombre
  *             properties:
  *               nombre:
  *                 type: string
- *           example:
- *             nombre: Zona Central
+ *                 example: "Zona Oeste"
  *     responses:
  *       200:
  *         description: Zona actualizada
- *
  *       404:
  *         description: Zona no encontrada
+ *       400:
+ *         description: Datos inválidos o faltantes
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.delete('/:id', validateParams(idParamSchema), deleteZona);
@@ -125,9 +137,15 @@ router.delete('/:id', validateParams(idParamSchema), deleteZona);
  *         description: ID de la zona
  *     responses:
  *       200:
- *         description: Zona eliminada
+ *         description: Zona eliminada exitosamente
  *       404:
  *         description: Zona no encontrada
+ *       400:
+ *         description: ID inválido
+ *       409:
+ *         description: No se puede eliminar porque está asociado a una tarifa
+ *       500:
+ *         description: Error interno del servidor
  */
 
 export default router;

@@ -40,7 +40,7 @@ export class Vehiculo extends BaseModel<VehiculoAttributes, VehiculoCreationAttr
         allowNull: false
       },
       toneladas: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DECIMAL(8, 2),
         allowNull: false
       }
     }, {

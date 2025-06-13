@@ -22,6 +22,8 @@ router.get('/', getAllTransportistas);
  *     responses:
  *       200:
  *         description: Lista de transportistas
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.get('/:id', validateParams(idParamSchema), getTransportistaById);
@@ -43,6 +45,10 @@ router.get('/:id', validateParams(idParamSchema), getTransportistaById);
  *         description: Transportista encontrado
  *       404:
  *         description: Transportista no encontrado
+ *       400:
+ *         description: ID inválido
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.post('/', validate(transportistaSchema), createTransportista);
@@ -60,15 +66,24 @@ router.post('/', validate(transportistaSchema), createTransportista);
  *             type: object
  *             required:
  *               - nombre
+ *               - telefono
  *             properties:
  *               nombre:
  *                 type: string
  *                 example: "Transportes Express"
+ *               telefono:
+ *                 type: string
+ *                 example: "11-1234-5678"
+ *               email:
+ *                 type: string
+ *                 example: "transportesexpress@gmail.com"
  *     responses:
  *       201:
  *         description: Transportista creado exitosamente
  *       400:
- *         description: Error al crear el transportista
+ *         description: Datos inválidos o faltantes
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.put(
@@ -89,6 +104,7 @@ router.put(
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID del transportista
  *     requestBody:
  *       required: true
  *       content:
@@ -97,15 +113,26 @@ router.put(
  *             type: object
  *             required:
  *               - nombre
+ *               - telefono
  *             properties:
  *               nombre:
  *                 type: string
- *                 example: "Transportes Rápidos"
+ *                 example: "Transportes Express"
+ *               telefono:
+ *                 type: string
+ *                 example: "11-1234-5678"
+ *               email:
+ *                 type: string
+ *                 example: "transportesexpress@gmail.com"
  *     responses:
  *       200:
  *         description: Transportista actualizado
  *       404:
  *         description: Transportista no encontrado
+ *       400:
+ *         description: Datos inválidos o faltantes
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.delete('/:id', validateParams(idParamSchema), deleteTransportista);
@@ -121,11 +148,18 @@ router.delete('/:id', validateParams(idParamSchema), deleteTransportista);
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID del transportista
  *     responses:
  *       200:
  *         description: Transportista eliminado exitosamente
  *       404:
  *         description: Transportista no encontrado
+ *       400:
+ *         description: ID inválido
+ *       409:
+ *         description: No se puede eliminar porque está asociado a una tarifa
+ *       500:
+ *         description: Error interno del servidor
  */
 
 export default router;

@@ -12,11 +12,11 @@ export = {
         type: DataTypes.INTEGER
       },
       tipo: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING,
         allowNull: false
       },
       toneladas: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DECIMAL(8, 2),
         allowNull: false
       },
       createdAt: {

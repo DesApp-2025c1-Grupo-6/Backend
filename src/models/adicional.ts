@@ -40,7 +40,7 @@ export class Adicional extends BaseModel<AdicionalAttributes, AdicionalCreationA
         allowNull: false
       },
       costo_default: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.DECIMAL(8, 2),
         allowNull: false
       }
     }, {

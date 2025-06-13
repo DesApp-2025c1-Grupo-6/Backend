@@ -23,7 +23,10 @@ router.get('/', getAllCargas);
  *     responses:
  *       200:
  *         description: Lista de cargas
+ *       500:
+ *         description: Error interno del servidor
  */
+
 router.get('/:id', validateParams(idParamSchema), getCargaById);
 /**
  * @swagger
@@ -34,20 +37,22 @@ router.get('/:id', validateParams(idParamSchema), getCargaById);
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: integer
+ *         required: true
+ *         description: ID de la carga
  *     responses:
  *       200:
  *         description: Carga encontrada
  *       404:
  *         description: Carga no encontrada
+ *       400:
+ *         description: ID inválido 
+ *       500:
+ *         description: Error interno del servidor
  */
-router.get(
-  '/:id/tipo-carga',
-  validateParams(idParamSchema),
-  getTipoCargaByCargaId as express.RequestHandler
-);
+
+router.get('/:id/tipo-carga', validateParams(idParamSchema), getTipoCargaByCargaId as express.RequestHandler);
 /**
  * @swagger
  * /cargas/{id}/tipo-carga:
@@ -60,13 +65,18 @@ router.get(
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID de la carga
  *     responses:
  *       200:
  *         description: Tipo de carga encontrado
  *       404:
- *         description: No se encontró un tipo de carga
- *
+ *         description: Carga no encontrada
+ *       400:
+ *         description: ID inválido 
+ *       500:
+ *         description: Error interno del servidor
  */
+
 router.post('/', validate(cargaSchema), createCarga);
 /**
  * @swagger
@@ -80,6 +90,11 @@ router.post('/', validate(cargaSchema), createCarga);
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - peso
+ *               - volumen
+ *               - requisitos_especiales
+ *               - id_tipo_carga
  *             properties:
  *               peso:
  *                 type: number
@@ -95,10 +110,11 @@ router.post('/', validate(cargaSchema), createCarga);
  *                 example: 2
  *     responses:
  *       201:
- *         description: Carga creada
- *
+ *         description: Carga creada exitosamente
  *       400:
  *         description: Datos inválidos o faltantes
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.put(
@@ -119,31 +135,40 @@ router.put(
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID de la carga
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - peso
+ *               - volumen
+ *               - requisitos_especiales
+ *               - id_tipo_carga
  *             properties:
  *               peso:
  *                 type: number
+ *                 example: 1200.5
  *               volumen:
  *                 type: number
+ *                 example: 3.4
  *               requisitos_especiales:
  *                 type: string
+ *                 example: "Manejo con cuidado extremo"
  *               id_tipo_carga:
  *                 type: integer
- *           example:
- *             peso: 1200.5
- *             volumen: 3.4
- *             requisitos_especiales: Manejo con cuidado extremo
- *             id_tipo_carga: 2
+ *                 example: 2
  *     responses:
  *       200:
  *         description: Carga actualizada
  *       404:
  *         description: Carga no encontrada
+ *       400:
+ *         description: Datos inválidos o faltantes
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.delete('/:id', validateParams(idParamSchema), deleteCarga);
@@ -159,11 +184,18 @@ router.delete('/:id', validateParams(idParamSchema), deleteCarga);
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID de la carga
  *     responses:
  *       200:
  *         description: Carga eliminada exitosamente
  *       404:
  *         description: Carga no encontrada
+ *       400:
+ *         description: ID inválido
+ *       409:
+ *         description: No se puede eliminar porque está asociado a una tarifa
+ *       500:
+ *         description: Error interno del servidor
  */
 
 export default router;

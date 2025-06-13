@@ -22,6 +22,8 @@ router.get('/', getAllAdicionales);
  *     responses:
  *       200:
  *         description: Lista de adicionales
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.get('/:id', validateParams(idParamSchema), getAdicionalById);
@@ -43,6 +45,10 @@ router.get('/:id', validateParams(idParamSchema), getAdicionalById);
  *         description: Adicional encontrado
  *       404:
  *         description: Adicional no encontrado
+ *       400:
+ *         description: ID inválido
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.post('/', validate(adicionalSchema), createAdicional);
@@ -72,13 +78,15 @@ router.post('/', validate(adicionalSchema), createAdicional);
  *       201:
  *         description: Adicional creado exitosamente
  *       400:
- *         description: Error al crear el adicional
+ *         description: Datos inválidos o faltantes
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.put(
   '/:id',
   validateParams(idParamSchema),
-  validate(adicionalSchema),
+  validate(adicionalSchema), 
   updateAdicional
 );
 /**
@@ -93,6 +101,7 @@ router.put(
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID del adicional
  *     requestBody:
  *       required: true
  *       content:
@@ -114,6 +123,10 @@ router.put(
  *         description: Adicional actualizado
  *       404:
  *         description: Adicional no encontrado
+ *       400:
+ *         description: Datos inválidos o faltantes
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.delete('/:id', validateParams(idParamSchema), deleteAdicional);
@@ -129,11 +142,18 @@ router.delete('/:id', validateParams(idParamSchema), deleteAdicional);
  *         required: true
  *         schema:
  *           type: integer
+ *         description: ID del adicional
  *     responses:
  *       200:
  *         description: Adicional eliminado exitosamente
  *       404:
  *         description: Adicional no encontrado
+ *       400:
+ *         description: ID inválido
+ *       409:
+ *         description: No se puede eliminar porque está asociado a una tarifa
+ *       500:
+ *         description: Error interno del servidor
  */
 
 export default router;

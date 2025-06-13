@@ -20,10 +20,10 @@ async function seed() {
   ]);
 
   await db.Transportista.bulkCreate([
-    { nombre: 'Logística del Litoral SA' },
-    { nombre: 'Transportes Rápidos SRL' },
-    { nombre: 'Fletexpress SA' },
-    { nombre: 'Don Pedro SRL' }
+    { nombre: 'Logística del Litoral SA', telefono: '11-1234-1234', email: 'contacto@logisticalitoral.com.ar' },
+    { nombre: 'Transportes Rápidos SRL', telefono: '11-0000-1234', email: 'info@transportesrapidos.com.ar' },
+    { nombre: 'Fletexpress SA', telefono: '11-1111-2222' }, 
+    { nombre: 'Don Pedro SRL', telefono: '11-9876-6543', email: 'donpedro.srl@gmail.com' }
   ]);
 
   await db.TipoCarga.bulkCreate([
@@ -89,12 +89,12 @@ async function seed() {
 
   await db.TarifaAdicional.bulkCreate([
     { id_tarifa: 1, id_adicional: 1, costo_personalizado: 9500 },
-    { id_tarifa: 1, id_adicional: 5, costo_personalizado: getCostoDefault(5) },
-    { id_tarifa: 1, id_adicional: 6, costo_personalizado: getCostoDefault(6) },
-    { id_tarifa: 2, id_adicional: 1, costo_personalizado: getCostoDefault(1) },
-    { id_tarifa: 2, id_adicional: 2, costo_personalizado: getCostoDefault(2) },
-    { id_tarifa: 2, id_adicional: 3, costo_personalizado: getCostoDefault(3) },
-    { id_tarifa: 3, id_adicional: 4, costo_personalizado: getCostoDefault(4) },
+    { id_tarifa: 1, id_adicional: 5, costo_personalizado: null },
+    { id_tarifa: 1, id_adicional: 6, costo_personalizado: null },
+    { id_tarifa: 2, id_adicional: 1, costo_personalizado: null },
+    { id_tarifa: 2, id_adicional: 2, costo_personalizado: null },
+    { id_tarifa: 2, id_adicional: 3, costo_personalizado: null },
+    { id_tarifa: 3, id_adicional: 4, costo_personalizado: null },
     { id_tarifa: 3, id_adicional: 6, costo_personalizado: 16000 }
   ]);
 

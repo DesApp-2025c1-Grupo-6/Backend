@@ -1,12 +1,14 @@
 import { Request, Response } from 'express';
 import db from '../models';
+import { ForeignKeyConstraintError } from "sequelize";
 
 export const getAllTransportistas = async (req: Request, res: Response) => {
   try {
     const transportistas = await db.Transportista.findAll();
     res.status(200).json(transportistas);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener transportistas' });
+    console.error('Error al obtener los transportistas:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
@@ -18,16 +20,16 @@ export const getTransportistaById = async (req: Request, res: Response) => {
     else 
       res.status(404).json({ error: 'Transportista no encontrado' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener el transportista' });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
 export const createTransportista = async (req: Request, res: Response) => {
   try {
-    const newTransportista = await db.Transportista.create(req.body);
-    res.status(201).json(newTransportista);
+    const nuevoTransportista = await db.Transportista.create(req.body);
+    res.status(201).json(nuevoTransportista);
   } catch (error) {
-    res.status(500).json({ error: 'Error al crear transportista' });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
@@ -36,17 +38,16 @@ export const updateTransportista = async (req: Request, res: Response) => {
     const transportista = await db.Transportista.findByPk(req.params.id);
     if (transportista) {
       await transportista.update(req.body);
-      res.json(transportista);
+      res.status(200).json(transportista);
     }
     else {
       res.status(404).json({ error: 'Transportista no encontrado' });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Error al actualizar transportista' });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
-// Eliminar un transportista
 export const deleteTransportista = async (req: Request, res: Response) => {
   try {
     const transportista = await db.Transportista.findByPk(req.params.id);
@@ -54,10 +55,13 @@ export const deleteTransportista = async (req: Request, res: Response) => {
       await transportista.destroy();
       res.status(200).json(transportista);
     }
-    else{
+    else {
       res.status(404).json({ error: 'Transportista no encontrado' });
     }
-  } catch (error) {
-    res.status(500).json({ error: 'Error al eliminar transportista' });
+  } catch (error: any) {
+    if (error instanceof ForeignKeyConstraintError) {
+      res.status(409).json({ error: "No se puede eliminar porque está asociado a una tarifa" });
+    }
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
