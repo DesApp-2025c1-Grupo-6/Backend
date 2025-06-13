@@ -60,10 +60,17 @@ router.post('/', validate(transportistaSchema), createTransportista);
  *             type: object
  *             required:
  *               - nombre
+ *               - telefono
  *             properties:
  *               nombre:
  *                 type: string
  *                 example: "Transportes Express"
+ *               telefono:
+ *                 type: string
+ *                 example: "11-1234-5678"
+ *               email:
+ *                 type: string
+ *                 example: "transportesexpress@gmail.com"
  *     responses:
  *       201:
  *         description: Transportista creado exitosamente
@@ -97,10 +104,17 @@ router.put(
  *             type: object
  *             required:
  *               - nombre
+ *               - telefono
  *             properties:
  *               nombre:
  *                 type: string
  *                 example: "Transportes Rápidos"
+ *               telefono:
+ *                 type: string
+ *                 example: "11-1234-1234"
+ *               email:
+ *                 type: string
+ *                 example: "transportesexpress@gmail.com"
  *     responses:
  *       200:
  *         description: Transportista actualizado

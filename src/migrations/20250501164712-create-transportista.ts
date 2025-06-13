@@ -15,6 +15,14 @@ export = {
         type: DataTypes.STRING,
         allowNull: false
       },
+      telefono: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE
