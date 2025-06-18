@@ -13,46 +13,75 @@ import { idParamSchema } from '../validations/comun.validation';
 const router = express.Router();
 
 router.get('/', getAllVehiculos);
-
-router.get('/:id', validateParams(idParamSchema), getVehiculoById);
 /**
  * @swagger
  * /vehiculos:
  *   get:
- *     summary: Obtener todos los vehículos
- *     tags: [Vehículos]
+ *     summary: Obtener todos los tipos de vehículo
+ *     tags: [Tipos de vehículo]
  *     responses:
  *       200:
- *         description: Lista de vehículos
+ *         description: Lista de tipos de vehículo
+ *       500:
+ *         description: Error interno del servidor
  */
 
-router.get(
-  '/:id',
-  validateParams(idParamSchema),
-  validate(vehiculoSchema),
-  getVehiculoById
-);
+router.get('/:id', validateParams(idParamSchema), getVehiculoById);
 /**
  * @swagger
  * /vehiculos/{id}:
  *   get:
- *     summary: Obtener un vehículo por ID
- *     tags: [Vehículos]
+ *     summary: Obtener un tipo de vehículo por ID
+ *     tags: [Tipos de vehículo]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID del vehículo
+ *         description: ID del tipo de vehículo
  *     responses:
  *       200:
- *         description: Vehículo encontrado
+ *         description: Tipo de vehículo encontrado
  *       404:
- *         description: Vehículo no encontrado
+ *         description: Tipo de vehículo no encontrado
+ *       400:
+ *         description: ID inválido
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.post('/', validate(vehiculoSchema), createVehiculo);
+/**
+ * @swagger
+ * /vehiculos:
+ *   post:
+ *     summary: Crear un nuevo tipo de vehículo
+ *     tags: [Tipos de vehículo]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - tipo
+ *               - toneladas
+ *             properties:
+ *               tipo:
+ *                 type: string
+ *                 example: "Camión"
+ *               toneladas:
+ *                 type: number
+ *                 example: 10
+ *     responses:
+ *       201:
+ *         description: Tipo de vehículo creado exitosamente
+ *       400:
+ *         description: Datos inválidos o faltantes
+ *       500:
+ *         description: Error interno del servidor
+ */
 
 router.put(
   '/:id',
@@ -60,68 +89,44 @@ router.put(
   validate(vehiculoSchema),
   updateVehiculo
 );
-
-router.delete('/:id', validateParams(idParamSchema), deleteVehiculo);
-router.post('/', validate(vehiculoSchema), createVehiculo);
-/**
- * @swagger
- * /vehiculos:
- *   post:
- *     summary: Crear un nuevo vehículo
- *     tags: [Vehículos]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               tipo:
- *                 type: string
- *                 example: "Camión"
- *               toneladas:
- *                 type: integer
- *                 example: 10
- *     responses:
- *       201:
- *         description: Vehículo creado
- *       500:
- *         description: Error al crear el vehículo
- */
-
-router.put('/:id', validateParams(idParamSchema), updateVehiculo);
 /**
  * @swagger
  * /vehiculos/{id}:
  *   put:
- *     summary: Actualizar un vehículo existente
- *     tags: [Vehículos]
+ *     summary: Actualizar un tipo de vehículo existente
+ *     tags: [Tipos de vehículo]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID del vehículo
+ *         description: ID del tipo de vehículo
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - tipo
+ *               - toneladas
  *             properties:
  *               tipo:
  *                 type: string
+ *                 example: "Camión"
  *               toneladas:
- *                 type: integer
- *           example:
- *             tipo: "Camioneta"
- *             toneladas: 5
+ *                 type: number
+ *                 example: 10
  *     responses:
  *       200:
- *         description: Vehículo actualizado
+ *         description: Tipo de vehículo actualizado
  *       404:
- *         description: Vehículo no encontrado
+ *         description: Tipo de vehículo no encontrado
+ *       400:
+ *         description: Datos inválidos o faltantes
+ *       500:
+ *         description: Error interno del servidor
  */
 
 router.delete('/:id', validateParams(idParamSchema), deleteVehiculo);
@@ -129,8 +134,8 @@ router.delete('/:id', validateParams(idParamSchema), deleteVehiculo);
  * @swagger
  * /vehiculos/{id}:
  *   delete:
- *     summary: Eliminar un vehículo
- *     tags: [Vehículos]
+ *     summary: Eliminar un tipo de vehículo
+ *     tags: [Tipos de vehículo]
  *     parameters:
  *       - in: path
  *         name: id
@@ -140,9 +145,15 @@ router.delete('/:id', validateParams(idParamSchema), deleteVehiculo);
  *         description: ID del vehículo
  *     responses:
  *       200:
- *         description: Vehículo eliminado
+ *         description: Tipo de vehículo eliminado exitosamente
  *       404:
- *         description: Vehículo no encontrado
+ *         description: Tipo de vehículo no encontrado
+ *       400:
+ *         description: ID inválido
+ *       409:
+ *         description: No se puede eliminar porque está asociado a una tarifa
+ *       500:
+ *         description: Error interno del servidor
  */
 
 export default router;

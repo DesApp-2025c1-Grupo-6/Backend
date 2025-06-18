@@ -19,10 +19,10 @@ export const getAllTarifas = async (_req: Request, res: Response) => {
       ],
     });
 
-    res.json(mapTarifas(tarifas));
+    res.status(200).json(mapTarifas(tarifas));
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al obtener las tarifas' });
+    console.error('Error al obtener las tarifas:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
@@ -49,8 +49,7 @@ export const getTarifaById = async (req: Request, res: Response) => {
     else 
       res.status(404).json({ error: 'Tarifa no encontrada' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al obtener la tarifa' });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
@@ -95,8 +94,7 @@ export const createTarifa = async (req: Request, res: Response) => {
     if (transaction) {
       await transaction.rollback();
     }
-    console.error(error);
-    res.status(500).json({ error: 'Error al crear la tarifa' });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
@@ -158,8 +156,7 @@ export const updateTarifa = async (req: Request, res: Response): Promise<void> =
 
   } catch (error) {
     await transaction.rollback();
-    console.error(error);
-    res.status(500).json({ error: 'Error al actualizar la tarifa' });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
@@ -208,8 +205,7 @@ export const deleteTarifa = async (req: Request, res: Response): Promise<void> =
 
   } catch (error) {
     await transaction.rollback();
-    console.error(error);
-    res.status(500).json({ error: 'Error al eliminar la tarifa' });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
@@ -220,13 +216,12 @@ export const getVehiculoByTarifa = async (req: Request, res: Response) => {
       include: [ 'vehiculo' ] 
     }) as any;;
 
-    if (tarifa.vehiculo) 
+    if (tarifa) 
       res.status(200).json(tarifa.vehiculo);
     else 
-      res.status(404).json({ error: 'Tarifa o vehículo no encontrados' });
+      res.status(404).json({ error: 'Tarifa no encontrada' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al obtener el vehículo de la tarifa' });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
@@ -239,13 +234,12 @@ export const getCargaByTarifa = async (req: Request, res: Response) => {
         } ] 
     }) as any;
 
-    if (tarifa.carga) 
+    if (tarifa) 
       res.status(200).json(tarifa.carga);
     else 
-      res.status(404).json({ error: 'Tarifa o carga no encontradas' });
+      res.status(404).json({ error: 'Tarifa no encontrada' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al obtener la carga de la tarifa' });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
@@ -258,13 +252,12 @@ export const getTipoCargaByTarifa = async (req: Request, res: Response) => {
         } ] 
     }) as any;
 
-    if (tarifa.carga.tipoCarga) 
+    if (tarifa) 
       res.status(200).json(tarifa.carga.tipoCarga);
     else 
-      res.status(404).json({ error: 'Tarifa o tipo de carga no encontrados' });
+      res.status(404).json({ error: 'Tarifa no encontrada' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al obtener el tipo de carga de la tarifa' });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
@@ -274,13 +267,12 @@ export const getZonaByTarifa = async (req: Request, res: Response) => {
       include: [ 'zona' ] 
     }) as any;;
 
-    if (tarifa.zona) 
+    if (tarifa)  
       res.status(200).json(tarifa.zona);
     else 
-      res.status(404).json({ error: 'Tarifa o zona no encontradas' });
+      res.status(404).json({ error: 'Tarifa no encontrada' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al obtener la zona de la tarifa' });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
@@ -290,13 +282,12 @@ export const getTransportistaByTarifa = async (req: Request, res: Response) => {
       include: [ 'transportista' ] 
     }) as any;;
 
-    if (tarifa.transportista) 
+    if (tarifa) 
       res.status(200).json(tarifa.transportista);
     else 
-      res.status(404).json({ error: 'Tarifa o transportista no encontrados' });
+      res.status(404).json({ error: 'Tarifa no encontrada' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al obtener el transportista de la tarifa' });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
@@ -309,19 +300,21 @@ export const getAdicionalesByTarifa = async (req: Request, res: Response) => {
       }] 
     }) as any;;
 
+    if (!tarifa)  
+      res.status(404).json({ error: 'Tarifa no encontrada' });
+
     const adicionales = tarifa.adicionales.map((ad: any) => ({
       id: ad.adicional.id_adicional || ad.adicional.id,
       tipo: ad.adicional.tipo,
       costo: ad.costo_personalizado ?? ad.adicional.costo_default
     }));
 
-    if (tarifa.adicionales) 
-      res.status(200).json(adicionales);
-    else 
-      res.status(404).json({ error: 'Tarifa o adicionales no encontrados' });
+    if (tarifa.adicionales.length === 0)  
+      res.status(200).json({ message: "La tarifa no tiene adicionales" });
+    else  
+      res.status(200).json(adicionales);      
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al obtener los adicionales de la tarifa' });
+    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 

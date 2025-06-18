@@ -4,7 +4,7 @@ const options: swaggerJSDoc.Options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Documentacion de API Gestion de tarifa de costos",
+      title: "Documentación de API Gestión de tarifa de costos",
       version: "1.0.0",
     },
   },
