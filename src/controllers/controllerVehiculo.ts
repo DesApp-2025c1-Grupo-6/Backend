@@ -7,7 +7,7 @@ export const getAllVehiculos = async (req: Request, res: Response) => {
     const vehiculo = await db.Vehiculo.findAll();
     res.status(200).json(vehiculo);
   } catch (error) {
-    console.error('Error al obtener los vehículos:', error);
+    console.error('Error al obtener los tipos de vehículo:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
@@ -18,7 +18,7 @@ export const getVehiculoById = async (req: Request, res: Response) => {
     if (vehiculo) 
       res.status(200).json(vehiculo);
     else 
-      res.status(404).json({ error: 'Vehículo no encontrado' });
+      res.status(404).json({ error: 'Tipo de vehículo no encontrado' });
   } catch (error) {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
@@ -41,7 +41,7 @@ export const updateVehiculo = async (req: Request, res: Response) => {
       res.status(200).json(vehiculo);
     }
     else {
-      res.status(404).json({ error: 'Vehículo no encontrado' });
+      res.status(404).json({ error: 'Tipo de vehículo no encontrado' });
     }
   } catch (error) {
     res.status(500).json({ error: 'Error interno del servidor' });
@@ -56,7 +56,7 @@ export const deleteVehiculo = async (req: Request, res: Response) => {
       res.status(200).json(vehiculo);
     }
     else {
-      res.status(404).json({ error: 'Vehículo no encontrado' });
+      res.status(404).json({ error: 'Tipo de vehículo no encontrado' });
     }
   } catch (error: any) {
     if (error instanceof ForeignKeyConstraintError) {

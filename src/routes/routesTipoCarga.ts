@@ -18,7 +18,7 @@ router.get('/', getAllTiposCarga);
  * /tipocargas:
  *   get:
  *     summary: Obtener todos los tipos de carga
- *     tags: [TiposCarga]
+ *     tags: [Tipos de carga]
  *     responses:
  *       200:
  *         description: Lista de tipos de carga
@@ -32,7 +32,7 @@ router.get('/:id', validateParams(idParamSchema), getTipoCargaById);
  * /tipocargas/{id}:
  *   get:
  *     summary: Obtener un tipo de carga por ID
- *     tags: [TiposCarga]
+ *     tags: [Tipos de carga]
  *     parameters:
  *       - in: path
  *         name: id
@@ -57,7 +57,7 @@ router.post('/', validate(tipoCargaSchema), createTipoCarga);
  * /tipocargas:
  *   post:
  *     summary: Crear un nuevo tipo de carga
- *     tags: [TiposCarga]
+ *     tags: [Tipos de carga]
  *     requestBody:
  *       required: true
  *       content:
@@ -90,7 +90,7 @@ router.put(
  * /tipocargas/{id}:
  *   put:
  *     summary: Actualizar un tipo de carga existente
- *     tags: [TiposCarga]
+ *     tags: [Tipos de carga]
  *     parameters:
  *       - in: path
  *         name: id
@@ -127,7 +127,7 @@ router.delete('/:id', validateParams(idParamSchema), deleteTipoCarga);
  * /tipocargas/{id}:
  *   delete:
  *     summary: Eliminar un tipo de carga
- *     tags: [TiposCarga]
+ *     tags: [Tipos de carga]
  *     parameters:
  *       - in: path
  *         name: id

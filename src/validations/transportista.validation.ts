@@ -8,10 +8,11 @@ export const transportistaSchema = Joi.object({
     'string.max': 'El nombre no puede tener más de 50 caracteres',
     'any.required': 'El nombre es obligatorio',
   }),
-  telefono: Joi.string().min(7).max(30).required().messages({
+  telefono: Joi.string().pattern(/^[+]?[(]?[0-9]{1,4}[)]?[-\s0-9]*$/).min(8).max(30).required().messages({
+    'string.pattern.base': 'El teléfono debe ser un número válido, puede incluir +, paréntesis, guiones y espacios',
     'string.base': 'El teléfono debe ser un número válido, puede incluir +, paréntesis, guiones y espacios',
     'string.empty': 'El teléfono no puede estar vacío',
-    'string.min': 'El teléfono debe tener al menos 7 caracteres',
+    'string.min': 'El teléfono debe tener al menos 8 caracteres',
     'string.max': 'El teléfono no puede tener más de 30 caracteres',
     'any.required': 'El teléfono es obligatorio',
   }),

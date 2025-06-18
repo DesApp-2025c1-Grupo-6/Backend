@@ -227,7 +227,7 @@ router.get('/:id/vehiculo', validateParams(idParamSchema), getVehiculoByTarifa);
  * @swagger
  * /tarifas/{id}/vehiculo:
  *   get:
- *     summary: Obtener el vehículo asociado a una tarifa
+ *     summary: Obtener el tipo de vehículo asociado a una tarifa
  *     tags: [Tarifas]
  *     parameters:
  *       - in: path
@@ -238,7 +238,7 @@ router.get('/:id/vehiculo', validateParams(idParamSchema), getVehiculoByTarifa);
  *         description: ID de la tarifa
  *     responses:
  *       200:
- *         description: Vehículo recuperado correctamente
+ *         description: Tipo de vehículo recuperado correctamente
  *       404:
  *         description: Tarifa no encontrada
  *       400:
