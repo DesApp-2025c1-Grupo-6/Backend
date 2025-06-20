@@ -4,27 +4,44 @@ dotenv.config();
 
 interface DBConfig {
   dialect: Dialect;
+  host: string;
+  port: number;
+  username: string;
+  password: string;
+  database: string;
+}
+
+interface SQLiteConfig {
+  dialect: Dialect;
   storage: string;
 }
 
 interface Config {
   development: DBConfig;
-  test: DBConfig;
+  test: SQLiteConfig;
   production: DBConfig;
 }
 
 const config: Config = {
   development: {
-    dialect: 'sqlite',
-    storage: process.env.DB_STORAGE || 'dev.sqlite',
+    dialect: 'mysql',
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT || '3306'),
+    username: process.env.DB_USER || 'backend_user',
+    password: process.env.DB_PASSWORD || 'backend_password',
+    database: process.env.DB_NAME || 'db_tarifas',
   },
   test: {
     dialect: 'sqlite',
     storage: ':memory:',
   },
   production: {
-    dialect: 'sqlite',
-    storage: process.env.DB_STORAGE || 'prod.sqlite',
+    dialect: 'mysql',
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT || '3306'),
+    username: process.env.DB_USER || 'backend_user',
+    password: process.env.DB_PASSWORD || 'backend_password',
+    database: process.env.DB_NAME || 'db_tarifas',
   }
 };
 
