@@ -14,10 +14,25 @@ const env = (process.env.NODE_ENV || 'development') as keyof typeof configFile;
 
 const config = configFile[env]; 
 
-const sequelize = new Sequelize({
-  dialect: config.dialect,
-  storage: config.storage
-});
+// Creación de la instancia de Sequelize según el entorno
+let sequelize: Sequelize;
+if ('storage' in config) {
+  // Configuración para SQLite (test)
+  sequelize = new Sequelize({
+    dialect: config.dialect,
+    storage: config.storage
+  });
+} else {
+  // Configuración para MySQL (development y production)
+  sequelize = new Sequelize({
+    dialect: config.dialect,
+    host: config.host,
+    port: config.port,
+    username: config.username,
+    password: config.password,
+    database: config.database
+  });
+}
 
 const db = {
   sequelize,

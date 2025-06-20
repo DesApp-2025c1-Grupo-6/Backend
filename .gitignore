@@ -1,2 +1,13 @@
 # Dependencias node
 node_modules/
+dist/
+
+# Archivos de entorno
+#.env
+
+# MySQL
+mysql_data/
+
+# SQLite database files
+*.sqlite
+*.sqlite3
