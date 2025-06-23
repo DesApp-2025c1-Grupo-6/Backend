@@ -1,12 +1,11 @@
 import db from '../models';
 
 const initDatabase = async () => {
-  try {
-    await db.sequelize.authenticate();
+  try {    await db.sequelize.authenticate();
     console.log('Conexión a la base de datos establecida con éxito.');
 
     if (process.env.NODE_ENV === 'development') {
-      await db.sequelize.sync({ force: true }); 
+      await db.sequelize.sync({ force: false }); 
       console.log('Modelos sincronizados con la base de datos.');
     }
   } catch (error) {
