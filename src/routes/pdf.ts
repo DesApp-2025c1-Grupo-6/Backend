@@ -6,6 +6,37 @@ type Adicional = {
   adicional: string;
   costo: number;
 };
+/**
+ * @swagger
+ * /reporte-adicionales:
+ *   post:
+ *     summary: Genera un reporte PDF con los adicionales y sus costos
+ *     tags:
+ *       - Reportes
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: object
+ *               properties:
+ *                 adicional:
+ *                   type: string
+ *                   example: Entrega rápida
+ *                 costo:
+ *                   type: number
+ *                   example: 1200
+ *     responses:
+ *       200:
+ *         description: PDF generado correctamente
+ *         content:
+ *           application/pdf:
+ *             schema:
+ *               type: string
+ *               format: binary
+ */
 export const generarReporteAdicionales = (req: Request, res: Response) => {
   const adicionales: Adicional[] = req.body; // [{ adicional: string, costo: number }]
 
