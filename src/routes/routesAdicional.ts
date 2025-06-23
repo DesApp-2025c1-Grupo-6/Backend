@@ -2,6 +2,7 @@ import express from 'express';
 import {
   getAllAdicionales,
   getAdicionalById,
+  generarReporteAdicionalesPDF,
   createAdicional,
   updateAdicional,
   deleteAdicional,
@@ -25,7 +26,23 @@ router.get('/', getAllAdicionales);
  *       500:
  *         description: Error interno del servidor
  */
-
+router.get('/reporte', generarReporteAdicionalesPDF);
+/**
+ * @swagger
+ * /adicionales/reporte:
+ *   get:
+ *     summary: Genera un reporte PDF con todos los adicionales desde la base de datos
+ *     tags:
+ *       - Adicionales
+ *     responses:
+ *       200:
+ *         description: PDF generado correctamente
+ *         content:
+ *           application/pdf:
+ *             schema:
+ *               type: string
+ *               format: binary
+ */
 router.get('/:id', validateParams(idParamSchema), getAdicionalById);
 /**
  * @swagger
@@ -86,7 +103,7 @@ router.post('/', validate(adicionalSchema), createAdicional);
 router.put(
   '/:id',
   validateParams(idParamSchema),
-  validate(adicionalSchema), 
+  validate(adicionalSchema),
   updateAdicional
 );
 /**
