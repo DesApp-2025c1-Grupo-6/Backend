@@ -11,9 +11,10 @@ interface TarifaAttributes {
   id_transportista: number;
   createdAt?: Date;
   updatedAt?: Date;
+  deletedAt?: Date;
 }
 
-type TarifaCreationAttributes = Optional<TarifaAttributes, 'id_tarifa' | 'createdAt' | 'updatedAt'>;
+type TarifaCreationAttributes = Optional<TarifaAttributes, 'id_tarifa' | 'createdAt' | 'updatedAt' | 'deletedAt'>;
 
 export class Tarifa extends BaseModel<TarifaAttributes, TarifaCreationAttributes> implements TarifaAttributes {
   public id_tarifa!: number;
@@ -25,6 +26,7 @@ export class Tarifa extends BaseModel<TarifaAttributes, TarifaCreationAttributes
   public id_transportista!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  public readonly deletedAt!: Date;
 
 
   // Esto es para el Front
@@ -95,7 +97,8 @@ export class Tarifa extends BaseModel<TarifaAttributes, TarifaCreationAttributes
       sequelize,
       tableName: 'tarifa',
       modelName: 'Tarifa',
-      timestamps: true
+      timestamps: true,
+      paranoid: true
     });
   }
 

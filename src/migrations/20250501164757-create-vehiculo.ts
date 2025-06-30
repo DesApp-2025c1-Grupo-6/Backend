@@ -26,6 +26,10 @@ export = {
       updatedAt: {
         allowNull: false,
         type: DataTypes.DATE
+      },
+      deletedAt: {
+        allowNull: true,
+        type: DataTypes.DATE
       }
     });
   },

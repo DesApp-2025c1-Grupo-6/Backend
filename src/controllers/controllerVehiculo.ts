@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import db from '../models';
-import { ForeignKeyConstraintError } from "sequelize";
 
 export const getAllVehiculos = async (req: Request, res: Response) => {
   try {
@@ -59,9 +58,7 @@ export const deleteVehiculo = async (req: Request, res: Response) => {
       res.status(404).json({ error: 'Tipo de vehículo no encontrado' });
     }
   } catch (error: any) {
-    if (error instanceof ForeignKeyConstraintError) {
-      res.status(409).json({ error: "No se puede eliminar porque está asociado a una tarifa" });
-    }
+    console.error('Error al eliminar vehículo:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };

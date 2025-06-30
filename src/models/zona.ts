@@ -6,15 +6,17 @@ interface ZonaAttributes {
   nombre: string;
   createdAt?: Date;
   updatedAt?: Date;
+  deletedAt?: Date;
 }
 
-type ZonaCreationAttributes = Optional<ZonaAttributes, 'id_zona' | 'createdAt' | 'updatedAt'>;
+type ZonaCreationAttributes = Optional<ZonaAttributes, 'id_zona' | 'createdAt' | 'updatedAt' | 'deletedAt'>;
 
 export class Zona extends BaseModel<ZonaAttributes, ZonaCreationAttributes> implements ZonaAttributes {
   public id_zona!: number;
   public nombre!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  public readonly deletedAt!: Date;
 
   
   // Esto es para el Front
@@ -41,7 +43,8 @@ export class Zona extends BaseModel<ZonaAttributes, ZonaCreationAttributes> impl
       sequelize,
       tableName: 'zona',
       modelName: 'Zona',
-      timestamps: true
+      timestamps: true,
+      paranoid: true
     });
   }
   

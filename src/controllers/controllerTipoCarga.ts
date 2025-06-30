@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import db from "../models";
-import { ForeignKeyConstraintError } from "sequelize";
 
 export const getAllTiposCarga = async (_: Request, res: Response) => {
   try {
@@ -59,9 +58,7 @@ export const deleteTipoCarga = async (req: Request, res: Response) => {
       res.status(404).json({ error: "Tipo de carga no encontrado" });
     }
   } catch (error: any) {
-    if (error instanceof ForeignKeyConstraintError) {
-      res.status(409).json({ error: "No se puede eliminar porque está asociado a una carga" });
-    }
+    console.error('Error al eliminar tipo de carga:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };

@@ -6,15 +6,17 @@ interface TipoCargaAttributes {
   descripcion: string;
   createdAt?: Date;
   updatedAt?: Date;
+  deletedAt?: Date;
 }
 
-type TipoCargaCreationAttributes = Optional<TipoCargaAttributes, 'id_tipo_carga' | 'createdAt' | 'updatedAt'>;
+type TipoCargaCreationAttributes = Optional<TipoCargaAttributes, 'id_tipo_carga' | 'createdAt' | 'updatedAt' | 'deletedAt'>;
 
 export class TipoCarga extends BaseModel<TipoCargaAttributes, TipoCargaCreationAttributes> implements TipoCargaAttributes {
   public id_tipo_carga!: number;
   public descripcion!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  public readonly deletedAt!: Date;
 
 
   // Esto es para el Front
@@ -41,7 +43,8 @@ export class TipoCarga extends BaseModel<TipoCargaAttributes, TipoCargaCreationA
       sequelize,
       tableName: 'tipo_carga',
       modelName: 'TipoCarga',
-      timestamps: true
+      timestamps: true,
+      paranoid: true
     });
   }
 
