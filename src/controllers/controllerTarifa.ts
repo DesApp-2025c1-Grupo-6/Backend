@@ -84,7 +84,7 @@ export const createTarifa = async (req: Request, res: Response) => {
        const adicionalesData = adicionales.map((adicional: any) => ({
         id_tarifa: nuevaTarifa.id_tarifa,
         id_adicional: adicional.id_adicional,
-        costo_personalizado: adicional.costo_personalizado || null
+        costo_personalizado: adicional.costo_personalizado ?? null
       }));
       
       await db.TarifaAdicional.bulkCreate(adicionalesData, { transaction:transaction });
@@ -147,14 +147,15 @@ export const updateTarifa = async (req: Request, res: Response): Promise<void> =
     if (adicionales !== undefined) {
       await db.TarifaAdicional.destroy({
         where: { id_tarifa: id },
-        transaction
+        transaction,
+        force: true  // Eliminación física para evitar conflictos con índice único
       });
 
       if (Array.isArray(adicionales) && adicionales.length > 0) {
         const adicionalesData = adicionales.map((adicional: any) => ({
           id_tarifa: parseInt(id),
           id_adicional: adicional.id_adicional,
-          costo_personalizado: adicional.costo_personalizado || null
+          costo_personalizado: adicional.costo_personalizado ?? null
         }));
         
         await db.TarifaAdicional.bulkCreate(adicionalesData, { transaction });
@@ -236,7 +237,8 @@ export const deleteTarifa = async (req: Request, res: Response): Promise<void> =
 
     await db.TarifaAdicional.destroy({
       where: { id_tarifa: id },
-      transaction
+      transaction,
+      force: true  // Eliminación física para consistencia
     });
 
     await db.Tarifa.destroy({
