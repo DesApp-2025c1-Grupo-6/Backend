@@ -5,7 +5,10 @@ export const getAllTarifas = async (_req: Request, res: Response) => {
   try {
     const tarifas = await db.Tarifa.findAll({
       include: [
-        'vehiculo',
+        {
+          association: 'vehiculo',
+          paranoid: false  // Incluir vehículos "eliminados"
+        },
         {
           association: 'carga',
           include: [{
@@ -17,7 +20,10 @@ export const getAllTarifas = async (_req: Request, res: Response) => {
           association: 'zona',
           paranoid: false  // Incluir zonas "eliminadas"
         },
-        'transportista',
+        {
+          association: 'transportista',
+          paranoid: false  // Incluir transportistas "eliminados"
+        },
         {
           association: 'adicionales',
           include: [{
@@ -39,12 +45,18 @@ export const getTarifaById = async (req: Request, res: Response) => {
   try {
     const tarifa = await db.Tarifa.findByPk(req.params.id, { 
       include: [
-        'vehiculo',
+        {
+          association: 'vehiculo',
+          paranoid: false  // Incluir vehículos "eliminados"
+        },
         {
           association: 'zona',
           paranoid: false  // Incluir zonas "eliminadas"
         },
-        'transportista',
+        {
+          association: 'transportista',
+          paranoid: false  // Incluir transportistas "eliminados"
+        },
         {
           association: 'carga',
           include: [{
@@ -93,7 +105,10 @@ export const createTarifa = async (req: Request, res: Response) => {
     
     const tarifa = await db.Tarifa.findByPk(nuevaTarifa.id_tarifa, {
       include: [
-        'vehiculo',
+        {
+          association: 'vehiculo',
+          paranoid: false  // Incluir vehículos "eliminados"
+        },
         {
           association: 'carga',
           include: [{
@@ -105,7 +120,10 @@ export const createTarifa = async (req: Request, res: Response) => {
           association: 'zona',
           paranoid: false  // Incluir zonas "eliminadas"
         },
-        'transportista',
+        {
+          association: 'transportista',
+          paranoid: false  // Incluir transportistas "eliminados"
+        },
         {
           association: 'adicionales',
           include: [{
@@ -166,7 +184,10 @@ export const updateTarifa = async (req: Request, res: Response): Promise<void> =
 
     const tarifaActualizada = await db.Tarifa.findByPk(id, {
       include: [
-        'vehiculo',
+        {
+          association: 'vehiculo',
+          paranoid: false  // Incluir vehículos "eliminados"
+        },
         {
           association: 'carga',
           include: [{
@@ -178,7 +199,10 @@ export const updateTarifa = async (req: Request, res: Response): Promise<void> =
           association: 'zona',
           paranoid: false  // Incluir zonas "eliminadas"
         },
-        'transportista',
+        {
+          association: 'transportista',
+          paranoid: false  // Incluir transportistas "eliminados"
+        },
         {
           association: 'adicionales',
           include: [{
@@ -205,7 +229,10 @@ export const deleteTarifa = async (req: Request, res: Response): Promise<void> =
 
     const tarifaAEliminar = await db.Tarifa.findByPk(id, {
       include: [
-        'vehiculo',
+        {
+          association: 'vehiculo',
+          paranoid: false  // Incluir vehículos "eliminados"
+        },
         {
           association: 'carga',
           include: [{
@@ -217,7 +244,10 @@ export const deleteTarifa = async (req: Request, res: Response): Promise<void> =
           association: 'zona',
           paranoid: false  // Incluir zonas "eliminadas"
         },
-        'transportista',
+        {
+          association: 'transportista',
+          paranoid: false  // Incluir transportistas "eliminados"
+        },
         {
           association: 'adicionales',
           include: [{
@@ -260,7 +290,10 @@ export const deleteTarifa = async (req: Request, res: Response): Promise<void> =
 export const getVehiculoByTarifa = async (req: Request, res: Response) => {
   try {
     const tarifa = await db.Tarifa.findByPk(req.params.id, { 
-      include: [ 'vehiculo' ] 
+      include: [{ 
+        association: 'vehiculo',
+        paranoid: false  // Incluir vehículos "eliminados"
+      }] 
     }) as any;;
 
     if (tarifa) 
@@ -335,7 +368,10 @@ export const getZonaByTarifa = async (req: Request, res: Response) => {
 export const getTransportistaByTarifa = async (req: Request, res: Response) => {
   try {
     const tarifa = await db.Tarifa.findByPk(req.params.id, { 
-      include: [ 'transportista' ] 
+      include: [{ 
+        association: 'transportista',
+        paranoid: false  // Incluir transportistas "eliminados"
+      }] 
     }) as any;;
 
     if (tarifa) 
