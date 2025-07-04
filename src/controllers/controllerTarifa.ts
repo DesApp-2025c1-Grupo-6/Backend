@@ -89,9 +89,50 @@ export const createTarifa = async (req: Request, res: Response) => {
   try {
     const { adicionales, ...tarifaData } = req.body;
 
+    // Validar que los registros relacionados existan y estén activos
+    const [vehiculo, carga, zona, transportista] = await Promise.all([
+      db.Vehiculo.findByPk(tarifaData.id_vehiculo),
+      db.Carga.findByPk(tarifaData.id_carga),
+      db.Zona.findByPk(tarifaData.id_zona),
+      db.Transportista.findByPk(tarifaData.id_transportista)
+    ]);
+
+    // Verificar que todos los registros existan y estén activos
+    if (!vehiculo) {
+      await transaction.rollback();
+      res.status(400).json({ error: 'El vehículo especificado no existe o está eliminado' });
+      return;
+    }
+    if (!carga) {
+      await transaction.rollback();
+      res.status(400).json({ error: 'La carga especificada no existe o está eliminada' });
+      return;
+    }
+    if (!zona) {
+      await transaction.rollback();
+      res.status(400).json({ error: 'La zona especificada no existe o está eliminada' });
+      return;
+    }
+    if (!transportista) {
+      await transaction.rollback();
+      res.status(400).json({ error: 'El transportista especificado no existe o está eliminado' });
+      return;
+    }
+
     const nuevaTarifa = await db.Tarifa.create(tarifaData, { transaction: transaction });
 
     if (Array.isArray(adicionales) && adicionales.length > 0) { 
+      // Validar que todos los adicionales existan y estén activos
+      const adicionalesIds = adicionales.map(a => a.id_adicional);
+      const adicionalesActivos = await db.Adicional.findAll({
+        where: { id_adicional: adicionalesIds }
+      });
+
+      if (adicionalesActivos.length !== adicionalesIds.length) {
+        await transaction.rollback();
+        res.status(400).json({ error: 'Uno o más adicionales especificados no existen o están eliminados' });
+        return;
+      }
       
        const adicionalesData = adicionales.map((adicional: any) => ({
         id_tarifa: nuevaTarifa.id_tarifa,
@@ -157,12 +198,57 @@ export const updateTarifa = async (req: Request, res: Response): Promise<void> =
       return;
     }
 
+    // Validar que los registros relacionados existan y estén activos (solo si se están actualizando)
+    if (tarifaData.id_vehiculo || tarifaData.id_carga || tarifaData.id_zona || tarifaData.id_transportista) {
+      const [vehiculo, carga, zona, transportista] = await Promise.all([
+        tarifaData.id_vehiculo ? db.Vehiculo.findByPk(tarifaData.id_vehiculo) : Promise.resolve(true),
+        tarifaData.id_carga ? db.Carga.findByPk(tarifaData.id_carga) : Promise.resolve(true),
+        tarifaData.id_zona ? db.Zona.findByPk(tarifaData.id_zona) : Promise.resolve(true),
+        tarifaData.id_transportista ? db.Transportista.findByPk(tarifaData.id_transportista) : Promise.resolve(true)
+      ]);
+
+      if (tarifaData.id_vehiculo && !vehiculo) {
+        await transaction.rollback();
+        res.status(400).json({ error: 'El vehículo especificado no existe o está eliminado' });
+        return;
+      }
+      if (tarifaData.id_carga && !carga) {
+        await transaction.rollback();
+        res.status(400).json({ error: 'La carga especificada no existe o está eliminada' });
+        return;
+      }
+      if (tarifaData.id_zona && !zona) {
+        await transaction.rollback();
+        res.status(400).json({ error: 'La zona especificada no existe o está eliminada' });
+        return;
+      }
+      if (tarifaData.id_transportista && !transportista) {
+        await transaction.rollback();
+        res.status(400).json({ error: 'El transportista especificado no existe o está eliminado' });
+        return;
+      }
+    }
+
     await db.Tarifa.update(tarifaData, {
       where: { id_tarifa: id },
       transaction
     });
 
     if (adicionales !== undefined) {
+      // Validar adicionales si se están actualizando
+      if (Array.isArray(adicionales) && adicionales.length > 0) {
+        const adicionalesIds = adicionales.map(a => a.id_adicional);
+        const adicionalesActivos = await db.Adicional.findAll({
+          where: { id_adicional: adicionalesIds }
+        });
+
+        if (adicionalesActivos.length !== adicionalesIds.length) {
+          await transaction.rollback();
+          res.status(400).json({ error: 'Uno o más adicionales especificados no existen o están eliminados' });
+          return;
+        }
+      }
+
       await db.TarifaAdicional.destroy({
         where: { id_tarifa: id },
         transaction,

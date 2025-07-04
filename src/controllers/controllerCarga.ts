@@ -35,6 +35,13 @@ export const getCargaById = async (req: Request, res: Response) => {
 
 export const createCarga = async (req: Request, res: Response) => {
   try {
+    // Validar que el tipo de carga exista y esté activo
+    const tipoCarga = await db.TipoCarga.findByPk(req.body.id_tipo_carga);
+    if (!tipoCarga) {
+      res.status(400).json({ error: 'El tipo de carga especificado no existe o está eliminado' });
+      return;
+    }
+
     const nuevaCarga = await db.Carga.create(req.body);
     res.status(201).json(nuevaCarga);
   } catch (error) {
@@ -45,13 +52,22 @@ export const createCarga = async (req: Request, res: Response) => {
 export const updateCarga = async (req: Request, res: Response) => {
   try {
     const carga = await db.Carga.findByPk(req.params.id);
-    if (carga) {
-      await carga.update(req.body);
-      res.status(200).json(carga);
-    } 
-    else {
+    if (!carga) {
       res.status(404).json({ error: 'Carga no encontrada' });
+      return;
     }
+
+    // Validar que el tipo de carga exista y esté activo (solo si se está actualizando)
+    if (req.body.id_tipo_carga) {
+      const tipoCarga = await db.TipoCarga.findByPk(req.body.id_tipo_carga);
+      if (!tipoCarga) {
+        res.status(400).json({ error: 'El tipo de carga especificado no existe o está eliminado' });
+        return;
+      }
+    }
+
+    await carga.update(req.body);
+    res.status(200).json(carga);
   } catch (error) {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
