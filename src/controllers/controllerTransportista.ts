@@ -37,13 +37,20 @@ export const updateTransportista = async (req: Request, res: Response) => {
   try {
     const transportista = await db.Transportista.findByPk(req.params.id);
     if (transportista) {
-      await transportista.update(req.body);
+      // Si el email viene como string vacío, convertirlo a null para "limpiar" el campo
+      const updateData = { ...req.body };
+      if (updateData.email === '') {
+        updateData.email = null;
+      }
+      
+      await transportista.update(updateData);
       res.status(200).json(transportista);
     }
     else {
       res.status(404).json({ error: 'Transportista no encontrado' });
     }
   } catch (error) {
+    console.error('Error al actualizar transportista:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
@@ -59,9 +66,11 @@ export const deleteTransportista = async (req: Request, res: Response) => {
       res.status(404).json({ error: 'Transportista no encontrado' });
     }
   } catch (error: any) {
+    console.error('Error al eliminar transportista:', error);
     if (error instanceof ForeignKeyConstraintError) {
       res.status(409).json({ error: "No se puede eliminar porque está asociado a una tarifa" });
+    } else {
+      res.status(500).json({ error: 'Error interno del servidor' });
     }
-    res.status(500).json({ error: 'Error interno del servidor' });
   }
 };

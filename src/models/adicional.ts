@@ -7,9 +7,10 @@ interface AdicionalAttributes {
   costo_default: number;
   createdAt?: Date;
   updatedAt?: Date;
+  deletedAt?: Date;
 }
 
-type AdicionalCreationAttributes = Optional<AdicionalAttributes, 'id_adicional' | 'createdAt' | 'updatedAt'>;
+type AdicionalCreationAttributes = Optional<AdicionalAttributes, 'id_adicional' | 'createdAt' | 'updatedAt' | 'deletedAt'>;
 
 export class Adicional extends BaseModel<AdicionalAttributes, AdicionalCreationAttributes> implements AdicionalAttributes {
   public id_adicional!: number;
@@ -17,6 +18,7 @@ export class Adicional extends BaseModel<AdicionalAttributes, AdicionalCreationA
   public costo_default!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  public readonly deletedAt!: Date;
 
 
   // Esto es para el Front
@@ -47,7 +49,8 @@ export class Adicional extends BaseModel<AdicionalAttributes, AdicionalCreationA
       sequelize,
       tableName: 'adicional',
       modelName: 'Adicional',
-      timestamps: true
+      timestamps: true,
+      paranoid: true
     });
   }
 

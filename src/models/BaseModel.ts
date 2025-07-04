@@ -18,6 +18,7 @@ export abstract class BaseModel<T extends object, U extends object> extends Mode
     
     delete values.createdAt;
     delete values.updatedAt;
+    delete values.deletedAt;
     
     const orderedValues: any = {};
 

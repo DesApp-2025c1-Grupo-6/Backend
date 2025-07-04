@@ -1,10 +1,14 @@
 import { Request, Response } from 'express';
 import db from '../models';
-import { ForeignKeyConstraintError } from "sequelize";
 
 export const getAllCargas = async (_: Request, res: Response) => {
   try {
-    const cargas = await db.Carga.findAll({ include: ['tipoCarga'] });
+    const cargas = await db.Carga.findAll({ 
+      include: [{
+        association: 'tipoCarga',
+        paranoid: false  // Incluir tipos de carga "eliminados"
+      }]
+    });
     res.status(200).json(cargas);
   } catch (error) {
     console.error('Error al obtener las cargas:', error);
@@ -14,7 +18,12 @@ export const getAllCargas = async (_: Request, res: Response) => {
 
 export const getCargaById = async (req: Request, res: Response) => {
   try {
-    const carga = await db.Carga.findByPk(req.params.id, { include: ['tipoCarga'] });
+    const carga = await db.Carga.findByPk(req.params.id, { 
+      include: [{
+        association: 'tipoCarga',
+        paranoid: false  // Incluir tipos de carga "eliminados"
+      }]
+    });
     if (carga) 
       res.status(200).json(carga);
     else 
@@ -26,6 +35,13 @@ export const getCargaById = async (req: Request, res: Response) => {
 
 export const createCarga = async (req: Request, res: Response) => {
   try {
+    // Validar que el tipo de carga exista y esté activo
+    const tipoCarga = await db.TipoCarga.findByPk(req.body.id_tipo_carga);
+    if (!tipoCarga) {
+      res.status(400).json({ error: 'El tipo de carga especificado no existe o está eliminado' });
+      return;
+    }
+
     const nuevaCarga = await db.Carga.create(req.body);
     res.status(201).json(nuevaCarga);
   } catch (error) {
@@ -36,13 +52,22 @@ export const createCarga = async (req: Request, res: Response) => {
 export const updateCarga = async (req: Request, res: Response) => {
   try {
     const carga = await db.Carga.findByPk(req.params.id);
-    if (carga) {
-      await carga.update(req.body);
-      res.status(200).json(carga);
-    } 
-    else {
+    if (!carga) {
       res.status(404).json({ error: 'Carga no encontrada' });
+      return;
     }
+
+    // Validar que el tipo de carga exista y esté activo (solo si se está actualizando)
+    if (req.body.id_tipo_carga) {
+      const tipoCarga = await db.TipoCarga.findByPk(req.body.id_tipo_carga);
+      if (!tipoCarga) {
+        res.status(400).json({ error: 'El tipo de carga especificado no existe o está eliminado' });
+        return;
+      }
+    }
+
+    await carga.update(req.body);
+    res.status(200).json(carga);
   } catch (error) {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
@@ -59,16 +84,19 @@ export const deleteCarga = async (req: Request, res: Response) => {
       res.status(404).json({ error: 'Carga no encontrada' });
     }
   } catch (error: any) {
-    if (error instanceof ForeignKeyConstraintError) {
-      res.status(409).json({ error: "No se puede eliminar porque está asociado a una tarifa" });
-    }
+    console.error('Error al eliminar carga:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
 
 export const getTipoCargaByCargaId = async (req: Request, res: Response) => {
   try {
-    const carga = await db.Carga.findByPk(req.params.id, { include: ['tipoCarga'] });
+    const carga = await db.Carga.findByPk(req.params.id, { 
+      include: [{
+        association: 'tipoCarga',
+        paranoid: false  // Incluir tipos de carga "eliminados"
+      }]
+    });
     if (!carga) {
       return res.status(404).json({ error: 'Carga no encontrada' });
     }

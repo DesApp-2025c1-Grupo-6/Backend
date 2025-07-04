@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import PDFDocument from 'pdfkit';
 import db from '../models';
-import { ForeignKeyConstraintError } from 'sequelize';
 
 export const getAllAdicionales = async (req: Request, res: Response) => {
   try {
@@ -151,11 +150,7 @@ export const deleteAdicional = async (req: Request, res: Response) => {
       res.status(404).json({ error: 'Adicional no encontrado' });
     }
   } catch (error: any) {
-    if (error instanceof ForeignKeyConstraintError) {
-      res.status(409).json({
-        error: 'No se puede eliminar porque está asociado a una tarifa',
-      });
-    }
+    console.error('Error al eliminar adicional:', error);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };

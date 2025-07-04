@@ -9,9 +9,10 @@ interface CargaAttributes {
   id_tipo_carga: number;
   createdAt?: Date;
   updatedAt?: Date;
+  deletedAt?: Date;
 }
 
-type CargaCreationAttributes = Optional<CargaAttributes, 'id_carga' | 'createdAt' | 'updatedAt'>;
+type CargaCreationAttributes = Optional<CargaAttributes, 'id_carga' | 'createdAt' | 'updatedAt' | 'deletedAt'>;
 
 export class Carga extends BaseModel<CargaAttributes, CargaCreationAttributes> implements CargaAttributes {
   public id_carga!: number;
@@ -21,6 +22,7 @@ export class Carga extends BaseModel<CargaAttributes, CargaCreationAttributes> i
   public id_tipo_carga!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  public readonly deletedAt!: Date;
 
 
   // Esto es para el Front
@@ -65,7 +67,8 @@ export class Carga extends BaseModel<CargaAttributes, CargaCreationAttributes> i
       sequelize,
       tableName: 'carga',
       modelName: 'Carga',
-      timestamps: true
+      timestamps: true,
+      paranoid: true
     });
   }
 
