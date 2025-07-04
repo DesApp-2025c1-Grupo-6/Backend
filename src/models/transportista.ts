@@ -8,9 +8,10 @@ interface TransportistaAttributes {
   email: string;
   createdAt?: Date;
   updatedAt?: Date;
+  deletedAt?: Date;
 }
 
-type TransportistaCreationAttributes = Optional<TransportistaAttributes, 'id_transportista' | 'email' | 'createdAt' | 'updatedAt'>;
+type TransportistaCreationAttributes = Optional<TransportistaAttributes, 'id_transportista' | 'email' | 'createdAt' | 'updatedAt' | 'deletedAt'>;
 
 export class Transportista extends BaseModel<TransportistaAttributes, TransportistaCreationAttributes> implements TransportistaAttributes {
   public id_transportista!: number;
@@ -19,6 +20,7 @@ export class Transportista extends BaseModel<TransportistaAttributes, Transporti
   public email!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  public readonly deletedAt!: Date;
 
 
   // Esto es para el Front
@@ -53,7 +55,8 @@ export class Transportista extends BaseModel<TransportistaAttributes, Transporti
       sequelize,
       tableName: 'transportista',
       modelName: 'Transportista',
-      timestamps: true
+      timestamps: true,
+      paranoid: true
     });
   }
 

@@ -16,9 +16,11 @@ export const transportistaSchema = Joi.object({
     'string.max': 'El teléfono no puede tener más de 30 caracteres',
     'any.required': 'El teléfono es obligatorio',
   }),
-  email: Joi.string().email().min(12).max(150).optional().messages({
+  email: Joi.alternatives().try(
+    Joi.string().email().min(12).max(150),
+    Joi.string().allow('').optional()
+  ).optional().messages({
     'string.base': 'El e-mail debe ser un texto',
-    'string.empty': 'El e-mail no puede estar vacío',
     'string.email': 'El e-mail debe tener un formato válido',
     'string.min': 'El e-mail debe tener al menos 12 caracteres',
     'string.max': 'El e-mail no puede tener más de 150 caracteres'

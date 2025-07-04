@@ -7,9 +7,10 @@ interface VehiculoAttributes {
   toneladas: number;
   createdAt?: Date;
   updatedAt?: Date;
+  deletedAt?: Date;
 }
 
-type VehiculoCreationAttributes = Optional<VehiculoAttributes, 'id_vehiculo' | 'createdAt' | 'updatedAt'>;
+type VehiculoCreationAttributes = Optional<VehiculoAttributes, 'id_vehiculo' | 'createdAt' | 'updatedAt' | 'deletedAt'>;
 
 export class Vehiculo extends BaseModel<VehiculoAttributes, VehiculoCreationAttributes> implements VehiculoAttributes {
   public id_vehiculo!: number;
@@ -17,6 +18,7 @@ export class Vehiculo extends BaseModel<VehiculoAttributes, VehiculoCreationAttr
   public toneladas!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  public readonly deletedAt!: Date;
 
 
   // Esto es para el Front
@@ -47,7 +49,8 @@ export class Vehiculo extends BaseModel<VehiculoAttributes, VehiculoCreationAttr
       sequelize,
       tableName: 'vehiculo',
       modelName: 'Vehiculo',
-      timestamps: true
+      timestamps: true,
+      paranoid: true
     });
   }
 

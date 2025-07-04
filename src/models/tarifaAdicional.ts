@@ -8,9 +8,10 @@ interface TarifaAdicionalAttributes {
   id_adicional: number;
   createdAt?: Date;
   updatedAt?: Date;
+  deletedAt?: Date;
 }
 
-type TarifaAdicionalCreationAttributes = Optional<TarifaAdicionalAttributes, 'id_tarifaAdicional' | 'createdAt' | 'updatedAt'>;
+type TarifaAdicionalCreationAttributes = Optional<TarifaAdicionalAttributes, 'id_tarifaAdicional' | 'createdAt' | 'updatedAt' | 'deletedAt'>;
 
 export class TarifaAdicional extends BaseModel<TarifaAdicionalAttributes, TarifaAdicionalCreationAttributes> implements TarifaAdicionalAttributes {
   public id_tarifaAdicional!: number;
@@ -19,6 +20,7 @@ export class TarifaAdicional extends BaseModel<TarifaAdicionalAttributes, Tarifa
   public id_adicional!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  public readonly deletedAt!: Date;
 
 
   // Esto es para el Front
@@ -66,6 +68,7 @@ export class TarifaAdicional extends BaseModel<TarifaAdicionalAttributes, Tarifa
       tableName: 'tarifaAdicional',
       modelName: 'TarifaAdicional',
       timestamps: true,
+      paranoid: true,
       indexes: [ 
         {
           unique: true,
