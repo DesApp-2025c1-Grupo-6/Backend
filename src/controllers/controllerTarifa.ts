@@ -175,6 +175,14 @@ export const createTarifa = async (req: Request, res: Response) => {
       ]
     });
 
+    // Crear histórico--------------------------------------------------------------------
+    await db.HistoricoTarifa.create({
+      idTarifa: nuevaTarifa.id_tarifa,
+      fecha: new Date(),
+      data: mapTarifa(tarifa),
+      accion: 'CREACION'
+    });
+
     res.status(201).json( mapTarifa(tarifa) );
   } catch (error) {
     if (transaction) {
@@ -191,12 +199,30 @@ export const updateTarifa = async (req: Request, res: Response): Promise<void> =
     const { id } = req.params;
     const { adicionales, ...tarifaData } = req.body;
 
-    const tarifaExistente = await db.Tarifa.findByPk(id);
+    // Buscar la version anterior para el historico--------------------------------------------------
+    const tarifaExistente = await db.Tarifa.findByPk(id, {
+      include: [
+        'vehiculo',
+        {
+          association: 'carga',
+          include: ['tipoCarga']
+        },
+        'zona',
+        'transportista',
+        {
+          association: 'adicionales',
+          include: ['adicional']
+        }
+      ]
+    });
+
     if (!tarifaExistente) {
       await transaction.rollback();
       res.status(404).json({ error: 'Tarifa no encontrada' });
       return;
     }
+
+    const tarifaAnterior = mapTarifa(tarifaExistente);
 
     // Validar que los registros relacionados existan y estén activos (solo si se están actualizando)
     if (tarifaData.id_vehiculo || tarifaData.id_carga || tarifaData.id_zona || tarifaData.id_transportista) {
@@ -299,7 +325,20 @@ export const updateTarifa = async (req: Request, res: Response): Promise<void> =
       ]
     });
 
-    res.status(200).json( mapTarifa(tarifaActualizada) );
+    const tarifaNueva = mapTarifa(tarifaActualizada);
+    const cambios = detectarCambios(tarifaAnterior, tarifaNueva);
+
+    if (cambios) {
+      await db.HistoricoTarifa.create({
+        idTarifa: Number(id),
+        fecha: new Date(),
+        data: tarifaNueva,
+        accion: 'MODIFICACION',
+        cambios
+      });
+    }
+
+    res.status(200).json(tarifaNueva);
 
   } catch (error) {
     await transaction.rollback();
@@ -526,3 +565,149 @@ function mapTarifa(tarifa: any) {
 function mapTarifas(tarifas: any[]) {
   return tarifas.map(mapTarifa);
 }
+
+
+/* ************************************************************************************** */
+/* ************************************************************************************** */
+function compararAdicionales(arr1: any[], arr2: any[]): boolean {
+  if (arr1.length !== arr2.length) return false;
+
+  const sorted1 = [...arr1].sort((a, b) => (a.id ?? a.id_adicional) - (b.id ?? b.id_adicional));
+  const sorted2 = [...arr2].sort((a, b) => (a.id ?? a.id_adicional) - (b.id ?? b.id_adicional));
+
+  for (let i = 0; i < sorted1.length; i++) {
+    const a = sorted1[i];
+    const b = sorted2[i];
+    if (
+      (a.id ?? a.id_adicional) !== (b.id ?? b.id_adicional) ||
+      Number(a.costo) !== Number(b.costo) ||
+      (a.tipo ?? '') !== (b.tipo ?? '')
+    ) {
+      return false;
+    }
+  }
+  return true;
+}
+
+export function detectarCambios(anterior: any, nuevo: any): any | null {
+  const cambios: any = {};
+  for (const key in nuevo) {
+    if (key === 'adicionales') {
+      const adicionalesIguales = compararAdicionales(anterior[key] ?? [], nuevo[key] ?? []);
+      if (!adicionalesIguales) {
+        cambios[key] = {
+          anterior: anterior[key],
+          nuevo: nuevo[key]
+        };
+      }
+    } else if (
+      Object.prototype.hasOwnProperty.call(anterior, key) &&
+      anterior[key] !== nuevo[key]
+    ) {
+      cambios[key] = {
+        anterior: anterior[key],
+        nuevo: nuevo[key]
+      };
+    }
+  }
+  return Object.keys(cambios).length ? cambios : null;
+}
+
+function formatFecha(fecha: string | Date) {
+  const fechaObj = typeof fecha === "string" ? new Date(fecha) : fecha;
+  const dia = String(fechaObj.getDate()).padStart(2, '0');
+  const mes = String(fechaObj.getMonth() + 1).padStart(2, '0');
+  const anio = fechaObj.getFullYear();
+  return `${dia}/${mes}/${anio}`;
+}
+
+//Todo el histórico de una tarifa----------------------------------------------------------------
+export const getHistoricoTarifa = async (req: Request, res: Response) => {
+  try {
+    const historico = await db.HistoricoTarifa.findAll({
+      where: { idTarifa: req.params.id },
+      order: [['fecha', 'DESC']]
+    });
+
+    const historicoFormateado = historico.map((h: any) => ({
+      ...h.toJSON(),
+      fecha: formatFecha(h.fecha)
+    }));
+
+    res.status(200).json(historicoFormateado);
+  } catch (error) {
+    console.error('Error al obtener el histórico de la tarifa:', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+export const getUltimoHistoricoTarifa = async (req: Request, res: Response) => {
+  try {
+    const ultimo = await db.HistoricoTarifa.findOne({
+      where: { idTarifa: req.params.id },
+      order: [['fecha', 'DESC']]
+    });
+
+    if (!ultimo) {
+      res.status(404).json({ error: 'No existe histórico para esa tarifa' });
+      return;
+    }
+
+    const historicoPlano = {
+      ...ultimo.toJSON(),
+      fecha: formatFecha(ultimo.get('fecha'))
+    };
+
+    res.status(200).json(historicoPlano);
+  } catch (error) {
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+ };
+
+export const getUltimoHistoricoDeTodasLasTarifas = async (req: Request, res: Response) => {
+  try {
+    const tarifas = await db.Tarifa.findAll();
+
+    const resultado = await Promise.all(tarifas.map(async (tarifa: any) => {
+      const ultimo = await db.HistoricoTarifa.findOne({
+        where: { idTarifa: tarifa.id_tarifa },
+        order: [['fecha', 'DESC']]
+      });
+      if (ultimo) {
+        return {
+          ...ultimo.toJSON(),
+          idTarifa: tarifa.id,
+          fecha: formatFecha(ultimo.fecha)
+        };
+      }
+      return null; // Por si no tiene historico
+    }));
+
+    // Filtra los que NO tienen histórico
+    res.json(resultado.filter(Boolean));
+  } catch (error) {
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};
+
+export const getHistoricoById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const registro = await db.HistoricoTarifa.findByPk(id);
+
+    if (!registro) {
+      res.status(404).json({ error: 'No existe registro histórico con ese id' });
+      return;
+    }
+    const data = registro.toJSON();
+    const response = {
+      ...data,
+      fecha: formatFecha((data as any).fecha)
+    };
+
+    res.json(response);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+};

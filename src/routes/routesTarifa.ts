@@ -11,6 +11,10 @@ import {
   getZonaByTarifa,
   getTransportistaByTarifa,
   getAdicionalesByTarifa,
+  getHistoricoTarifa,
+  getUltimoHistoricoTarifa,
+  getUltimoHistoricoDeTodasLasTarifas,
+  getHistoricoById
 } from '../controllers/controllerTarifa';
 import { validate, validateParams } from '../middlewares/validate.middlewares';
 import { tarifaSchema } from '../validations/tarifa.validation';
@@ -366,6 +370,97 @@ router.get('/:id/adicionales', validateParams(idParamSchema), getAdicionalesByTa
  *         description: Adicionales recuperados correctamente
  *       404:
  *         description: Tarifa no encontrada
+ *       400:
+ *         description: ID inválido
+ *       500:
+ *         description: Error interno del servidor
+ */
+
+
+
+router.get('/:id/historico', getHistoricoTarifa);
+/**
+ * @swagger
+ * /tarifas/{id}/historico:
+ *   get:
+ *     summary: Obtener el histórico completo de una tarifa
+ *     tags: [Historico]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la tarifa
+ *     responses:
+ *       200:
+ *         description: Histórico recuperado correctamente
+ *       404:
+ *         description: Tarifa no encontrada
+ *       400:
+ *         description: ID inválido
+ *       500:
+ *         description: Error interno del servidor
+ */
+
+router.get('/:id/historico/ultimo', getUltimoHistoricoTarifa); //---Este no
+/**
+ * @swagger
+ * /tarifas/{id}/historico/ultimo:
+ *   get:
+ *     summary: Obtener el último registro del histórico de una tarifa
+ *     tags: [Historico]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la tarifa
+ *     responses:
+ *       200:
+ *         description: Histórico recuperado correctamente
+ *       404:
+ *         description: Tarifa no encontrada
+ *       400:
+ *         description: ID inválido
+ *       500:
+ *         description: Error interno del servidor
+ */
+
+router.get('/historico/ultimos', getUltimoHistoricoDeTodasLasTarifas);
+/**
+ * @swagger
+ * /tarifas/historico/ultimos:
+ *   get:
+ *     summary: Obtener el último registro del histórico de todas las tarifas
+ *     tags: [Historico]
+ *     responses:
+ *       200:
+ *         description: Históricos recuperados correctamente
+ *       500:
+ *         description: Error interno del servidor
+ */
+
+router.get('/historico/:id', getHistoricoById);
+/**
+ * @swagger
+ * /tarifas/historico/{id}:
+ *   get:
+ *     summary: Obtener el histórico indicado
+ *     tags: [Historico]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del histórico
+ *     responses:
+ *       200:
+ *         description: Histórico recuperado correctamente
+ *       404:
+ *         description: Histórico no encontrado
  *       400:
  *         description: ID inválido
  *       500:

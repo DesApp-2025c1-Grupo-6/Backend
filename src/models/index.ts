@@ -8,6 +8,7 @@ import { Vehiculo } from './vehiculo';
 import { Adicional } from './adicional';
 import { Tarifa } from './tarifa';
 import { TarifaAdicional } from './tarifaAdicional';
+import { HistoricoTarifa } from './historicoTarifa';
 
 
 const env = (process.env.NODE_ENV || 'development') as keyof typeof configFile;
@@ -44,7 +45,8 @@ const db = {
   Vehiculo: Vehiculo.initModel(sequelize),
   Adicional: Adicional.initModel(sequelize),
   Tarifa: Tarifa.initModel(sequelize),
-  TarifaAdicional: TarifaAdicional.initModel(sequelize)
+  TarifaAdicional: TarifaAdicional.initModel(sequelize),
+  HistoricoTarifa: HistoricoTarifa.initModel(sequelize)
 };
 
 
