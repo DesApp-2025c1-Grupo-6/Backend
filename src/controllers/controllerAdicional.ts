@@ -11,7 +11,6 @@ export const getAllAdicionales = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
-
 export const generarReporteAdicionalesPDF = async (
   req: Request,
   res: Response
@@ -49,31 +48,28 @@ export const generarReporteAdicionalesPDF = async (
       .text('Adicionales utilizados en tarifas', { underline: true });
     doc.moveDown();
 
+    // Formato para moneda
     const formatoMoneda = new Intl.NumberFormat('es-AR', {
       style: 'currency',
       currency: 'ARS',
       minimumFractionDigits: 2,
     });
 
-    // Encabezado tabla
+    // Encabezado de tabla
     let y = doc.y;
     doc
       .font('Helvetica-Bold')
       .text('Tipo', 50, y)
-      .text('Costo ($)', 200, y)
-      .text('# Tarifas', 300, y)
-      .text('Subtotal', 400, y);
+      .text('Costo ($)', 250, y)
+      .text('Cant. de veces utilizado', 400, y, { width: 200 });
     doc.font('Helvetica');
     y += 20;
 
-    let totalGeneral = 0;
-
+    // Recorrer adicionales
     adicionales.forEach((adic: any) => {
       const tipo = adic.tipo;
       const costo = parseFloat(adic.costo_default) || 0;
       const cantidad = adic.TarifaAdicionals?.length || 0;
-      const subtotal = costo * cantidad;
-      totalGeneral += subtotal;
 
       if (y > doc.page.height - 50) {
         doc.addPage();
@@ -82,21 +78,11 @@ export const generarReporteAdicionalesPDF = async (
 
       doc
         .text(tipo, 50, y)
-        .text(costo.toFixed(2), 200, y)
-        .text(`${cantidad}`, 300, y)
-        .text(formatoMoneda.format(subtotal), 400, y);
+        .text(formatoMoneda.format(costo), 250, y)
+        .text(`${cantidad}`, 400, y);
 
       y += 20;
     });
-
-    y += 20;
-    doc.moveTo(50, y).lineTo(550, y).stroke();
-    y += 10;
-
-    doc
-      .font('Helvetica-Bold')
-      .text('TOTAL GENERAL:', 300, y)
-      .text(formatoMoneda.format(totalGeneral), 400, y);
 
     doc.end();
   } catch (error) {
