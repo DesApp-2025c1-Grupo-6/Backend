@@ -27,7 +27,7 @@ export = {
         key: 'id_tipo_carga'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'SET NULL'
+        onDelete: 'RESTRICT'
       },
       createdAt: {
         allowNull: false,
