@@ -12,11 +12,13 @@
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
     "docker:logs": "docker-compose logs -f mysql",
-    "seed": "npx ts-node src/seeders/seed.ts"
+    "seed": "npx ts-node src/seeders/seed.ts",
+    "seed:api": "npx ts-node src/seeders/seed_api.ts"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",  "dependencies": {
+  "license": "ISC",
+  "dependencies": {
     "@types/swagger-jsdoc": "^6.0.4",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",

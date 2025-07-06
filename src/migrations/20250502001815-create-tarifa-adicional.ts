@@ -55,6 +55,7 @@ export = {
   },
   
   down: async (queryInterface: QueryInterface): Promise<void> => {
+    await queryInterface.removeIndex('tarifaAdicional', 'unique_tarifa_adicional').catch(()=>{});
     await queryInterface.dropTable('tarifaAdicional');
   }
 };
