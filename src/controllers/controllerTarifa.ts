@@ -711,12 +711,12 @@ export const getHistoricoTarifa = async (req: Request, res: Response) => {
       order: [["fecha", "DESC"]],
     });
 
-    const historicoFormateado = historico.map((h: any) => ({
+    const dataDashboard = historico.map((h: any) => ({
       ...h.toJSON(),
       fecha: formatFecha(h.fecha),
     }));
 
-    res.status(200).json(historicoFormateado);
+    res.status(200).json(dataDashboard);
   } catch (error) {
     console.error("Error al obtener el histórico de la tarifa:", error);
     res.status(500).json({ error: "Error interno del servidor" });
@@ -752,8 +752,6 @@ export const getUltimoHistoricoDeTodasLasTarifas = async (
 ) => {
   try {
     const tarifas = await db.Tarifa.findAll({ paranoid: false });
-
-    console.log("Tarifas encontradas:", tarifas);
 
     const resultado = await Promise.all(
       tarifas.map(async (tarifa: any) => {
@@ -800,5 +798,39 @@ export const getHistoricoById = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+export const getDataDashboard = async (req: Request, res: Response) => {
+  try {
+    const historico = await db.HistoricoTarifa.findAll({
+      where: { idTarifa: req.params.id },
+      order: [["fecha", "DESC"]],
+    });
+
+    const dataDashboard = historico.map((h: any) => {
+      let valor = Number(h.data.valor_base) || 0;
+      if (h.data.adicionales) {
+        const adicionales = h.data.adicionales.map((ad: any) =>
+          ad.costo_personalizado ? ad.costo_personalizado : ad.costo
+        );
+        valor += adicionales.reduce(
+          (acc: number, cur: number) => Number(acc) + Number(cur),
+          0
+        );
+      }
+      const fechaObj = h.fecha instanceof Date ? h.fecha : new Date(h.fecha);
+      return {
+        value: valor,
+        time: Math.floor(fechaObj.getTime() / 1000), // timestamp en segundos
+      };
+    });
+
+    res.status(200).json(dataDashboard);
+  } catch (error) {
+    console.error("Error obteniendo el histórico para el dashboard:", error);
+    res
+      .status(500)
+      .json({ error: "No se pudo obtener el histórico para el dashboard" });
   }
 };
