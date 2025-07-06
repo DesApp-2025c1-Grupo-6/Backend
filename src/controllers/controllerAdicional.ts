@@ -55,34 +55,43 @@ export const generarReporteAdicionalesPDF = async (
       minimumFractionDigits: 2,
     });
 
-    // Encabezado de tabla
     let y = doc.y;
-    doc
-      .font('Helvetica-Bold')
-      .text('Tipo', 50, y)
-      .text('Costo ($)', 250, y)
-      .text('Cant. de veces utilizado', 400, y, { width: 200 });
-    doc.font('Helvetica');
-    y += 20;
 
-    // Recorrer adicionales
-    adicionales.forEach((adic: any) => {
-      const tipo = adic.tipo;
-      const costo = parseFloat(adic.costo_default) || 0;
-      const cantidad = adic.TarifaAdicionals?.length || 0;
-
-      if (y > doc.page.height - 50) {
-        doc.addPage();
-        y = 50;
-      }
-
+    if (adicionales.length === 0) {
+      // Si no hay adicionales, mostrar mensaje
       doc
-        .text(tipo, 50, y)
-        .text(formatoMoneda.format(costo), 250, y)
-        .text(`${cantidad}`, 400, y);
-
+        .font('Helvetica-Oblique')
+        .fontSize(12)
+        .text('No hay adicionales disponibles.', 50, y);
+    } else {
+      // Encabezado de tabla
+      doc
+        .font('Helvetica-Bold')
+        .text('Tipo', 50, y)
+        .text('Costo ($)', 250, y)
+        .text('Cant. de veces utilizado', 400, y, { width: 200 });
+      doc.font('Helvetica');
       y += 20;
-    });
+
+      // Recorrer adicionales
+      adicionales.forEach((adic: any) => {
+        const tipo = adic.tipo;
+        const costo = parseFloat(adic.costo_default) || 0;
+        const cantidad = adic.TarifaAdicionals?.length || 0;
+
+        if (y > doc.page.height - 50) {
+          doc.addPage();
+          y = 50;
+        }
+
+        doc
+          .text(tipo, 50, y)
+          .text(formatoMoneda.format(costo), 250, y)
+          .text(`${cantidad}`, 400, y);
+
+        y += 20;
+      });
+    }
 
     doc.end();
   } catch (error) {
