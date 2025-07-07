@@ -58,17 +58,29 @@ export const generarReporteAdicionalesPDF = async (
     const formatoMoneda = new Intl.NumberFormat("es-AR", {
       style: "currency",
       currency: "ARS",
-      minimumFractionDigits: 2,
+      minimumFractionDigits: 0,
     });
+
+    // Definir posiciones de columnas para mejor alineación
+    const colTipo = 40;
+    const colCosto = 180;
+    const colUtilizado = 300;
+    const colEstado = 420;
 
     // Función para agregar encabezado de tabla
     const agregarEncabezadoTabla = (yPos: number) => {
       pdf
         .font("Helvetica-Bold")
-        .text("Tipo", 40, yPos)
-        .text("Costo", 180, yPos)
-        .text("Utilizado en", 325, yPos)
-        .text("Estado", 505, yPos);
+        .text("Tipo", colTipo, yPos, { width: colCosto - colTipo - 10 })
+        .text("Costo", colCosto, yPos, {
+          width: colUtilizado - colCosto - 10,
+          align: "right",
+        })
+        .text("Utilizado en", colUtilizado, yPos, {
+          width: colEstado - colUtilizado - 10,
+          align: "right",
+        })
+        .text("Estado", colEstado, yPos, { align: "right" });
       pdf.font("Helvetica");
       return yPos + 20;
     };
@@ -116,16 +128,20 @@ export const generarReporteAdicionalesPDF = async (
       const estadoAdicional = adicional.deletedAt
         ? "Deshabilitado"
         : "Habilitado";
-      const anchoPagina = pdf.page.width;
-      const margenDerecho = 40;
-      const anchoTextoEstado = pdf.widthOfString(estadoAdicional);
-      const posicionXEstado = anchoPagina - margenDerecho - anchoTextoEstado;
 
       pdf
-        .text(tipoAdicional, 40, posicionY)
-        .text(formatoMoneda.format(costoAdicional), 170, posicionY)
-        .text(textoCantidadTarifas, 340, posicionY)
-        .text(estadoAdicional, posicionXEstado, posicionY);
+        .text(tipoAdicional, colTipo, posicionY, {
+          width: colCosto - colTipo - 10,
+        })
+        .text(formatoMoneda.format(costoAdicional), colCosto, posicionY, {
+          width: colUtilizado - colCosto - 10,
+          align: "right",
+        })
+        .text(textoCantidadTarifas, colUtilizado, posicionY, {
+          width: colEstado - colUtilizado - 10,
+          align: "right",
+        })
+        .text(estadoAdicional, colEstado, posicionY, { align: "right" });
       posicionY += 20;
     });
 
