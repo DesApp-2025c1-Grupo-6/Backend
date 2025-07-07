@@ -129,15 +129,40 @@ async function seed() {
     tipo: "Monitoreo satelital",
     costo_default: 5500,
   });
+  await post(`${API_URL}/adicionales`, {
+    tipo: "Carga y descarga manual",
+    costo_default: 9000,
+  });
+  await post(`${API_URL}/adicionales`, {
+    tipo: "Seguro adicional",
+    costo_default: 7000,
+  });
+  await post(`${API_URL}/adicionales`, {
+    tipo: "Permiso municipal",
+    costo_default: 3500,
+  });
+  await post(`${API_URL}/adicionales`, {
+    tipo: "Esperas prolongadas",
+    costo_default: 6000,
+  });
+  await post(`${API_URL}/adicionales`, {
+    tipo: "Embalaje especial",
+    costo_default: 8000,
+  });
 
   // Tarifas
   await post(`${API_URL}/tarifas`, {
     valor_base: 45000,
-    fecha: "2025-07-05", // Usar formato YYYY-MM-DD
+    fecha: "2025-07-05",
     id_vehiculo: 3,
     id_carga: 1,
     id_zona: 1,
     id_transportista: 1,
+    adicionales: [
+      { id_adicional: 1, costo_personalizado: 9000 }, // Ayudante
+      { id_adicional: 2 }, // Carga peligrosa
+      { id_adicional: 4 }, // Almuerzo
+    ],
   });
   await post(`${API_URL}/tarifas`, {
     valor_base: 95000,
@@ -146,6 +171,11 @@ async function seed() {
     id_carga: 1,
     id_zona: 4,
     id_transportista: 2,
+    adicionales: [
+      { id_adicional: 3 }, // Horario nocturno
+      { id_adicional: 5, costo_personalizado: 20000 }, // Estadía
+      { id_adicional: 6 }, // Peajes
+    ],
   });
   await post(`${API_URL}/tarifas`, {
     valor_base: 115000,
@@ -154,9 +184,106 @@ async function seed() {
     id_carga: 5,
     id_zona: 3,
     id_transportista: 3,
+    adicionales: [
+      { id_adicional: 7 }, // Monitoreo satelital
+      { id_adicional: 8 }, // Carga y descarga manual
+      { id_adicional: 9, costo_personalizado: 8000 }, // Seguro adicional
+    ],
   });
-
-  seed().catch((err) => {
-    console.error("Error al cargar datos:", err.message);
+  await post(`${API_URL}/tarifas`, {
+    valor_base: 67000,
+    fecha: "2024-09-15",
+    id_vehiculo: 2,
+    id_carga: 2,
+    id_zona: 2,
+    id_transportista: 4,
+    adicionales: [
+      { id_adicional: 1 }, // Ayudante
+      { id_adicional: 10 }, // Permiso municipal
+    ],
+  });
+  await post(`${API_URL}/tarifas`, {
+    valor_base: 82000,
+    fecha: "2024-11-20",
+    id_vehiculo: 1,
+    id_carga: 3,
+    id_zona: 5,
+    id_transportista: 1,
+    adicionales: [
+      { id_adicional: 2 }, // Carga peligrosa
+      { id_adicional: 11 }, // Esperas prolongadas
+    ],
+  });
+  await post(`${API_URL}/tarifas`, {
+    valor_base: 123000,
+    fecha: "2025-03-10",
+    id_vehiculo: 3,
+    id_carga: 6,
+    id_zona: 6,
+    id_transportista: 2,
+    adicionales: [
+      { id_adicional: 4 }, // Almuerzo
+      { id_adicional: 12 }, // Embalaje especial
+      { id_adicional: 9 }, // Seguro adicional
+    ],
+  });
+  // Tarifas adicionales de ejemplo
+  await post(`${API_URL}/tarifas`, {
+    valor_base: 56000,
+    fecha: "2024-08-12",
+    id_vehiculo: 2,
+    id_carga: 4,
+    id_zona: 2,
+    id_transportista: 3,
+    adicionales: [
+      { id_adicional: 3 }, // Horario nocturno
+      { id_adicional: 8 }, // Carga y descarga manual
+    ],
+  });
+  await post(`${API_URL}/tarifas`, {
+    valor_base: 99000,
+    fecha: "2024-10-22",
+    id_vehiculo: 4,
+    id_carga: 5,
+    id_zona: 5,
+    id_transportista: 4,
+    adicionales: [
+      { id_adicional: 5 }, // Estadía
+      { id_adicional: 6 }, // Peajes
+      { id_adicional: 12 }, // Embalaje especial
+    ],
+  });
+  await post(`${API_URL}/tarifas`, {
+    valor_base: 72000,
+    fecha: "2025-02-14",
+    id_vehiculo: 1,
+    id_carga: 2,
+    id_zona: 3,
+    id_transportista: 2,
+    adicionales: [
+      { id_adicional: 7 }, // Monitoreo satelital
+      { id_adicional: 10 }, // Permiso municipal
+    ],
+  });
+  await post(`${API_URL}/tarifas`, {
+    valor_base: 105000,
+    fecha: "2025-04-01",
+    id_vehiculo: 3,
+    id_carga: 6,
+    id_zona: 4,
+    id_transportista: 1,
+    adicionales: [
+      { id_adicional: 11 }, // Esperas prolongadas
+      { id_adicional: 12 }, // Embalaje especial
+      { id_adicional: 1 }, // Ayudante
+    ],
   });
 }
+
+seed()
+  .then(() => {
+    console.log("Datos cargados exitosamente a través de la API.");
+  })
+  .catch((err) => {
+    console.error("Error al cargar datos:", err.message);
+  });
