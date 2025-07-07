@@ -11,55 +11,95 @@ export const getAllAdicionales = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Error interno del servidor' });
   }
 };
-
 export const generarReporteAdicionalesPDF = async (
   req: Request,
   res: Response
 ) => {
-  const adicionales = await db.Adicional.findAll(); // trae tipo y costo_default
+  try {
+    // Traer adicionales y sus tarifas asociadas
+    const adicionales = await db.Adicional.findAll({
+      attributes: ['id_adicional', 'tipo', 'costo_default'],
+      include: [
+        {
+          model: db.TarifaAdicional,
+          attributes: ['id_tarifa'],
+        },
+      ],
+    });
 
-  const doc = new PDFDocument({ margin: 40, size: 'A4' });
+    // Iniciar PDF
+    const doc = new PDFDocument({ margin: 40, size: 'A4' });
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader(
+      'Content-Disposition',
+      'attachment; filename=reporte-adicionales.pdf'
+    );
+    doc.pipe(res);
 
-  res.setHeader('Content-Type', 'application/pdf');
-  res.setHeader(
-    'Content-Disposition',
-    'attachment; filename=reporte-adicionales.pdf'
-  );
+    // Encabezado
+    doc.fontSize(20).text('Reporte de Adicionales', { align: 'center' });
+    doc.moveDown();
+    doc
+      .fontSize(12)
+      .text(`Fecha: ${new Date().toLocaleDateString()}`, { align: 'right' });
+    doc.moveDown();
+    doc
+      .fontSize(14)
+      .text('Adicionales utilizados en tarifas', { underline: true });
+    doc.moveDown();
 
-  doc.pipe(res);
+    // Formato para moneda
+    const formatoMoneda = new Intl.NumberFormat('es-AR', {
+      style: 'currency',
+      currency: 'ARS',
+      minimumFractionDigits: 2,
+    });
 
-  doc.fontSize(20).text('Reporte de Adicionales', { align: 'center' });
-  doc.moveDown();
-  doc
-    .fontSize(12)
-    .text(`Fecha: ${new Date().toLocaleDateString()}`, { align: 'right' });
-  doc.moveDown();
-  doc.fontSize(14).text('Detalle de adicionales:', { underline: true });
-  doc.moveDown();
+    let y = doc.y;
 
-  const startY = doc.y;
-  doc
-    .font('Helvetica-Bold')
-    .text('Tipo', 50, startY)
-    .text('Costo ($)', 400, startY);
-  doc.font('Helvetica');
+    if (adicionales.length === 0) {
+      // Si no hay adicionales, mostrar mensaje
+      doc
+        .font('Helvetica-Oblique')
+        .fontSize(12)
+        .text('No hay adicionales disponibles.', 50, y);
+    } else {
+      // Encabezado de tabla
+      doc
+        .font('Helvetica-Bold')
+        .text('Tipo', 50, y)
+        .text('Costo ($)', 250, y)
+        .text('Cant. de veces utilizado', 400, y, { width: 200 });
+      doc.font('Helvetica');
+      y += 20;
 
-  let total = 0;
-  let y = startY + 20;
+      // Recorrer adicionales
+      adicionales.forEach((adic: any) => {
+        const tipo = adic.tipo;
+        const costo = parseFloat(adic.costo_default) || 0;
+        const cantidad = adic.TarifaAdicionals?.length || 0;
 
-  adicionales.forEach(({ tipo, costo_default }: any) => {
-    doc.text(tipo, 50, y);
-    doc.text(`$${costo_default.toFixed(2)}`, 400, y);
-    y += 20;
-    total += costo_default;
-  });
+        if (y > doc.page.height - 50) {
+          doc.addPage();
+          y = 50;
+        }
 
-  doc.moveDown().moveDown();
-  doc
-    .font('Helvetica-Bold')
-    .text(`Total: $${total.toFixed(2)}`, { align: 'right' });
+        doc
+          .text(tipo, 50, y)
+          .text(formatoMoneda.format(costo), 250, y)
+          .text(`${cantidad}`, 400, y);
 
-  doc.end();
+        y += 20;
+      });
+    }
+
+    doc.end();
+  } catch (error) {
+    console.error('Error generando el PDF:', error);
+    if (!res.headersSent) {
+      res.status(500).json({ error: 'Error al generar el PDF' });
+    }
+  }
 };
 
 export const getAdicionalById = async (req: Request, res: Response) => {
