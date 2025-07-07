@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router } from "express";
 import {
   getAllTarifas,
   getTarifaById,
@@ -14,15 +14,16 @@ import {
   getHistoricoTarifa,
   getUltimoHistoricoTarifa,
   getUltimoHistoricoDeTodasLasTarifas,
-  getHistoricoById
-} from '../controllers/controllerTarifa';
-import { validate, validateParams } from '../middlewares/validate.middlewares';
-import { tarifaSchema } from '../validations/tarifa.validation';
-import { idParamSchema } from '../validations/comun.validation';
+  getHistoricoById,
+  getDataDashboard,
+} from "../controllers/controllerTarifa";
+import { validate, validateParams } from "../middlewares/validate.middlewares";
+import { tarifaSchema } from "../validations/tarifa.validation";
+import { idParamSchema } from "../validations/comun.validation";
 
 const router = Router();
 
-router.get('/', getAllTarifas);
+router.get("/", getAllTarifas);
 /**
  * @swagger
  * /tarifas:
@@ -36,7 +37,7 @@ router.get('/', getAllTarifas);
  *         description: Error interno del servidor
  */
 
-router.get('/:id', validateParams(idParamSchema), getTarifaById);
+router.get("/:id", validateParams(idParamSchema), getTarifaById);
 /**
  * @swagger
  * /tarifas/{id}:
@@ -56,12 +57,12 @@ router.get('/:id', validateParams(idParamSchema), getTarifaById);
  *       404:
  *         description: Tarifa no encontrada
  *       400:
- *         description: ID inválido 
+ *         description: ID inválido
  *       500:
  *         description: Error interno del servidor
  */
 
-router.post('/', validate(tarifaSchema), createTarifa);
+router.post("/", validate(tarifaSchema), createTarifa);
 /**
  * @swagger
  * /tarifas:
@@ -124,7 +125,7 @@ router.post('/', validate(tarifaSchema), createTarifa);
  */
 
 router.put(
-  '/:id',
+  "/:id",
   validateParams(idParamSchema),
   validate(tarifaSchema),
   updateTarifa
@@ -141,7 +142,7 @@ router.put(
  *         required: true
  *         schema:
  *           type: integer
- *         description: ID de la tarifa 
+ *         description: ID de la tarifa
  *     requestBody:
  *       required: true
  *       content:
@@ -200,7 +201,7 @@ router.put(
  *         description: Error interno del servidor
  */
 
-router.delete('/:id', validateParams(idParamSchema), deleteTarifa);
+router.delete("/:id", validateParams(idParamSchema), deleteTarifa);
 /**
  * @swagger
  * /tarifas/{id}:
@@ -225,8 +226,7 @@ router.delete('/:id', validateParams(idParamSchema), deleteTarifa);
  *         description: Error interno del servidor
  */
 
-
-router.get('/:id/vehiculo', validateParams(idParamSchema), getVehiculoByTarifa);
+router.get("/:id/vehiculo", validateParams(idParamSchema), getVehiculoByTarifa);
 /**
  * @swagger
  * /tarifas/{id}/vehiculo:
@@ -251,7 +251,7 @@ router.get('/:id/vehiculo', validateParams(idParamSchema), getVehiculoByTarifa);
  *         description: Error interno del servidor
  */
 
-router.get('/:id/carga', validateParams(idParamSchema), getCargaByTarifa);
+router.get("/:id/carga", validateParams(idParamSchema), getCargaByTarifa);
 /**
  * @swagger
  * /tarifas/{id}/carga:
@@ -276,7 +276,11 @@ router.get('/:id/carga', validateParams(idParamSchema), getCargaByTarifa);
  *         description: Error interno del servidor
  */
 
-router.get('/:id/tipoCarga', validateParams(idParamSchema), getTipoCargaByTarifa);
+router.get(
+  "/:id/tipoCarga",
+  validateParams(idParamSchema),
+  getTipoCargaByTarifa
+);
 /**
  * @swagger
  * /tarifas/{id}/tipoCarga:
@@ -301,7 +305,7 @@ router.get('/:id/tipoCarga', validateParams(idParamSchema), getTipoCargaByTarifa
  *         description: Error interno del servidor
  */
 
-router.get('/:id/zona', validateParams(idParamSchema), getZonaByTarifa);
+router.get("/:id/zona", validateParams(idParamSchema), getZonaByTarifa);
 /**
  * @swagger
  * /tarifas/{id}/zona:
@@ -326,7 +330,11 @@ router.get('/:id/zona', validateParams(idParamSchema), getZonaByTarifa);
  *         description: Error interno del servidor
  */
 
-router.get('/:id/transportista', validateParams(idParamSchema), getTransportistaByTarifa);
+router.get(
+  "/:id/transportista",
+  validateParams(idParamSchema),
+  getTransportistaByTarifa
+);
 /**
  * @swagger
  * /tarifas/{id}/transportista:
@@ -351,7 +359,11 @@ router.get('/:id/transportista', validateParams(idParamSchema), getTransportista
  *         description: Error interno del servidor
  */
 
-router.get('/:id/adicionales', validateParams(idParamSchema), getAdicionalesByTarifa);
+router.get(
+  "/:id/adicionales",
+  validateParams(idParamSchema),
+  getAdicionalesByTarifa
+);
 /**
  * @swagger
  * /tarifas/{id}/adicionales:
@@ -376,9 +388,7 @@ router.get('/:id/adicionales', validateParams(idParamSchema), getAdicionalesByTa
  *         description: Error interno del servidor
  */
 
-
-
-router.get('/:id/historico', getHistoricoTarifa);
+router.get("/:id/historico", getHistoricoTarifa);
 /**
  * @swagger
  * /tarifas/{id}/historico:
@@ -403,7 +413,7 @@ router.get('/:id/historico', getHistoricoTarifa);
  *         description: Error interno del servidor
  */
 
-router.get('/:id/historico/ultimo', getUltimoHistoricoTarifa); //---Este no
+router.get("/:id/historico/ultimo", getUltimoHistoricoTarifa); //---Este no
 /**
  * @swagger
  * /tarifas/{id}/historico/ultimo:
@@ -428,7 +438,7 @@ router.get('/:id/historico/ultimo', getUltimoHistoricoTarifa); //---Este no
  *         description: Error interno del servidor
  */
 
-router.get('/historico/ultimos', getUltimoHistoricoDeTodasLasTarifas);
+router.get("/historico/ultimos", getUltimoHistoricoDeTodasLasTarifas);
 /**
  * @swagger
  * /tarifas/historico/ultimos:
@@ -442,7 +452,7 @@ router.get('/historico/ultimos', getUltimoHistoricoDeTodasLasTarifas);
  *         description: Error interno del servidor
  */
 
-router.get('/historico/:id', getHistoricoById);
+router.get("/historico/:id", getHistoricoById);
 /**
  * @swagger
  * /tarifas/historico/{id}:
@@ -461,6 +471,31 @@ router.get('/historico/:id', getHistoricoById);
  *         description: Histórico recuperado correctamente
  *       404:
  *         description: Histórico no encontrado
+ *       400:
+ *         description: ID inválido
+ *       500:
+ *         description: Error interno del servidor
+ */
+
+router.get("/dashboard/:id", getDataDashboard);
+/**
+ * @swagger
+ * /tarifas/dashboard/{id}:
+ *   get:
+ *     summary: Obtener datos del dashboard de tarifas
+ *     tags: [Dashboard]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del dashboard
+ *     responses:
+ *       200:
+ *         description: Datos del dashboard recuperados correctamente
+ *       404:
+ *         description: Dashboard no encontrado
  *       400:
  *         description: ID inválido
  *       500:
