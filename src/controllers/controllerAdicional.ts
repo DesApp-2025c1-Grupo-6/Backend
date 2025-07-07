@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import PDFDocument from "pdfkit";
 import db from "../models";
 
+import { existeValorUnico } from "../middlewares/validacionesUnicas"; // ajustá la ruta
+
 export const generarReporteAdicionalesPDF = async (
   req: Request,
   res: Response
@@ -176,6 +178,14 @@ export const getAdicionalById = async (req: Request, res: Response) => {
 
 export const createAdicional = async (req: Request, res: Response) => {
   try {
+    const { tipo } = req.body;
+
+    const yaExiste = await existeValorUnico(db.Adicional, "tipo", tipo);
+    if (yaExiste) {
+      res.status(400).json({ error: "Ya existe un adicional con ese tipo" });
+      return;
+    }
+
     const nuevoAdicional = await db.Adicional.create(req.body);
     res.status(201).json(nuevoAdicional);
   } catch (error) {
@@ -206,7 +216,7 @@ export const updateAdicional = async (req: Request, res: Response) => {
       res.status(404).json({ error: "Adicional no encontrado" });
     }
   } catch (error) {
-    console.error("Error:", error); //
+    console.error("Error:", error);
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
