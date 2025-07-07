@@ -13,6 +13,21 @@ import { idParamSchema } from '../validations/comun.validation';
 
 const router = express.Router();
 
+
+router.get('/reporte', generarReporteAdicionalesPDF);
+/**
+ * @swagger
+ * /adicionales/reporte:
+ *   get:
+ *     summary: Genera un reporte PDF con todos los adicionales desde la base de datos
+ *     tags: [Adicionales - Reporte]
+ *     responses:
+ *       200:
+ *         description: PDF generado correctamente
+ *       500:
+ *         description: Error interno del servidor
+ */
+
 router.get('/', getAllAdicionales);
 /**
  * @swagger
@@ -26,23 +41,7 @@ router.get('/', getAllAdicionales);
  *       500:
  *         description: Error interno del servidor
  */
-router.get('/reporte', generarReporteAdicionalesPDF);
-/**
- * @swagger
- * /adicionales/reporte:
- *   get:
- *     summary: Genera un reporte PDF con todos los adicionales desde la base de datos
- *     tags:
- *       - Adicionales
- *     responses:
- *       200:
- *         description: PDF generado correctamente
- *         content:
- *           application/pdf:
- *             schema:
- *               type: string
- *               format: binary
- */
+
 router.get('/:id', validateParams(idParamSchema), getAdicionalById);
 /**
  * @swagger
@@ -167,8 +166,6 @@ router.delete('/:id', validateParams(idParamSchema), deleteAdicional);
  *         description: Adicional no encontrado
  *       400:
  *         description: ID inválido
- *       409:
- *         description: No se puede eliminar porque está asociado a una tarifa
  *       500:
  *         description: Error interno del servidor
  */

@@ -142,8 +142,6 @@ router.delete('/:id', validateParams(idParamSchema), deleteTipoCarga);
  *         description: Tipo de carga no encontrado
  *       400:
  *         description: ID inválido
- *       409:
- *         description: No se puede eliminar porque está asociado a una carga
  *       500:
  *         description: Error interno del servidor
  */

@@ -142,8 +142,6 @@ router.delete('/:id', validateParams(idParamSchema), deleteZona);
  *         description: Zona no encontrada
  *       400:
  *         description: ID inválido
- *       409:
- *         description: No se puede eliminar porque está asociado a una tarifa
  *       500:
  *         description: Error interno del servidor
  */

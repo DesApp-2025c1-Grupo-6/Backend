@@ -15,7 +15,7 @@ export const cargaSchema = Joi.object({
   requisitos_especiales: Joi.string().min(3).max(50).required().messages({
     'string.base': 'Los requisitos especiales deben ser texto',
     'string.empty': 'Los requisitos especiales no pueden estar vacíos',
-    'string.min': 'Los requisitos especiales debe tener al menos 3 caracteres',
+    'string.min': 'Los requisitos especiales deben tener al menos 3 caracteres',
     'string.max': 'Los requisitos especiales no pueden superar los 50 caracteres',
     'any.required': 'Los requisitos especiales son obligatorios',
   }),

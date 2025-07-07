@@ -200,7 +200,7 @@ export const createTarifa = async (req: Request, res: Response) => {
       ],
     });
 
-    // Crear histórico--------------------------------------------------------------------
+    
     await db.HistoricoTarifa.create({
       idTarifa: nuevaTarifa.id_tarifa,
       fecha: new Date(),
@@ -227,7 +227,6 @@ export const updateTarifa = async (
     const { id } = req.params;
     const { adicionales, ...tarifaData } = req.body;
 
-    // Buscar la version anterior para el historico--------------------------------------------------
     const tarifaExistente = await db.Tarifa.findByPk(id, {
       include: [
         "vehiculo",
@@ -617,7 +616,11 @@ function mapTarifa(tarifa: any) {
     id: tarifa.id_tarifa,
     valor_base: tarifa.valor_base,
     fecha: tarifa.fecha
-      ? new Date(tarifa.fecha).toISOString().slice(0, 10)
+      ? new Date(tarifa.fecha).toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
+        })
       : null,
     id_vehiculo: tarifa.id_vehiculo,
     id_carga: tarifa.id_carga,
@@ -703,7 +706,7 @@ function formatFecha(fecha: string | Date) {
   )}:${String(fechaObj.getMinutes()).padStart(2, "0")}`;
 }
 
-//Todo el histórico de una tarifa----------------------------------------------------------------
+
 export const getHistoricoTarifa = async (req: Request, res: Response) => {
   try {
     const historico = await db.HistoricoTarifa.findAll({
@@ -759,6 +762,7 @@ export const getUltimoHistoricoDeTodasLasTarifas = async (
           where: { idTarifa: tarifa.id_tarifa },
           order: [["fecha", "DESC"]],
         });
+        /*
         if (ultimo) {
           return {
             ...ultimo.toJSON(),
@@ -767,11 +771,19 @@ export const getUltimoHistoricoDeTodasLasTarifas = async (
           };
         }
         return null; // Por si no tiene historico
+        */
+        if (!ultimo) { 
+          throw new Error('No se encontró historial para la tarifa con id ${tarifa.id_tarifa}');
+        }
+        return {
+            ...ultimo.toJSON(),
+            idTarifa: tarifa.id,
+            fecha: formatFecha(ultimo.fecha),
+        };
       })
     );
 
-    // Filtra los que NO tienen histórico
-    res.json(resultado.filter(Boolean));
+    res.json(resultado);
   } catch (error) {
     res.status(500).json({ error: "Error interno del servidor" });
   }
@@ -783,9 +795,7 @@ export const getHistoricoById = async (req: Request, res: Response) => {
     const registro = await db.HistoricoTarifa.findByPk(id);
 
     if (!registro) {
-      res
-        .status(404)
-        .json({ error: "No existe registro histórico con ese id" });
+      res.status(404).json({ error: "No existe registro histórico con ese id" });
       return;
     }
     const data = registro.toJSON();
