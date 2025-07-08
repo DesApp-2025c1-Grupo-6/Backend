@@ -180,12 +180,31 @@ export const createAdicional = async (req: Request, res: Response) => {
   try {
     const { tipo } = req.body;
 
+    // Buscar si existe un adicional eliminado (soft deleted) con los mismos atributos
+    const adicionalEliminado = await db.Adicional.findOne({
+      where: {
+        tipo,
+      },
+      paranoid: false,
+    });
+
+    if (adicionalEliminado && adicionalEliminado.deletedAt) {
+      // Si existe y está eliminado, lo restauramos
+      await adicionalEliminado.restore();
+      // Opcionalmente, actualizar otros campos si cambiaron
+      await adicionalEliminado.update(req.body);
+      res.status(200).json(adicionalEliminado);
+      return;
+    }
+
+    // Verificar unicidad por tipo (no debe haber uno activo)
     const yaExiste = await existeValorUnico(db.Adicional, "tipo", tipo);
     if (yaExiste) {
       res.status(400).json({ error: "Ya existe un adicional con ese tipo" });
       return;
     }
 
+    // Crear nuevo adicional
     const nuevoAdicional = await db.Adicional.create(req.body);
     res.status(201).json(nuevoAdicional);
   } catch (error) {
