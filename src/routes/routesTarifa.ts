@@ -226,6 +226,7 @@ router.delete("/:id", validateParams(idParamSchema), deleteTarifa);
  *         description: Error interno del servidor
  */
 
+
 router.get("/:id/vehiculo", validateParams(idParamSchema), getVehiculoByTarifa);
 /**
  * @swagger
@@ -276,11 +277,7 @@ router.get("/:id/carga", validateParams(idParamSchema), getCargaByTarifa);
  *         description: Error interno del servidor
  */
 
-router.get(
-  "/:id/tipoCarga",
-  validateParams(idParamSchema),
-  getTipoCargaByTarifa
-);
+router.get("/:id/tipoCarga", validateParams(idParamSchema), getTipoCargaByTarifa);
 /**
  * @swagger
  * /tarifas/{id}/tipoCarga:
@@ -330,11 +327,7 @@ router.get("/:id/zona", validateParams(idParamSchema), getZonaByTarifa);
  *         description: Error interno del servidor
  */
 
-router.get(
-  "/:id/transportista",
-  validateParams(idParamSchema),
-  getTransportistaByTarifa
-);
+router.get("/:id/transportista", validateParams(idParamSchema), getTransportistaByTarifa);
 /**
  * @swagger
  * /tarifas/{id}/transportista:
@@ -359,11 +352,7 @@ router.get(
  *         description: Error interno del servidor
  */
 
-router.get(
-  "/:id/adicionales",
-  validateParams(idParamSchema),
-  getAdicionalesByTarifa
-);
+router.get("/:id/adicionales", validateParams(idParamSchema), getAdicionalesByTarifa);
 /**
  * @swagger
  * /tarifas/{id}/adicionales:
@@ -387,6 +376,7 @@ router.get(
  *       500:
  *         description: Error interno del servidor
  */
+
 
 router.get("/:id/historico", getHistoricoTarifa);
 /**
@@ -413,7 +403,7 @@ router.get("/:id/historico", getHistoricoTarifa);
  *         description: Error interno del servidor
  */
 
-router.get("/:id/historico/ultimo", getUltimoHistoricoTarifa); //---Este no
+router.get("/:id/historico/ultimo", getUltimoHistoricoTarifa); //---Este no se usa
 /**
  * @swagger
  * /tarifas/{id}/historico/ultimo:

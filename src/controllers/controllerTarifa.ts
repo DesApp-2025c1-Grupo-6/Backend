@@ -95,6 +95,68 @@ export const createTarifa = async (req: Request, res: Response) => {
   try {
     const { adicionales, ...tarifaData } = req.body;
 
+    // Verificar si existe una tarifa eliminada con los mismos atributos principales
+    const whereTarifa = {
+      valor_base: tarifaData.valor_base,
+      id_vehiculo: tarifaData.id_vehiculo,
+      id_carga: tarifaData.id_carga,
+      id_zona: tarifaData.id_zona,
+      id_transportista: tarifaData.id_transportista,
+    };
+    const tarifaEliminada = await db.Tarifa.findOne({
+      where: whereTarifa,
+      paranoid: false,
+    });
+
+    if (tarifaEliminada && tarifaEliminada.deletedAt) {
+      await tarifaEliminada.restore();
+      await tarifaEliminada.update(tarifaData, { transaction });
+      // Si hay adicionales, también restaurar y actualizar los adicionales
+      if (Array.isArray(adicionales) && adicionales.length > 0) {
+        await db.TarifaAdicional.destroy({
+          where: { id_tarifa: tarifaEliminada.id_tarifa },
+          force: true,
+          transaction,
+        });
+        const adicionalesData = adicionales.map((adicional: any) => ({
+          id_tarifa: tarifaEliminada.id_tarifa,
+          id_adicional: adicional.id_adicional,
+          costo_personalizado: adicional.costo_personalizado ?? null,
+        }));
+        await db.TarifaAdicional.bulkCreate(adicionalesData, { transaction });
+      }
+
+      // Crear registro en el histórico como "CREACION" al restaurar
+      const tarifaRestaurada = await db.Tarifa.findByPk(
+        tarifaEliminada.id_tarifa,
+        {
+          include: [
+            { association: "vehiculo", paranoid: false },
+            {
+              association: "carga",
+              include: [{ association: "tipoCarga", paranoid: false }],
+            },
+            { association: "zona", paranoid: false },
+            { association: "transportista", paranoid: false },
+            {
+              association: "adicionales",
+              include: [{ association: "adicional", paranoid: false }],
+            },
+          ],
+        }
+      );
+      await db.HistoricoTarifa.create({
+        idTarifa: tarifaEliminada.id_tarifa,
+        fecha: new Date(),
+        data: mapTarifa(tarifaRestaurada),
+        accion: "CREACION",
+      });
+
+      await transaction.commit();
+      res.status(200).json(tarifaEliminada);
+      return;
+    }
+
     // Validar que los registros relacionados existan y estén activos
     const [vehiculo, carga, zona, transportista] = await Promise.all([
       db.Vehiculo.findByPk(tarifaData.id_vehiculo),
@@ -130,6 +192,17 @@ export const createTarifa = async (req: Request, res: Response) => {
       res.status(400).json({
         error: "El transportista especificado no existe o está eliminado",
       });
+      return;
+    }
+
+    // Verificar si ya existe una tarifa activa con los mismos atributos principales
+    const tarifaExistente = await db.Tarifa.findOne({ where: whereTarifa });
+
+    if (tarifaExistente) {
+      await transaction.rollback();
+      res
+        .status(400)
+        .json({ error: "Ya existe una tarifa con esos atributos principales" });
       return;
     }
 
@@ -200,7 +273,6 @@ export const createTarifa = async (req: Request, res: Response) => {
       ],
     });
 
-    // Crear histórico--------------------------------------------------------------------
     await db.HistoricoTarifa.create({
       idTarifa: nuevaTarifa.id_tarifa,
       fecha: new Date(),
@@ -227,7 +299,6 @@ export const updateTarifa = async (
     const { id } = req.params;
     const { adicionales, ...tarifaData } = req.body;
 
-    // Buscar la version anterior para el historico--------------------------------------------------
     const tarifaExistente = await db.Tarifa.findByPk(id, {
       include: [
         "vehiculo",
@@ -617,7 +688,11 @@ function mapTarifa(tarifa: any) {
     id: tarifa.id_tarifa,
     valor_base: tarifa.valor_base,
     fecha: tarifa.fecha
-      ? new Date(tarifa.fecha).toISOString().slice(0, 10)
+      ? new Date(tarifa.fecha).toLocaleDateString("es-ES", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })
       : null,
     id_vehiculo: tarifa.id_vehiculo,
     id_carga: tarifa.id_carga,
@@ -703,7 +778,6 @@ function formatFecha(fecha: string | Date) {
   )}:${String(fechaObj.getMinutes()).padStart(2, "0")}`;
 }
 
-//Todo el histórico de una tarifa----------------------------------------------------------------
 export const getHistoricoTarifa = async (req: Request, res: Response) => {
   try {
     const historico = await db.HistoricoTarifa.findAll({
@@ -759,6 +833,7 @@ export const getUltimoHistoricoDeTodasLasTarifas = async (
           where: { idTarifa: tarifa.id_tarifa },
           order: [["fecha", "DESC"]],
         });
+        /*
         if (ultimo) {
           return {
             ...ultimo.toJSON(),
@@ -767,11 +842,21 @@ export const getUltimoHistoricoDeTodasLasTarifas = async (
           };
         }
         return null; // Por si no tiene historico
+        */
+        if (!ultimo) {
+          throw new Error(
+            "No se encontró historial para la tarifa con id ${tarifa.id_tarifa}"
+          );
+        }
+        return {
+          ...ultimo.toJSON(),
+          idTarifa: tarifa.id,
+          fecha: formatFecha(ultimo.fecha),
+        };
       })
     );
 
-    // Filtra los que NO tienen histórico
-    res.json(resultado.filter(Boolean));
+    res.json(resultado);
   } catch (error) {
     res.status(500).json({ error: "Error interno del servidor" });
   }
