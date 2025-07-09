@@ -1,61 +1,67 @@
-'use strict';
-import { QueryInterface, DataTypes } from 'sequelize';
+"use strict";
+import { QueryInterface, DataTypes } from "sequelize";
 
 export = {
   up: async (queryInterface: QueryInterface): Promise<void> => {
-    await queryInterface.createTable('tarifaAdicional', {
+    await queryInterface.createTable("tarifaAdicional", {
       id_tarifaAdicional: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
       },
       costo_personalizado: {
-        type: DataTypes.DECIMAL(8, 2),
-        allowNull: true
+        type: DataTypes.DECIMAL,
+        allowNull: true,
       },
       id_tarifa: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'tarifa',
-          key: 'id_tarifa'
+          model: "tarifa",
+          key: "id_tarifa",
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT'
+        onUpdate: "CASCADE",
+        onDelete: "RESTRICT",
       },
       id_adicional: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-          model: 'adicional',
-          key: 'id_adicional'
+          model: "adicional",
+          key: "id_adicional",
         },
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT'
+        onUpdate: "CASCADE",
+        onDelete: "RESTRICT",
       },
       createdAt: {
         allowNull: false,
-        type: DataTypes.DATE
+        type: DataTypes.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: DataTypes.DATE
+        type: DataTypes.DATE,
       },
       deletedAt: {
         allowNull: true,
-        type: DataTypes.DATE
-      }
+        type: DataTypes.DATE,
+      },
     });
 
-    await queryInterface.addIndex('tarifaAdicional', ['id_tarifa', 'id_adicional'], {
-      unique: true,
-      name: 'unique_tarifa_adicional'
-    });
+    await queryInterface.addIndex(
+      "tarifaAdicional",
+      ["id_tarifa", "id_adicional"],
+      {
+        unique: true,
+        name: "unique_tarifa_adicional",
+      }
+    );
   },
-  
+
   down: async (queryInterface: QueryInterface): Promise<void> => {
-    await queryInterface.removeIndex('tarifaAdicional', 'unique_tarifa_adicional').catch(()=>{});
-    await queryInterface.dropTable('tarifaAdicional');
-  }
+    await queryInterface
+      .removeIndex("tarifaAdicional", "unique_tarifa_adicional")
+      .catch(() => {});
+    await queryInterface.dropTable("tarifaAdicional");
+  },
 };

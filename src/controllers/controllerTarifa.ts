@@ -41,7 +41,9 @@ export const getAllTarifas = async (_req: Request, res: Response) => {
     res.status(200).json(mapTarifas(tarifas));
   } catch (error) {
     console.error("Error al obtener las tarifas:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -85,7 +87,9 @@ export const getTarifaById = async (req: Request, res: Response) => {
     if (tarifa) res.status(200).json(mapTarifa(tarifa));
     else res.status(404).json({ error: "Tarifa no encontrada" });
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -285,7 +289,9 @@ export const createTarifa = async (req: Request, res: Response) => {
     if (transaction) {
       await transaction.rollback();
     }
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -468,7 +474,9 @@ export const updateTarifa = async (
     res.status(200).json(tarifaNueva);
   } catch (error) {
     await transaction.rollback();
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor, detalle: " + error });
   }
 };
 
@@ -545,7 +553,9 @@ export const deleteTarifa = async (
     res.status(200).json(mapTarifa(tarifaAEliminar));
   } catch (error) {
     await transaction.rollback();
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -563,7 +573,9 @@ export const getVehiculoByTarifa = async (req: Request, res: Response) => {
     if (tarifa) res.status(200).json(tarifa.vehiculo);
     else res.status(404).json({ error: "Tarifa no encontrada" });
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -586,7 +598,9 @@ export const getCargaByTarifa = async (req: Request, res: Response) => {
     if (tarifa) res.status(200).json(tarifa.carga);
     else res.status(404).json({ error: "Tarifa no encontrada" });
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -609,7 +623,9 @@ export const getTipoCargaByTarifa = async (req: Request, res: Response) => {
     if (tarifa) res.status(200).json(tarifa.carga.tipoCarga);
     else res.status(404).json({ error: "Tarifa no encontrada" });
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -627,7 +643,9 @@ export const getZonaByTarifa = async (req: Request, res: Response) => {
     if (tarifa) res.status(200).json(tarifa.zona);
     else res.status(404).json({ error: "Tarifa no encontrada" });
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -645,7 +663,9 @@ export const getTransportistaByTarifa = async (req: Request, res: Response) => {
     if (tarifa) res.status(200).json(tarifa.transportista);
     else res.status(404).json({ error: "Tarifa no encontrada" });
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -677,7 +697,9 @@ export const getAdicionalesByTarifa = async (req: Request, res: Response) => {
       res.status(200).json({ message: "La tarifa no tiene adicionales" });
     else res.status(200).json(adicionales);
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -793,7 +815,9 @@ export const getHistoricoTarifa = async (req: Request, res: Response) => {
     res.status(200).json(dataDashboard);
   } catch (error) {
     console.error("Error al obtener el histórico de la tarifa:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -816,7 +840,9 @@ export const getUltimoHistoricoTarifa = async (req: Request, res: Response) => {
 
     res.status(200).json(historicoPlano);
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -858,7 +884,9 @@ export const getUltimoHistoricoDeTodasLasTarifas = async (
 
     res.json(resultado);
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -882,7 +910,9 @@ export const getHistoricoById = async (req: Request, res: Response) => {
     res.json(response);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 

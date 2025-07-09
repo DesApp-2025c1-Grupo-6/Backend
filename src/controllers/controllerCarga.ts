@@ -14,7 +14,9 @@ export const getAllCargas = async (_: Request, res: Response) => {
     res.status(200).json(cargas);
   } catch (error) {
     console.error("Error al obtener las cargas:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -31,7 +33,9 @@ export const getCargaById = async (req: Request, res: Response) => {
     if (carga) res.status(200).json(carga);
     else res.status(404).json({ error: "Carga no encontrada" });
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -73,7 +77,9 @@ export const createCarga = async (req: Request, res: Response) => {
     const nuevaCarga = await db.Carga.create(req.body);
     res.status(201).json(nuevaCarga);
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -99,7 +105,9 @@ export const updateCarga = async (req: Request, res: Response) => {
     await carga.update(req.body);
     res.status(200).json(carga);
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -114,7 +122,9 @@ export const deleteCarga = async (req: Request, res: Response) => {
     }
   } catch (error: any) {
     console.error("Error al eliminar carga:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -134,6 +144,8 @@ export const getTipoCargaByCargaId = async (req: Request, res: Response) => {
     res.status(200).json(carga.get("tipoCarga"));
   } catch (error) {
     console.error("Error al obtener el tipo de carga:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };

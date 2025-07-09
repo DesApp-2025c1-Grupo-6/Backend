@@ -7,7 +7,9 @@ export const getAllTiposCarga = async (_: Request, res: Response) => {
     res.status(200).json(tiposCarga);
   } catch (error) {
     console.error("Error al obtener los tipos de carga:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -17,7 +19,9 @@ export const getTipoCargaById = async (req: Request, res: Response) => {
     if (tipoCarga) res.status(200).json(tipoCarga);
     else res.status(404).json({ error: "Tipo de carga no encontrado" });
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -48,7 +52,9 @@ export const createTipoCarga = async (req: Request, res: Response) => {
     const nuevoTipoCarga = await db.TipoCarga.create(req.body);
     res.status(201).json(nuevoTipoCarga);
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -62,7 +68,9 @@ export const updateTipoCarga = async (req: Request, res: Response) => {
       res.status(404).json({ error: "Tipo de carga no encontrado" });
     }
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -77,6 +85,8 @@ export const deleteTipoCarga = async (req: Request, res: Response) => {
     }
   } catch (error: any) {
     console.error("Error al eliminar tipo de carga:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };

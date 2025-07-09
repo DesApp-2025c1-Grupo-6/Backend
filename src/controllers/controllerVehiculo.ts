@@ -7,7 +7,9 @@ export const getAllVehiculos = async (req: Request, res: Response) => {
     res.status(200).json(vehiculo);
   } catch (error) {
     console.error("Error al obtener los tipos de vehículo:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -17,7 +19,9 @@ export const getVehiculoById = async (req: Request, res: Response) => {
     if (vehiculo) res.status(200).json(vehiculo);
     else res.status(404).json({ error: "Tipo de vehículo no encontrado" });
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -51,7 +55,9 @@ export const createVehiculo = async (req: Request, res: Response) => {
     const nuevoVehiculo = await db.Vehiculo.create(req.body);
     res.status(201).json(nuevoVehiculo);
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -65,7 +71,9 @@ export const updateVehiculo = async (req: Request, res: Response) => {
       res.status(404).json({ error: "Tipo de vehículo no encontrado" });
     }
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -80,6 +88,8 @@ export const deleteVehiculo = async (req: Request, res: Response) => {
     }
   } catch (error: any) {
     console.error("Error al eliminar vehículo:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
