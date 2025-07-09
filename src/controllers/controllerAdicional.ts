@@ -162,7 +162,9 @@ export const getAllAdicionales = async (req: Request, res: Response) => {
     res.status(200).json(adicional);
   } catch (error) {
     console.error("Error al obtener los adicionales:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -172,7 +174,9 @@ export const getAdicionalById = async (req: Request, res: Response) => {
     if (adicional) res.status(200).json(adicional);
     else res.status(404).json({ error: "Adicional no encontrado" });
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -208,7 +212,9 @@ export const createAdicional = async (req: Request, res: Response) => {
     const nuevoAdicional = await db.Adicional.create(req.body);
     res.status(201).json(nuevoAdicional);
   } catch (error) {
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -236,7 +242,9 @@ export const updateAdicional = async (req: Request, res: Response) => {
     }
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
@@ -251,7 +259,9 @@ export const deleteAdicional = async (req: Request, res: Response) => {
     }
   } catch (error: any) {
     console.error("Error al eliminar adicional:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
+    res
+      .status(500)
+      .json({ error: "Error interno del servidor. Detalle: " + error });
   }
 };
 
