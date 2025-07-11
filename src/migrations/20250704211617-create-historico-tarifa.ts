@@ -4,7 +4,7 @@ import { QueryInterface, DataTypes } from 'sequelize';
 
 module.exports = {
   up: async (queryInterface: QueryInterface) => {
-    await queryInterface.createTable('HistoricoTarifas', {
+    await queryInterface.createTable('HistoricoTarifa', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -52,6 +52,6 @@ module.exports = {
   },
 
   down: async (queryInterface: QueryInterface) => {
-    await queryInterface.dropTable('HistoricoTarifas');
+    await queryInterface.dropTable('HistoricoTarifa');
   },
 };
