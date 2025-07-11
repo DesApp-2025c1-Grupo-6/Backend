@@ -1,6 +1,6 @@
 import { Dialect } from 'sequelize';
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
 interface DBConfig {
   dialect: Dialect;
@@ -33,7 +33,7 @@ const config: Config = {
   },
   test: {
     dialect: 'sqlite',
-    storage: ':memory:',
+    storage: process.env.DB_STORAGE || './database/test.sqlite',
   },
   production: {
     dialect: 'mysql',
