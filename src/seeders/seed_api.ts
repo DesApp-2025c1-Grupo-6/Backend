@@ -33,7 +33,7 @@ async function seed() {
 
   // Vehiculos
   await post(`${API_URL}/vehiculos`, { tipo: "Camioneta", toneladas: 0.5 });
-  await post(`${API_URL}/vehiculos`, { tipo: "Camion Chico", toneladas: 2 });
+  await post(`${API_URL}/vehiculos`, { tipo: "Camión Chico", toneladas: 2 });
   await post(`${API_URL}/vehiculos`, { tipo: "Camión Mediano", toneladas: 5 });
   await post(`${API_URL}/vehiculos`, { tipo: "Camión Grande", toneladas: 12 });
 
@@ -80,7 +80,7 @@ async function seed() {
   });
   await post(`${API_URL}/cargas`, {
     peso: 500,
-    volumen: 4,
+    volumen: 2,
     requisitos_especiales: "Ninguno",
     id_tipo_carga: 1,
   });
@@ -130,7 +130,7 @@ async function seed() {
     costo_default: 5500,
   });
   await post(`${API_URL}/adicionales`, {
-    tipo: "Carga y descarga manual",
+    tipo: "Descarga manual",
     costo_default: 9000,
   });
   await post(`${API_URL}/adicionales`, {
@@ -186,7 +186,7 @@ async function seed() {
     id_transportista: 3,
     adicionales: [
       { id_adicional: 7 }, // Monitoreo satelital
-      { id_adicional: 8 }, // Carga y descarga manual
+      { id_adicional: 8 }, // Descarga manual
       { id_adicional: 9, costo_personalizado: 8000 }, // Seguro adicional
     ],
   });
@@ -237,7 +237,7 @@ async function seed() {
     id_transportista: 3,
     adicionales: [
       { id_adicional: 3 }, // Horario nocturno
-      { id_adicional: 8 }, // Carga y descarga manual
+      { id_adicional: 8 }, // Descarga manual
     ],
   });
   await post(`${API_URL}/tarifas`, {
