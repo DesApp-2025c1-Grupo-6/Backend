@@ -14,7 +14,7 @@ async function seed() {
 
   await db.Vehiculo.bulkCreate([
     { tipo: 'Camioneta', toneladas: 0.5 },
-    { tipo: 'Camion Chico', toneladas: 2 },
+    { tipo: 'Camión Chico', toneladas: 2 },
     { tipo: 'Camión Mediano', toneladas: 5 },
     { tipo: 'Camión Grande', toneladas: 12 }
   ]);
@@ -37,7 +37,7 @@ async function seed() {
   await db.Carga.bulkCreate([
     { peso: 3000, volumen: 15, requisitos_especiales: "Ninguno", id_tipo_carga: 1 },
     { peso: 1000, volumen: 7, requisitos_especiales: "Manipulación delicada", id_tipo_carga: 3 },
-    { peso: 500, volumen: 4, requisitos_especiales: "Ninguno", id_tipo_carga: 1 },
+    { peso: 500, volumen: 2, requisitos_especiales: "Ninguno", id_tipo_carga: 1 },
     { peso: 600, volumen: 10, requisitos_especiales: "Elementos inflamables, señalización y extintor", id_tipo_carga: 2 },
     { peso: 7100, volumen: 25, requisitos_especiales: "Refrigeración constante a 4°C", id_tipo_carga: 4 },
     { peso: 12700, volumen: 42, requisitos_especiales: "Grúa para carga y descarga", id_tipo_carga: 5 }

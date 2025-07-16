@@ -48,7 +48,7 @@ export const createVehiculo = async (req: Request, res: Response) => {
       where: whereVehiculo,
     });
     if (vehiculoExistente) {
-      res.status(400).json({ error: "Ya existe un vehículo con esos datos" });
+      res.status(400).json({ error: "Ya existe un tipo de vehículo con esos datos" });
       return;
     }
 
