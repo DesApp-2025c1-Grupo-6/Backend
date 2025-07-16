@@ -65,9 +65,9 @@ export const generarReporteAdicionalesPDF = async (
 
     // Definir posiciones de columnas para mejor alineación
     const colTipo = 40;
-    const colCosto = 180;
-    const colUtilizado = 300;
-    const colEstado = 420;
+    const colCosto = 240; // Aumentado para dar más espacio a la columna de Tipo
+    const colUtilizado = 340;
+    const colEstado = 460;
 
     // Función para agregar encabezado de tabla
     const agregarEncabezadoTabla = (yPos: number) => {
